@@ -12,14 +12,15 @@ import { AdminUsers } from './admin/pages/users.js';
 import { Login } from './pages/login.js';
 
 // Initialize Simulated DB
-const initApp = async () => {
+let isAppInitialized = false;
+const initAppPromise = (async () => {
     try {
         await DB.init();
+        isAppInitialized = true;
     } catch (e) {
         console.warn('Database initialization failed:', e);
     }
-};
-initApp();
+})();
 
 const routes = {
     '/': Home,
@@ -41,9 +42,18 @@ const router = async () => {
     // Smooth transition
     view.classList.add('opacity-0');
     
+    // Wait for the database to fetch initial data before rendering
+    if (!isAppInitialized) {
+        await initAppPromise;
+    }
+
     setTimeout(async () => {
         try {
             const component = routes[path] || Home;
+            // Fetch latest specific data just in case before render if we are in admin
+            if (path === '/admin/cursos') await DB.fetchCourses();
+            if (path === '/admin/usuarios') await DB.fetchUsers();
+
             let content = await component.render();
 
             // If it's an admin path, wrap it in AdminLayout
