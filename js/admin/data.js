@@ -45,10 +45,11 @@ export const DB = {
                 .update(course)
                 .eq('id', course.id);
         } else {
-            // Create
+            // Create - omit ID for GENERATED ALWAYS AS IDENTITY
+            const { id, ...courseData } = course;
             result = await supabase
                 .from('courses')
-                .insert([course]);
+                .insert([courseData]);
         }
 
         if (result.error) throw result.error;
