@@ -51,6 +51,9 @@ const router = async () => {
                 content = AdminLayout.render(content);
                 document.querySelector('header')?.classList.add('hidden');
                 document.querySelector('footer')?.classList.add('hidden');
+            } else if (path === '/login') {
+                document.querySelector('header')?.classList.remove('hidden');
+                document.querySelector('footer')?.classList.add('hidden');
             } else {
                 document.querySelector('header')?.classList.remove('hidden');
                 document.querySelector('footer')?.classList.remove('hidden');
