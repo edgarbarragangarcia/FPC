@@ -46,6 +46,12 @@ const router = async () => {
         }
 
         view.innerHTML = content;
+        
+        // Execute afterRender for both layout (if admin) and component
+        if (path.startsWith('/admin') && AdminLayout.afterRender) {
+            await AdminLayout.afterRender();
+        }
+        
         if (component.afterRender) await component.afterRender();
         
         view.classList.remove('opacity-0');
