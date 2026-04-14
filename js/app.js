@@ -9,6 +9,8 @@ import { AdminLayout } from './admin/layout.js';
 import { AdminDashboard } from './admin/pages/dashboard.js';
 import { AdminCourses } from './admin/pages/courses.js';
 import { AdminUsers } from './admin/pages/users.js';
+import { AdminEnrollments } from './admin/pages/enrollments.js';
+import { AdminReports } from './admin/pages/reports.js';
 import { Login } from './pages/login.js';
 
 // Initialize Simulated DB
