@@ -119,6 +119,46 @@
         </div>
     </footer>
 
+    <!-- Mobile Menu Drawer (Hidden by default) -->
+    <div id="mobile-menu" class="fixed inset-0 z-[100] hidden">
+        <!-- Backdrop -->
+        <div id="mobile-menu-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        
+        <!-- Drawer Container -->
+        <div id="mobile-menu-content" class="absolute top-0 left-0 bottom-0 w-[80%] max-w-sm bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col p-8">
+            <div class="flex justify-between items-center mb-12">
+                <div class="flex flex-col">
+                    <span class="font-headline font-bold text-primary text-lg">Menú</span>
+                    <span class="text-[8px] font-bold text-secondary uppercase tracking-widest leading-none">Promover por Colombia</span>
+                </div>
+                <button id="close-mobile-menu" class="p-2 hover:bg-surface-variant rounded-full transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <nav class="flex flex-col gap-6">
+                <a href="#/" class="mobile-nav-link flex items-center gap-4 text-xl font-bold text-primary py-2 border-b border-surface-variant/50">
+                    <span class="material-symbols-outlined">home</span> Inicio
+                </a>
+                <a href="#/cursos" class="mobile-nav-link flex items-center gap-4 text-xl font-bold text-primary py-2 border-b border-surface-variant/50">
+                    <span class="material-symbols-outlined">school</span> Cursos
+                </a>
+                <a href="#/impacto" class="mobile-nav-link flex items-center gap-4 text-xl font-bold text-primary py-2 border-b border-surface-variant/50">
+                    <span class="material-symbols-outlined">diversity_1</span> Impacto
+                </a>
+                <a href="#/admin" class="mobile-nav-link flex items-center gap-4 text-sm font-bold text-on-surface/40 py-2">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> Administración
+                </a>
+            </nav>
+
+            <div class="mt-auto pt-8 border-t border-surface-variant">
+                <button class="w-full bg-primary text-white py-4 rounded-2xl font-bold shadow-lg shadow-primary/20">
+                    Mi Cuenta
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Accessibility Widget Modal (Hidden by default) -->
     <div id="acc-modal" class="hidden fixed inset-0 z-[60] bg-black/40 flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-surface-variant translate-y-0 transition-transform duration-300">
@@ -190,6 +230,35 @@
         const guideToggle = document.getElementById('reading-guide-toggle');
         const guideLine = document.getElementById('reading-guide');
         const guideCircle = document.getElementById('guide-circle');
+
+        // Mobile Menu Logic
+        const menuBtn = document.getElementById('toggle-sidebar');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileContent = document.getElementById('mobile-menu-content');
+        const mobileBackdrop = document.getElementById('mobile-menu-backdrop');
+        const closeMenuBtn = document.getElementById('close-mobile-menu');
+        const menuLinks = document.querySelectorAll('.mobile-nav-link');
+
+        const openMenu = () => {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileBackdrop.classList.replace('opacity-0', 'opacity-100');
+                mobileContent.classList.replace('-translate-x-full', 'translate-x-0');
+            }, 10);
+        };
+
+        const closeMenu = () => {
+            mobileBackdrop.classList.replace('opacity-100', 'opacity-0');
+            mobileContent.classList.replace('translate-x-0', '-translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        };
+
+        menuBtn.onclick = openMenu;
+        closeMenuBtn.onclick = closeMenu;
+        mobileBackdrop.onclick = closeMenu;
+        menuLinks.forEach(link => link.onclick = closeMenu);
 
         accBtn.onclick = () => accModal.classList.remove('hidden');
         closeAcc.onclick = () => accModal.classList.add('hidden');
