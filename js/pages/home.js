@@ -114,7 +114,7 @@ export const Home = {
                 </div>
                 
                 <div class="lg:col-span-7 order-1 lg:order-2 space-y-8">
-                    <h2 class="text-3xl md:text-6xl font-headline font-bold text-primary">Transformando la tragedia en Legado.</h2>
+                    <h2 class="text-3xl md:text-6xl font-headline font-bold text-primary">Transformando los desafíos en Legado.</h2>
                     <div class="space-y-6 text-lg md:text-xl text-on-surface/70 leading-relaxed font-light">
                         <p>Tras un accidente automovilístico en 1982 que lo dejó con una discapacidad física permanente, Jairo tomó una decisión: su voz sería la de millones que no eran escuchados.</p>
                         <p>Logró ser el primer congresista en la historia del país en sesionar desde una silla de ruedas, abriendo el camino físico e institucional para la inclusión. Como Senador y Alto Consejero, ha legislado por la eliminación de barreras y la creación de oportunidades equitativas en todo el territorio nacional.</p>
