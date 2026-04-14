@@ -68,45 +68,77 @@ export const AdminDashboard = {
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Recent Activity Glassmorphism -->
-                <div class="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 md:p-10 h-full">
-                    <h3 class="text-2xl font-headline font-extrabold text-primary mb-8">Actividad Reciente</h3>
-                    <div class="space-y-6">
-                        ${logs.length > 0 ? logs.map((log, i) => `
-                            <div class="flex items-start gap-5 border-b border-surface-variant/40 pb-6 last:border-0 last:pb-0 group">
-                                <div class="w-3 h-3 rounded-full mt-1.5 ${i === 0 ? 'bg-secondary animate-pulse' : 'bg-surface-variant ring-4 ring-white'}"></div>
-                                <div class="flex-1">
-                                    <p class="text-base font-bold text-on-surface/80 group-hover:text-primary transition-colors">${log.message}</p>
-                                    <p class="text-[10px] text-on-surface/40 uppercase font-black tracking-widest mt-2">${new Date(log.created_at).toLocaleString()}</p>
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 md:p-10">
+                        <h3 class="text-2xl font-headline font-extrabold text-primary mb-8 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-secondary">history</span>
+                            Actividad Reciente
+                        </h3>
+                        <div class="space-y-6">
+                            ${logs.length > 0 ? logs.map((log, i) => `
+                                <div class="flex items-start gap-5 border-b border-surface-variant/40 pb-6 last:border-0 last:pb-0 group">
+                                    <div class="w-3.5 h-3.5 rounded-full mt-1.5 ${i === 0 ? 'bg-secondary animate-pulse ring-4 ring-secondary/20' : 'bg-surface-variant'}"></div>
+                                    <div class="flex-1">
+                                        <p class="text-base font-bold text-on-surface/80 group-hover:text-primary transition-colors">${log.message}</p>
+                                        <p class="text-[10px] text-on-surface/40 uppercase font-black tracking-widest mt-2">${log.created_at ? new Date(log.created_at).toLocaleString() : 'Recientemente'}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        `).join('') : '<p class="text-on-surface/40 text-center font-bold py-12">No hay actividad reciente.</p>'}
+                            `).join('') : '<p class="text-on-surface/40 text-center font-bold py-12">No hay actividad reciente.</p>'}
+                        </div>
+                    </div>
+
+                    <!-- New: Recent Users Summary -->
+                    <div class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 md:p-10">
+                        <h3 class="text-2xl font-headline font-extrabold text-primary mb-8 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent">group</span>
+                            Últimos Usuarios
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${users.slice(0, 4).map(user => `
+                                <div class="flex items-center gap-4 p-4 rounded-2xl bg-surface/30 border border-surface-variant/20">
+                                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                                        ${user.full_name?.split(' ').map(n => n[0]).join('') || 'U'}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-primary truncate max-w-[150px]">${user.full_name}</p>
+                                        <p class="text-[10px] text-on-surface/50 uppercase font-bold tracking-widest">${user.role}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
 
                 <!-- Quick Actions Gradient -->
-                <div class="relative overflow-hidden bg-gradient-to-br from-primary to-[#0052b4] text-white rounded-3xl p-8 md:p-10 flex flex-col justify-between shadow-xl shadow-primary/20">
-                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="relative z-10">
-                        <h3 class="text-2xl font-headline font-extrabold mb-3">Acciones Rápidas</h3>
-                        <p class="text-white/70 text-sm font-medium mb-10">Accesos directos para la gestión inmediata.</p>
+                <div class="flex flex-col gap-8">
+                    <div class="relative overflow-hidden bg-gradient-to-br from-primary to-[#0052b4] text-white rounded-3xl p-8 md:p-10 flex flex-col justify-between shadow-xl shadow-primary/20 flex-1">
+                        <div class="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-headline font-extrabold mb-3">Acciones Rápidas</h3>
+                            <p class="text-white/70 text-sm font-medium mb-10">Accesos directos para la gestión inmediata.</p>
+                            
+                            <div class="space-y-4">
+                                <a href="#/admin/cursos" class="w-full bg-white/10 hover:bg-white border border-white/20 hover:text-primary p-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 shadow-sm hover:shadow-lg group">
+                                    <span class="font-bold">Nuevo Curso</span>
+                                    <span class="material-symbols-outlined group-hover:scale-110 transition-transform">add_circle</span>
+                                </a>
+                                <a href="#/admin/usuarios" class="w-full bg-white/10 hover:bg-white border border-white/20 hover:text-primary p-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 shadow-sm hover:shadow-lg group">
+                                    <span class="font-bold">Alta de Usuario</span>
+                                    <span class="material-symbols-outlined group-hover:scale-110 transition-transform">person_add</span>
+                                </a>
+                                <a href="#/admin/reportes" class="w-full bg-white/10 hover:bg-white border border-white/20 hover:text-primary p-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 shadow-sm hover:shadow-lg group">
+                                    <span class="font-bold">Ver Reportes</span>
+                                    <span class="material-symbols-outlined group-hover:scale-110 transition-transform">analytics</span>
+                                </a>
+                            </div>
+                        </div>
                         
-                        <div class="space-y-4">
-                            <a href="#/admin/cursos" class="w-full bg-white/10 hover:bg-white border border-white/20 hover:text-primary p-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 shadow-sm hover:shadow-lg group">
-                                <span class="font-bold">Nuevo Curso</span>
-                                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">add_circle</span>
-                            </a>
-                            <a href="#/admin/usuarios" class="w-full bg-white/10 hover:bg-white border border-white/20 hover:text-primary p-4.5 rounded-2xl flex items-center justify-between transition-all duration-300 shadow-sm hover:shadow-lg group">
-                                <span class="font-bold">Alta de Usuario</span>
-                                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">person_add</span>
+                        <div class="relative z-10 mt-12 pt-8 border-t border-white/20">
+                            <p class="text-[10px] text-white/50 uppercase font-black tracking-[0.2em] mb-4">Ayuda del Sistema</p>
+                            <a href="#" class="text-sm font-bold flex items-center gap-3 hover:text-white/80 transition-colors">
+                                <span class="material-symbols-outlined text-lg">menu_book</span> Manual de Administrador
                             </a>
                         </div>
-                    </div>
-                    
-                    <div class="relative z-10 mt-12 pt-8 border-t border-white/20">
-                        <p class="text-[10px] text-white/50 uppercase font-black tracking-[0.2em] mb-4">Ayuda del Sistema</p>
-                        <a href="#" class="text-sm font-bold flex items-center gap-3 hover:text-white/80 transition-colors">
-                            <span class="material-symbols-outlined text-lg">menu_book</span> Manual de Administrador
-                        </a>
                     </div>
                 </div>
             </div>
