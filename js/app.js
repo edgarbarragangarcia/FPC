@@ -43,67 +43,72 @@ const router = async () => {
     const view = document.getElementById('router-view');
     const path = window.location.hash.slice(1) || '/';
     
-    // Smooth transition
+    // Start exit transition
     view.classList.add('opacity-0');
-    
-    // Wait for the database to fetch initial data before rendering
-    if (!isAppInitialized) {
-        await initAppPromise;
-    }
 
-    setTimeout(async () => {
-        try {
+    try {
+        // 1. Prepare component and content in parallel with a minimum transition delay
+        const renderTask = (async () => {
+            if (!isAppInitialized) await initAppPromise;
+            
             const component = routes[path] || Home;
-            // Fetch latest specific data just in case before render if we are in admin
+            // Pre-fetch specific data if needed
             if (path === '/admin/cursos') await DB.fetchCourses();
             if (path === '/admin/usuarios') await DB.fetchUsers();
-
-            let content = await component.render();
-
-            // If it's an admin path, wrap it in AdminLayout
-            if (path.startsWith('/admin')) {
-                content = AdminLayout.render(content);
-                document.querySelector('header')?.classList.add('hidden');
-                document.querySelector('footer')?.classList.add('hidden');
-                // Remove padding for full-width admin layout
-                view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            } else if (path === '/login') {
-                document.querySelector('header')?.classList.remove('hidden');
-                document.querySelector('footer')?.classList.add('hidden');
-                // Ensure padding is restored
-                view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            } else {
-                document.querySelector('header')?.classList.remove('hidden');
-                document.querySelector('footer')?.classList.remove('hidden');
-                // Ensure padding is restored
-                view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            }
-
-            view.innerHTML = content;
             
-            // Execute afterRender for both layout (if admin) and component
-            if (path.startsWith('/admin') && AdminLayout.afterRender) {
-                await AdminLayout.afterRender();
-            }
-            
-            if (component.afterRender) await component.afterRender();
-            
-            view.classList.remove('opacity-0');
-        } catch (error) {
-            console.error('Router Error:', error);
-            view.innerHTML = `
-                <div class="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
-                    <span class="material-symbols-outlined text-accent text-6xl mb-4">error</span>
-                    <h2 class="text-3xl font-bold text-primary mb-2">¡Ups! Algo salió mal</h2>
-                    <p class="text-on-surface/60 mb-8">No pudimos cargar esta sección. Por favor, intenta recargar la página.</p>
-                    <button onclick="location.reload()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20">Recargar</button>
-                    <p class="mt-8 text-[10px] text-on-surface/20 uppercase tracking-widest">${error.message}</p>
-                </div>
-            `;
-            view.classList.remove('opacity-0');
+            const content = await component.render();
+            return { component, content };
+        })();
+
+        // 2. Wait for at least 150ms (animation sync) AND the render to finish
+        const [_, { component, content }] = await Promise.all([
+            new Promise(resolve => setTimeout(resolve, 150)),
+            renderTask
+        ]);
+
+        let finalContent = content;
+
+        // 3. Handle Layouts (Admin vs Public)
+        if (path.startsWith('/admin')) {
+            finalContent = AdminLayout.render(content);
+            document.querySelector('header')?.classList.add('hidden');
+            document.querySelector('footer')?.classList.add('hidden');
+            view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+        } else if (path === '/login') {
+            document.querySelector('header')?.classList.remove('hidden');
+            document.querySelector('footer')?.classList.add('hidden');
+            view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+        } else {
+            document.querySelector('header')?.classList.remove('hidden');
+            document.querySelector('footer')?.classList.remove('hidden');
+            view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
         }
+
+        // 4. Atomic Swap
+        view.innerHTML = finalContent;
+        
+        // 5. Post-render logic
+        if (path.startsWith('/admin') && AdminLayout.afterRender) {
+            await AdminLayout.afterRender();
+        }
+        if (component.afterRender) await component.afterRender();
+        
+        // 6. Reveal
+        view.classList.remove('opacity-0');
         window.scrollTo(0, 0);
-    }, 200);
+
+    } catch (error) {
+        console.error('Router Error:', error);
+        view.innerHTML = `
+            <div class="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
+                <span class="material-symbols-outlined text-accent text-6xl mb-4">error</span>
+                <h2 class="text-3xl font-bold text-primary mb-2">¡Ups! Algo salió mal</h2>
+                <p class="text-on-surface/60 mb-8">No pudimos cargar esta sección. Por favor, intenta recargar la página.</p>
+                <button onclick="location.reload()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20">Recargar</button>
+            </div>
+        `;
+        view.classList.remove('opacity-0');
+    }
 };
 
 // Listen for hash changes

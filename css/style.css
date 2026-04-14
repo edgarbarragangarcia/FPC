@@ -6,25 +6,55 @@
 }
 
 /* Fluid Typography Utilities */
-@layer utilities {
+/* Fluid Typography & Spacing Utilities (Vanilla CSS) */
+.text-title-responsive {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+}
+
+.text-subtitle-responsive {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.section-spacing {
+    margin-bottom: 4rem;
+}
+
+/* Tablet Up */
+@media (min-width: 768px) {
     .text-title-responsive {
-        @apply text-4xl md:text-6xl lg:text-8xl;
+        font-size: 3.75rem;
+        line-height: 1;
     }
     .text-subtitle-responsive {
-        @apply text-2xl md:text-3xl lg:text-4xl;
+        font-size: 1.875rem;
+        line-height: 2.25rem;
     }
     .section-spacing {
-        @apply mb-16 md:mb-32;
+        margin-bottom: 8rem;
+    }
+}
+
+/* Desktop Up */
+@media (min-width: 1024px) {
+    .text-title-responsive {
+        font-size: 6rem;
+        line-height: 1;
+    }
+    .text-subtitle-responsive {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
     }
 }
 
 /* Smooth page transitions */
 #router-view {
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-out;
 }
 
 #router-view.opacity-0 {
-    transform: translateY(10px);
+    transform: translateY(4px);
 }
 
 /* Custom sober scrollbar */
