@@ -1,0 +1,53 @@
+/* LMS Custom Sobriety & Accessibility Styles */
+
+:root {
+    --primary-color: #003F87;
+    --secondary-color: #1B6D24;
+}
+
+/* Smooth page transitions */
+#router-view {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+}
+
+#router-view.opacity-0 {
+    transform: translateY(10px);
+}
+
+/* Custom sober scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #FBF9F8;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #DCD9D9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #003F87;
+}
+
+/* Accessibility Focus Ring */
+*:focus-visible {
+    outline: 3px solid var(--primary-color) !important;
+    outline-offset: 4px !important;
+}
+
+/* Inclusive Typography tweaks */
+p {
+    max-width: 65ch; /* Optimal reading length */
+}
+
+.high-contrast {
+    --primary-color: #FFD700;
+}
+
+.dark.high-contrast body {
+    background-color: #000 !important;
+    color: #FFF !important;
+}
