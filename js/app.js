@@ -9,6 +9,7 @@ import { AdminLayout } from './admin/layout.js';
 import { AdminDashboard } from './admin/pages/dashboard.js';
 import { AdminCourses } from './admin/pages/courses.js';
 import { AdminUsers } from './admin/pages/users.js';
+import { Login } from './pages/login.js';
 
 // Initialize Simulated DB
 const initApp = async () => {
@@ -27,7 +28,10 @@ const routes = {
     // Admin Routes
     '/admin': AdminDashboard,
     '/admin/cursos': AdminCourses,
-    '/admin/usuarios': AdminUsers
+    '/admin/usuarios': AdminUsers,
+    
+    // Auth
+    '/login': Login
 };
 
 const router = async () => {
@@ -81,7 +85,19 @@ const router = async () => {
 
 // Listen for hash changes
 window.addEventListener('hashchange', router);
-window.addEventListener('load', router);
+window.addEventListener('load', () => {
+    router();
+    
+    // Auth Button routing
+    const btnDesktop = document.getElementById('btn-mi-cuenta-desktop');
+    const btnMobile = document.getElementById('btn-mi-cuenta-mobile');
+    
+    if(btnDesktop) btnDesktop.onclick = () => window.location.hash = '#/login';
+    if(btnMobile) btnMobile.onclick = () => {
+        document.getElementById('mobile-menu-backdrop')?.click(); // Close menu
+        window.location.hash = '#/login';
+    };
+});
 
 // Global State (Simple)
 window.state = {

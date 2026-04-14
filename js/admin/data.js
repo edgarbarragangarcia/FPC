@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://nhrgxyoqwrxoasbxqtjr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocmd4eW9xd3J4b2FzYnhxdGpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxOTM5NjQsImV4cCI6MjA5MTc2OTk2NH0.qh9buTEvnjdwZxYj0MltW6ju_9r-SHK6YG1x2RNgBFM';
 
 // Initialize the Supabase client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+export const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const DB = {
     // Current local cache for synchronous rendering if needed
