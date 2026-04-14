@@ -51,12 +51,18 @@ const router = async () => {
                 content = AdminLayout.render(content);
                 document.querySelector('header')?.classList.add('hidden');
                 document.querySelector('footer')?.classList.add('hidden');
+                // Remove padding for full-width admin layout
+                view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
             } else if (path === '/login') {
                 document.querySelector('header')?.classList.remove('hidden');
                 document.querySelector('footer')?.classList.add('hidden');
+                // Ensure padding is restored
+                view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
             } else {
                 document.querySelector('header')?.classList.remove('hidden');
                 document.querySelector('footer')?.classList.remove('hidden');
+                // Ensure padding is restored
+                view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
             }
 
             view.innerHTML = content;
