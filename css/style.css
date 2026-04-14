@@ -48,14 +48,7 @@
     }
 }
 
-/* Smooth page transitions */
-#router-view {
-    transition: opacity 0.2s ease-in-out, transform 0.2s ease-out;
-}
-
-#router-view.opacity-0 {
-    transform: translateY(4px);
-}
+/* Smooth page transitions removed by user request */
 
 /* Custom sober scrollbar */
 ::-webkit-scrollbar {

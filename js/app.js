@@ -42,35 +42,21 @@ const routes = {
 const router = async () => {
     const view = document.getElementById('router-view');
     const path = window.location.hash.slice(1) || '/';
-    
-    // Start exit transition
-    view.classList.add('opacity-0');
 
     try {
-        // 1. Prepare component and content in parallel with a minimum transition delay
-        const renderTask = (async () => {
-            if (!isAppInitialized) await initAppPromise;
-            
-            const component = routes[path] || Home;
-            // Pre-fetch specific data if needed
-            if (path === '/admin/cursos') await DB.fetchCourses();
-            if (path === '/admin/usuarios') await DB.fetchUsers();
-            
-            const content = await component.render();
-            return { component, content };
-        })();
+        // Prepare content
+        if (!isAppInitialized) await initAppPromise;
+        
+        const component = routes[path] || Home;
+        // Pre-fetch specific data if needed
+        if (path === '/admin/cursos') await DB.fetchCourses();
+        if (path === '/admin/usuarios') await DB.fetchUsers();
+        
+        let content = await component.render();
 
-        // 2. Wait for at least 150ms (animation sync) AND the render to finish
-        const [_, { component, content }] = await Promise.all([
-            new Promise(resolve => setTimeout(resolve, 150)),
-            renderTask
-        ]);
-
-        let finalContent = content;
-
-        // 3. Handle Layouts (Admin vs Public)
+        // Handle Layouts (Admin vs Public)
         if (path.startsWith('/admin')) {
-            finalContent = AdminLayout.render(content);
+            content = AdminLayout.render(content);
             document.querySelector('header')?.classList.add('hidden');
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
@@ -84,17 +70,15 @@ const router = async () => {
             view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
         }
 
-        // 4. Atomic Swap
-        view.innerHTML = finalContent;
+        // Immediate Swap
+        view.innerHTML = content;
         
-        // 5. Post-render logic
+        // Post-render logic
         if (path.startsWith('/admin') && AdminLayout.afterRender) {
             await AdminLayout.afterRender();
         }
         if (component.afterRender) await component.afterRender();
         
-        // 6. Reveal
-        view.classList.remove('opacity-0');
         window.scrollTo(0, 0);
 
     } catch (error) {
@@ -107,7 +91,6 @@ const router = async () => {
                 <button onclick="location.reload()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20">Recargar</button>
             </div>
         `;
-        view.classList.remove('opacity-0');
     }
 };
 
