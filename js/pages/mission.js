@@ -7,7 +7,7 @@ export const Mission = {
             <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-32">
                 <div class="lg:col-span-12 text-center mb-12 space-y-4 px-4">
                      <span class="inline-block px-4 py-1.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-[0.2em]">Más de 3 Décadas de Lucha</span>
-                     <h2 class="text-3xl md:text-5xl lg:text-7xl font-headline font-bold text-primary tracking-tight">El Legado de <span class="text-accent underline decoration-4 underline-offset-8">Jairo Clopatofsky</span></h2>
+                     <h2 class="text-3xl md:text-5xl lg:text-7xl font-headline font-bold text-primary tracking-tight">El Legado de <span class="text-primary underline decoration-4 underline-offset-8">Jairo Clopatofsky</span></h2>
                 </div>
                 
                 <div class="lg:col-span-7 space-y-8 animate-in slide-in-from-left duration-700">
