@@ -1,12 +1,9 @@
 // Courses Page Component
+import { DB } from '../admin/data.js';
+
 export const Courses = {
     render: async () => {
-        const dummyCourses = [
-            { id: 1, title: 'Liderazgo Empático', level: 'Accesibilidad AAA', duration: '12h', category: 'Laboral', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMTJH8dbnMCwZe3P5hXyrvwXTglZkdnH3Xv_WEb-Z-J78s4WfRPq9ECpTLFBqO6hBclnn6LVzDqJOEQHeXGkcu978LySNe8ARN-p2Avf2LlxjtEA8lT-qhQaxvadE3IUKG5AINm-RPwwGTBYEKq0Rk-FcsbC3ZyUQ-9mbntNAmL6DlL4Hq8vElxvOfm0KuGGjL-P0nIkOgSK43CXVh96lewEHl_x6KbilKk1lVapVS9ZiBsNv1v0wbzK8Zfcf2fByS9UcDjy0DeE2L' },
-            { id: 2, title: 'Introducción al Braille Digital', level: 'Visual Focus', duration: '20h', category: 'Tecnología', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCjZNvaOh3E9Ond6UnB7yMU84nt6E0BXVuBAHSN1CK710aBie79qf1a9Vm4b_nz86hQmrrNK3KqqYU20UTpyOxA9kfWrvbidFSsRDA0V62F3aELe_Lr5_pHoPiGFN3KAnH_um2mf2Cmpf7icVX831g_o1YevXmqqOV5dk9dOb1w9uySAEQSN7qNYeTEWFAMmtVw3PiRHh7ebN9aiwCC6mWBXtWAwSmhHHI8z4LEwFxPv58YjgujBB-S22d8A8rxlO0jCZrOEFhaHMn8' },
-            { id: 3, title: 'Emprendimiento Inclusivo', level: 'Cognitivo Adaptado', duration: '15h', category: 'Negocios', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCicB8UDykP_ofYUn7VxMkqrz3Ml6P_R7D54GE5VyI7XjxP1QMzTvECnnL9-N5APo3383NGUZmDT-0BWcp6g1VtLS1-AHteLHyOhFr1rri-XMW9P-lwJxFhK5vaDFmc3G0co0dwO8rpnNGKCjQPez15XyvXdNA-RNhnaX5SHFYca3B3_hmTi4pkPs_3mcGHsfHBlmMPg9BDeTJ98xEHnj5yUlj0Xr--Xy4YKWOselGzajSNp4MEqwG4Ic7OrcCS52lop-ZjyO2Gey9b' },
-            { id: 4, title: 'Diseño para Todos (Discapacidad)', level: 'Accesibilidad AAA', duration: '8h', category: 'Diseño', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAXr5jMsNNJfYFIrwvjkbsNzhaUNf03lC3nVFsm6QdKvRR5UX-lVKa8Y1j8bUh4XZL64v3SqhUXjefTsduipYlTknkV8dmZEmHaP-l71AjjP98bbpQEyOZgOCLpv1BWNBoQ6J2Vs9RdsvC3cJwo3Ab4sHcp88k17OXPG2DHEWnJRMxUSwaWGFjkhwfpmWYSWmZct2zNcMA8ICnwOmbTmlQ8cmFzxPACSUt6rDCjLKZ-j7lVk54H0iW5LlLQYCdPrqIXCPtU3cTHmbH' }
-        ];
+        const dummyCourses = DB.getCourses();
 
         return `
         <div class="max-w-7xl mx-auto py-12">
