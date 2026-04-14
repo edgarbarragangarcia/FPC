@@ -5,16 +5,16 @@ export const Mission = {
         <div class="max-w-7xl mx-auto py-12 px-4">
             <!-- Impact Story -->
             <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-32">
-                <div class="lg:col-span-12 text-center mb-12 space-y-4">
+                <div class="lg:col-span-12 text-center mb-12 space-y-4 px-4">
                      <span class="inline-block px-4 py-1.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-[0.2em]">Más de 3 Décadas de Lucha</span>
-                     <h2 class="text-5xl md:text-7xl font-headline font-bold text-primary tracking-tight">El Legado de <span class="text-accent underline decoration-4 underline-offset-8">Jairo Clopatofsky</span></h2>
+                     <h2 class="text-3xl md:text-5xl lg:text-7xl font-headline font-bold text-primary tracking-tight">El Legado de <span class="text-accent underline decoration-4 underline-offset-8">Jairo Clopatofsky</span></h2>
                 </div>
                 
                 <div class="lg:col-span-7 space-y-8 animate-in slide-in-from-left duration-700">
-                    <p class="text-3xl font-light text-on-surface/80 leading-relaxed italic border-l-8 border-secondary pl-8">
+                    <p class="text-xl md:text-3xl font-light text-on-surface/80 leading-relaxed italic border-l-8 border-secondary pl-8">
                         "Fundación Promover por Colombia nació de la necesidad de demostrar que la inclusión no es un favor, es un derecho fundamental e irrevocable."
                     </p>
-                    <div class="space-y-6 text-xl text-on-surface/70 leading-relaxed font-light">
+                    <div class="space-y-6 text-lg md:text-xl text-on-surface/70 leading-relaxed font-light">
                         <p>
                             Jairo Clopatofsky Ghisays ha marcado la historia de Colombia como el primer congresista usuario de silla de ruedas. Su labor no se limitó a ocupar un curul; se enfocó en transformar el marco legal del país.
                         </p>
@@ -56,10 +56,10 @@ export const Mission = {
             </section>
 
             <!-- Detailed Impact Pillars -->
-            <section class="mb-32">
+            <section class="mb-16 md:mb-32 px-4">
                 <div class="text-center mb-16 space-y-4">
-                    <h2 class="text-5xl font-headline font-bold text-primary">Lo que hacemos juntos</h2>
-                    <p class="text-on-surface/60 max-w-2xl mx-auto">Nuestros programas están diseñados bajo 4 ejes estratégicos que garantizan el desarrollo integral.</p>
+                    <h2 class="text-3xl md:text-5xl font-headline font-bold text-primary">Lo que hacemos juntos</h2>
+                    <p class="text-on-surface/60 text-sm md:text-base max-w-2xl mx-auto">Nuestros programas están diseñados bajo 4 ejes estratégicos que garantizan el desarrollo integral.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -107,11 +107,11 @@ export const Mission = {
             </section>
 
             <!-- Call to Action -->
-            <section class="text-center bg-primary text-white rounded-[4rem] p-16 md:p-32 relative overflow-hidden">
+            <section class="text-center bg-primary text-white rounded-[2.5rem] md:rounded-[4rem] p-8 md:p-32 relative overflow-hidden">
                 <div class="absolute bottom-0 right-0 w-64 h-64 bg-secondary rounded-full blur-[100px] opacity-20 -mb-32 -mr-32"></div>
                 <div class="relative z-10">
-                    <h2 class="text-4xl md:text-6xl font-headline font-bold mb-8">Únete a la Revolución de la Inclusión</h2>
-                    <p class="text-white/80 text-2xl max-w-2xl mx-auto mb-12 leading-relaxed">Cada curso que tomas, cada certificado que obtienes, es un paso hacia una Colombia más justa.</p>
+                    <h2 class="text-3xl md:text-6xl font-headline font-bold mb-8">Únete a la Revolución de la Inclusión</h2>
+                    <p class="text-white/80 text-xl md:text-2xl max-w-2xl mx-auto mb-12 leading-relaxed">Cada curso que tomas, cada certificado que obtienes, es un paso hacia una Colombia más justa.</p>
                     <div class="flex justify-center flex-wrap gap-4">
                         <a href="#/cursos" class="bg-white text-primary px-12 py-5 rounded-3xl font-bold text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl">
                             Explorar Cursos LMS

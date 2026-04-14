@@ -9,7 +9,7 @@ export const Home = {
                     <div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-widest">
                         Desde 1982 transformando vidas
                     </div>
-                    <h1 class="text-5xl md:text-8xl font-headline font-bold text-primary leading-[1.05] tracking-tight">
+                    <h1 class="text-4xl md:text-6xl lg:text-8xl font-headline font-bold text-primary leading-[1.05] tracking-tight">
                         Donde la <span class="text-secondary italic">voluntad</span> rompe toda barrera.
                     </h1>
                     <p class="text-xl md:text-2xl text-on-surface/70 leading-relaxed max-w-2xl font-light">
@@ -42,10 +42,10 @@ export const Home = {
             </section>
 
             <!-- ¿Qué hace la Fundación? 4 Pilares -->
-            <section class="py-24 bg-white rounded-[4rem] px-8 md:px-16 border border-surface-variant mb-32">
-                <div class="max-w-4xl mb-20">
-                    <h2 class="text-4xl md:text-6xl font-headline font-bold text-primary mb-6">Nuestra Labor Social</h2>
-                    <p class="text-xl text-on-surface/60 leading-relaxed">No solo formamos personas; transformamos el ecosistema social y legal de Colombia para asegurar que la discapacidad jamás sea sinónimo de exclusión.</p>
+            <section class="py-12 md:py-24 bg-white rounded-[2.5rem] md:rounded-[4rem] px-6 md:px-16 border border-surface-variant mb-16 md:mb-32">
+                <div class="max-w-4xl mb-12 md:mb-20">
+                    <h2 class="text-3xl md:text-6xl font-headline font-bold text-primary mb-6">Nuestra Labor Social</h2>
+                    <p class="text-lg md:text-xl text-on-surface/60 leading-relaxed">No solo formamos personas; transformamos el ecosistema social y legal de Colombia para asegurar que la discapacidad jamás sea sinónimo de exclusión.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -85,7 +85,7 @@ export const Home = {
             </section>
 
             <!-- Biography Section: Jairo Clopatofsky -->
-            <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-32">
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-center mb-16 md:mb-32">
                 <div class="lg:col-span-5 order-2 lg:order-1">
                     <div class="relative scale-95 hover:scale-100 transition-transform duration-500">
                         <div class="absolute inset-0 bg-primary rounded-[4rem] transform -rotate-3 overflow-hidden">
@@ -114,8 +114,8 @@ export const Home = {
                 </div>
                 
                 <div class="lg:col-span-7 order-1 lg:order-2 space-y-8">
-                    <h2 class="text-4xl md:text-6xl font-headline font-bold text-primary">Transformando la tragedia en Legado.</h2>
-                    <div class="space-y-6 text-xl text-on-surface/70 leading-relaxed font-light">
+                    <h2 class="text-3xl md:text-6xl font-headline font-bold text-primary">Transformando la tragedia en Legado.</h2>
+                    <div class="space-y-6 text-lg md:text-xl text-on-surface/70 leading-relaxed font-light">
                         <p>Tras un accidente automovilístico en 1982 que lo dejó con una discapacidad física permanente, Jairo tomó una decisión: su voz sería la de millones que no eran escuchados.</p>
                         <p>Logró ser el primer congresista en la historia del país en sesionar desde una silla de ruedas, abriendo el camino físico e institucional para la inclusión. Como Senador y Alto Consejero, ha legislado por la eliminación de barreras y la creación de oportunidades equitativas en todo el territorio nacional.</p>
                         <p>Fundación Promover por Colombia es la culminación de este esfuerzo, permitiendo que la educación sea el primer paso hacia la libertad de pensamiento y acción.</p>
@@ -127,11 +127,11 @@ export const Home = {
             </section>
 
             <!-- LMS Shortcut -->
-            <section class="mb-32">
-                <div class="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+            <section class="mb-16 md:mb-32">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 mb-12 md:mb-16">
                     <div>
-                        <h2 class="text-4xl font-headline font-bold text-primary mb-2">Aprende hoy, lidera mañana</h2>
-                        <p class="text-on-surface/60">Cursos diseñados con los más altos estándares de accesibilidad.</p>
+                        <h2 class="text-3xl font-headline font-bold text-primary mb-2">Aprende hoy, lidera mañana</h2>
+                        <p class="text-on-surface/60 text-sm md:text-base">Cursos diseñados con los más altos estándares de accesibilidad.</p>
                     </div>
                     <a href="#/cursos" class="text-primary font-bold border-b-2 border-primary pb-1">Ver todos los cursos</a>
                 </div>

@@ -18,8 +18,8 @@ export const AdminCourses = {
             </header>
 
             <!-- Course Table/List -->
-            <div class="bg-white rounded-[2rem] border border-surface-variant overflow-hidden shadow-sm">
-                <table class="w-full text-left">
+            <div class="bg-white rounded-[2rem] border border-surface-variant overflow-x-auto shadow-sm">
+                <table class="min-w-full text-left">
                     <thead class="bg-surface-variant/30 border-b border-surface-variant">
                         <tr>
                             <th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface/50">Curso</th>

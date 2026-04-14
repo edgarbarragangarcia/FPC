@@ -5,6 +5,19 @@
     --secondary-color: #1B6D24;
 }
 
+/* Fluid Typography Utilities */
+@layer utilities {
+    .text-title-responsive {
+        @apply text-4xl md:text-6xl lg:text-8xl;
+    }
+    .text-subtitle-responsive {
+        @apply text-2xl md:text-3xl lg:text-4xl;
+    }
+    .section-spacing {
+        @apply mb-16 md:mb-32;
+    }
+}
+
 /* Smooth page transitions */
 #router-view {
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
@@ -16,7 +29,7 @@
 
 /* Custom sober scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -50,4 +63,12 @@ p {
 .dark.high-contrast body {
     background-color: #000 !important;
     color: #FFF !important;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .max-w-7xl {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
 }
