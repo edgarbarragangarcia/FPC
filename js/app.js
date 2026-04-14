@@ -11,7 +11,14 @@ import { AdminCourses } from './admin/pages/courses.js';
 import { AdminUsers } from './admin/pages/users.js';
 
 // Initialize Simulated DB
-DB.init();
+const initApp = async () => {
+    try {
+        await DB.init();
+    } catch (e) {
+        console.warn('Database initialization failed:', e);
+    }
+};
+initApp();
 
 const routes = {
     '/': Home,

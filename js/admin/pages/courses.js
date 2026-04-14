@@ -154,14 +154,18 @@ export const AdminCourses = {
             }
         };
 
-        window.deleteCourse = (id) => {
+        window.deleteCourse = async (id) => {
             if (confirm('¿Estás seguro de eliminar este curso? Esta acción no se puede deshacer.')) {
-                DB.deleteCourse(id);
-                location.reload();
+                try {
+                    await DB.deleteCourse(id);
+                    location.reload();
+                } catch(e) {
+                    alert('Error al eliminar: ' + e.message);
+                }
             }
         };
 
-        form.onsubmit = (e) => {
+        form.onsubmit = async (e) => {
             e.preventDefault();
             const course = {
                 id: document.getElementById('course-id').value ? parseInt(document.getElementById('course-id').value) : null,
@@ -172,8 +176,13 @@ export const AdminCourses = {
                 img: document.getElementById('course-img').value || 'https://via.placeholder.com/800x600',
                 status: 'published'
             };
-            DB.saveCourse(course);
-            location.reload();
+            
+            try {
+                await DB.saveCourse(course);
+                location.reload();
+            } catch(error) {
+                alert('Error al guardar: ' + error.message);
+            }
         };
     }
 };

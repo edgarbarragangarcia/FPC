@@ -1,75 +1,138 @@
-// LMS Data Layer - Simulated Database with LocalStorage
+// Supabase Integration - Cloud Database for FPC LMS
+const SUPABASE_URL = 'https://nhrgxyoqwrxoasbxqtjr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ocmd4eW9xd3J4b2FzYnhxdGpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxOTM5NjQsImV4cCI6MjA5MTc2OTk2NH0.qh9buTEvnjdwZxYj0MltW6ju_9r-SHK6YG1x2RNgBFM';
 
-const STORAGE_KEYS = {
-    COURSES: 'fpc_courses',
-    USERS: 'fpc_users',
-    LOG: 'fpc_audit_log',
-    COLLECTIONS: 'fpc_collections'
-};
-
-const SEED_DATA = {
-    COURSES: [
-        { id: 1, title: 'Liderazgo Empático', level: 'Accesibilidad AAA', duration: '12h', category: 'Laboral', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMTJH8dbnMCwZe3P5hXyrvwXTglZkdnH3Xv_WEb-Z-J78s4WfRPq9ECpTLFBqO6hBclnn6LVzDqJOEQHeXGkcu978LySNe8ARN-p2Avf2LlxjtEA8lT-qhQaxvadE3IUKG5AINm-RPwwGTBYEKq0Rk-FcsbC3ZyUQ-9mbntNAmL6DlL4Hq8vElxvOfm0KuGGjL-P0nIkOgSK43CXVh96lewEHl_x6KbilKk1lVapVS9ZiBsNv1v0wbzK8Zfcf2fByS9UcDjy0DeE2L', status: 'published' },
-        { id: 2, title: 'Introducción al Braille Digital', level: 'Visual Focus', duration: '20h', category: 'Tecnología', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCjZNvaOh3E9Ond6UnB7yMU84nt6E0BXVuBAHSN1CK710aBie79qf1a9Vm4b_nz86hQmrrNK3KqqYU20UTpyOxA9kfWrvbidFSsRDA0V62F3aELe_Lr5_pHoPiGFN3KAnH_um2mf2Cmpf7icVX831g_o1YevXmqqOV5dk9dOb1w9uySAEQSN7qNYeTEWFAMmtVw3PiRHh7ebN9aiwCC6mWBXtWAwSmhHHI8z4LEwFxPv58YjgujBB-S22d8A8rxlO0jCZrOEFhaHMn8', status: 'published' },
-        { id: 3, title: 'Emprendimiento Inclusivo', level: 'Cognitivo Adaptado', duration: '15h', category: 'Negocios', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCicB8UDykP_ofYUn7VxMkqrz3Ml6P_R7D54GE5VyI7XjxP1QMzTvECnnL9-N5APo3383NGUZmDT-0BWcp6g1VtLS1-AHteLHyOhFr1rri-XMW9P-lwJxFhK5vaDFmc3G0co0dwO8rpnNGKCjQPez15XyvXdNA-RNhnaX5SHFYca3B3_hmTi4pkPs_3mcGHsfHBlmMPg9BDeTJ98xEHnj5yUlj0Xr--Xy4YKWOselGzajSNp4MEqwG4Ic7OrcCS52lop-ZjyO2Gey9b', status: 'published' }
-    ],
-    USERS: [
-        { id: 1, name: 'Administrador FPC', email: 'admin@fpc.org', role: 'admin', avatar: 'https://ui-avatars.com/api/?name=Admin+FPC&background=003F87&color=fff' },
-        { id: 2, name: 'Juan Perez', email: 'juan@test.com', role: 'student', avatar: 'https://ui-avatars.com/api/?name=Juan+Perez&background=1B6D24&color=fff' }
-    ]
-};
+// Initialize the Supabase client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const DB = {
-    init: () => {
-        if (!localStorage.getItem(STORAGE_KEYS.COURSES)) {
-            localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(SEED_DATA.COURSES));
-        }
-        if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
-            localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(SEED_DATA.USERS));
-        }
+    // Current local cache for synchronous rendering if needed
+    _courses: [],
+    _users: [],
+    _logs: [],
+
+    init: async () => {
+        console.log('Iniciando conexión con Supabase...');
+        // We will fetch initial data
+        await DB.fetchCourses();
+        await DB.fetchUsers();
+        await DB.fetchLogs();
     },
 
-    // Course CRUD
-    getCourses: () => JSON.parse(localStorage.getItem(STORAGE_KEYS.COURSES) || '[]'),
-    saveCourse: (course) => {
-        const courses = DB.getCourses();
+    // --- Courses ---
+    fetchCourses: async () => {
+        const { data, error } = await supabase
+            .from('courses')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('Error fetching courses:', error);
+            return [];
+        }
+        DB._courses = data;
+        return data;
+    },
+
+    getCourses: () => DB._courses,
+
+    saveCourse: async (course) => {
+        let result;
         if (course.id) {
-            const index = courses.findIndex(c => c.id === course.id);
-            courses[index] = { ...courses[index], ...course };
+            // Update
+            result = await supabase
+                .from('courses')
+                .update(course)
+                .eq('id', course.id);
         } else {
-            course.id = Date.now();
-            courses.push(course);
+            // Create
+            result = await supabase
+                .from('courses')
+                .insert([course]);
         }
-        localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(courses));
-        DB.log(`Curso ${course.id ? 'actualizado' : 'creado'}: ${course.title}`);
-        return course;
-    },
-    deleteCourse: (id) => {
-        const courses = DB.getCourses().filter(c => c.id !== id);
-        localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(courses));
-        DB.log(`Curso eliminado ID: ${id}`);
+
+        if (result.error) throw result.error;
+        await DB.log(`Curso gestionado: ${course.title}`);
+        await DB.fetchCourses(); // Sync cache
+        return result.data;
     },
 
-    // User CRUD
-    getUsers: () => JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]'),
-    saveUser: (user) => {
-        const users = DB.getUsers();
-        if (user.id) {
-            const index = users.findIndex(u => u.id === user.id);
-            users[index] = { ...users[index], ...user };
-        } else {
-            user.id = Date.now();
-            users.push(user);
-        }
-        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-        return user;
+    deleteCourse: async (id) => {
+        const { error } = await supabase
+            .from('courses')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
+        await DB.log(`Curso eliminado (ID: ${id})`);
+        await DB.fetchCourses();
     },
 
-    // Logger
-    log: (message) => {
-        const logs = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOG) || '[]');
-        logs.unshift({ id: Date.now(), message, date: new Date().toISOString() });
-        localStorage.setItem(STORAGE_KEYS.LOG, JSON.stringify(logs.slice(0, 50)));
+    // --- Users ---
+    fetchUsers: async () => {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*');
+        
+        if (error) {
+            console.error('Error fetching users:', error);
+            return [];
+        }
+        DB._users = data;
+        return data;
     },
-    getLogs: () => JSON.parse(localStorage.getItem(STORAGE_KEYS.LOG) || '[]')
+
+    getUsers: () => DB._users,
+
+    // --- Logs ---
+    fetchLogs: async () => {
+        const { data, error } = await supabase
+            .from('logs')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(20);
+        
+        if (error) return [];
+        DB._logs = data;
+        return data;
+    },
+
+    getLogs: () => DB._logs,
+
+    log: async (message) => {
+        await supabase
+            .from('logs')
+            .insert([{ message }]);
+        await DB.fetchLogs();
+    }
 };
+
+/**
+ * SQL SCHEMA FOR SUPABASE DASHBOARD:
+ * 
+ * create table courses (
+ *   id bigint primary key generated always as identity,
+ *   title text not null,
+ *   level text,
+ *   duration text,
+ *   category text,
+ *   img text,
+ *   status text default 'published',
+ *   created_at timestamp with time zone default now()
+ * );
+ * 
+ * create table profiles (
+ *   id bigint primary key generated always as identity,
+ *   name text,
+ *   email text unique,
+ *   role text default 'student',
+ *   avatar text,
+ *   created_at timestamp with time zone default now()
+ * );
+ * 
+ * create table logs (
+ *   id bigint primary key generated always as identity,
+ *   message text,
+ *   created_at timestamp with time zone default now()
+ * );
+ */
