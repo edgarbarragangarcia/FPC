@@ -67,15 +67,28 @@ export const Login = {
                 }
 
                 if (data.session) {
-                    window.state.user = { loggedIn: true, email: data.user.email, id: data.user.id };
+                    // Fetch full profile to get role and details
+                    const { data: profileData, error: profileError } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('email', email)
+                        .single();
+
+                    if (profileError) throw profileError;
+
+                    window.state.user = { 
+                        loggedIn: true, 
+                        email: data.user.email, 
+                        id: profileData.id,
+                        role: profileData.role,
+                        name: profileData.name,
+                        avatar: profileData.avatar
+                    };
                     
-                    // Comprobar rol si quisieras redireccionarlo a /admin
-                    // Usaremos profiles para definir el panel
-                    const profileData = await supabase.from('profiles').select('role').eq('email', email).single();
-                    if(profileData?.data?.role === 'admin') {
+                    if(profileData.role === 'admin') {
                         window.location.hash = '#/admin';
                     } else {
-                        window.location.hash = '#/cursos';
+                        window.location.hash = '#/dashboard';
                     }
                 }
             } catch (err) {

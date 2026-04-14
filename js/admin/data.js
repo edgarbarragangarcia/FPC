@@ -105,6 +105,23 @@ export const DB = {
             .from('logs')
             .insert([{ message }]);
         await DB.fetchLogs();
+    },
+
+    // --- Student Enrollments ---
+    fetchUserEnrollments: async (userId) => {
+        const { data, error } = await supabase
+            .from('enrollments')
+            .select(`
+                *,
+                courses (*)
+            `)
+            .eq('profile_id', userId);
+        
+        if (error) {
+            console.error('Error fetching enrollments:', error);
+            return [];
+        }
+        return data;
     }
 };
 

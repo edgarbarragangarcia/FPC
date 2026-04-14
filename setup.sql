@@ -30,7 +30,17 @@ CREATE TABLE IF NOT EXISTS logs (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 4. Datos Iniciales (Seed)
+-- 4. Tabla de Inscripciones (Enrollments)
+CREATE TABLE IF NOT EXISTS enrollments (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    profile_id BIGINT REFERENCES profiles(id) ON DELETE CASCADE,
+    course_id BIGINT REFERENCES courses(id) ON DELETE CASCADE,
+    progress INT DEFAULT 0,
+    status TEXT DEFAULT 'active',
+    enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 5. Datos Iniciales (Seed)
 INSERT INTO courses (title, level, duration, category, img)
 VALUES 
 ('Liderazgo Empático', 'Accesibilidad AAA', '12h', 'Laboral', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAMTJH8dbnMCwZe3P5hXyrvwXTglZkdnH3Xv_WEb-Z-J78s4WfRPq9ECpTLFBqO6hBclnn6LVzDqJOEQHeXGkcu978LySNe8ARN-p2Avf2LlxjtEA8lT-qhQaxvadE3IUKG5AINm-RPwwGTBYEKq0Rk-FcsbC3ZyUQ-9mbntNAmL6DlL4Hq8vElxvOfm0KuGGjL-P0nIkOgSK43CXVh96lewEHl_x6KbilKk1lVapVS9ZiBsNv1v0wbzK8Zfcf2fByS9UcDjy0DeE2L'),
@@ -42,4 +52,11 @@ VALUES
 ('Administrador FPC', 'admin@fpc.org', 'admin', 'https://ui-avatars.com/api/?name=Admin+FPC&background=003F87&color=fff'),
 ('Juan Perez', 'juan@test.com', 'student', 'https://ui-avatars.com/api/?name=Juan+Perez&background=1B6D24&color=fff');
 
-INSERT INTO logs (message) VALUES ('Base de datos inicializada');
+-- Inscripciones para Juan Perez (ID 2 típicamente en este seed)
+-- Nota: En Supabase real los IDs pueden variar, esto es para referencia
+INSERT INTO enrollments (profile_id, course_id, progress, status)
+VALUES 
+(2, 1, 45, 'active'),
+(2, 2, 80, 'active');
+
+INSERT INTO logs (message) VALUES ('Base de datos inicializada con tabla de inscripciones');

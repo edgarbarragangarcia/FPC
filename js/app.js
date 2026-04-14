@@ -12,6 +12,7 @@ import { AdminUsers } from './admin/pages/users.js';
 import { AdminEnrollments } from './admin/pages/enrollments.js';
 import { AdminReports } from './admin/pages/reports.js';
 import { Login } from './pages/login.js';
+import { StudentDashboard } from './pages/studentDashboard.js';
 
 // Initialize Simulated DB
 let isAppInitialized = false;
@@ -36,7 +37,8 @@ const routes = {
     '/admin/reportes': AdminReports,
     
     // Auth
-    '/login': Login
+    '/login': Login,
+    '/dashboard': StudentDashboard
 };
 
 const router = async () => {
@@ -103,10 +105,22 @@ window.addEventListener('load', () => {
     const btnDesktop = document.getElementById('btn-mi-cuenta-desktop');
     const btnMobile = document.getElementById('btn-mi-cuenta-mobile');
     
-    if(btnDesktop) btnDesktop.onclick = () => window.location.hash = '#/login';
+    const handleAccountClick = () => {
+        if (window.state.user && window.state.user.loggedIn) {
+            if (window.state.user.role === 'admin') {
+                window.location.hash = '#/admin';
+            } else {
+                window.location.hash = '#/dashboard';
+            }
+        } else {
+            window.location.hash = '#/login';
+        }
+    };
+
+    if(btnDesktop) btnDesktop.onclick = handleAccountClick;
     if(btnMobile) btnMobile.onclick = () => {
         document.getElementById('mobile-menu-backdrop')?.click(); // Close menu
-        window.location.hash = '#/login';
+        handleAccountClick();
     };
 });
 
