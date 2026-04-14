@@ -122,6 +122,73 @@ export const DB = {
             return [];
         }
         return data;
+    },
+
+    // --- Modules ---
+    fetchModules: async (courseId) => {
+        const { data, error } = await supabase
+            .from('modules')
+            .select('*')
+            .eq('course_id', courseId)
+            .order('position', { ascending: true });
+        
+        if (error) { console.error('Error fetching modules:', error); return []; }
+        return data;
+    },
+
+    saveModule: async (mod) => {
+        let result;
+        if (mod.id) {
+            result = await supabase.from('modules').update(mod).eq('id', mod.id);
+        } else {
+            const { id, ...modData } = mod;
+            result = await supabase.from('modules').insert([modData]).select();
+        }
+        if (result.error) throw result.error;
+        return result.data;
+    },
+
+    deleteModule: async (id) => {
+        const { error } = await supabase.from('modules').delete().eq('id', id);
+        if (error) throw error;
+    },
+
+    // --- Lessons ---
+    fetchLessons: async (moduleId) => {
+        const { data, error } = await supabase
+            .from('lessons')
+            .select('*')
+            .eq('module_id', moduleId)
+            .order('position', { ascending: true });
+        
+        if (error) { console.error('Error fetching lessons:', error); return []; }
+        return data;
+    },
+
+    saveLesson: async (lesson) => {
+        let result;
+        if (lesson.id) {
+            result = await supabase.from('lessons').update(lesson).eq('id', lesson.id);
+        } else {
+            const { id, ...lessonData } = lesson;
+            result = await supabase.from('lessons').insert([lessonData]).select();
+        }
+        if (result.error) throw result.error;
+        return result.data;
+    },
+
+    deleteLesson: async (id) => {
+        const { error } = await supabase.from('lessons').delete().eq('id', id);
+        if (error) throw error;
+    },
+
+    // --- Full Course Content (modules + lessons) ---
+    fetchCourseContent: async (courseId) => {
+        const modules = await DB.fetchModules(courseId);
+        for (const mod of modules) {
+            mod.lessons = await DB.fetchLessons(mod.id);
+        }
+        return modules;
     }
 };
 
