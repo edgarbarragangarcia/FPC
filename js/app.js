@@ -32,6 +32,8 @@ const routes = {
     '/admin': AdminDashboard,
     '/admin/cursos': AdminCourses,
     '/admin/usuarios': AdminUsers,
+    '/admin/inscripciones': AdminEnrollments,
+    '/admin/reportes': AdminReports,
     
     // Auth
     '/login': Login

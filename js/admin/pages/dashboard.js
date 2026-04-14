@@ -8,7 +8,6 @@ export const AdminDashboard = {
         const logs = DB.getLogs();
 
         return `
-        return `
         <div class="space-y-8 animate-in fade-in duration-700 pb-12">
             <!-- Premium Header -->
             <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
