@@ -6,59 +6,69 @@ export const AdminCourses = {
         const courses = DB.getCourses();
 
         return `
-        <div class="space-y-8 animate-in fade-in duration-500 pb-12">
-            <header class="flex justify-between items-center bg-white p-8 rounded-[2rem] border border-surface-variant">
-                <div>
-                    <h2 class="text-3xl font-headline font-bold text-primary">Gestión de Cursos</h2>
-                    <p class="text-on-surface/60">Administra el catálogo educativo de la plataforma.</p>
+        <div class="space-y-8 animate-in fade-in duration-700 pb-12">
+            <!-- Premium Header with Gradient & Glassmorphism -->
+            <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                
+                <div class="relative z-10 space-y-2 mb-6 md:mb-0">
+                    <h2 class="text-4xl font-headline font-extrabold tracking-tight">Gestión de Cursos</h2>
+                    <p class="text-white/80 text-lg font-medium">Administra el catálogo educativo de la plataforma.</p>
                 </div>
-                <button onclick="window.showCourseModal()" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
-                    <span class="material-symbols-outlined">add</span> Nuevo Curso
+                
+                <button onclick="window.showCourseModal()" class="relative z-10 bg-white/10 hover:bg-white text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <span class="material-symbols-outlined font-light text-[22px]">add</span> 
+                    <span>Nuevo Curso</span>
                 </button>
             </header>
 
-            <!-- Course Table/List -->
-            <div class="bg-white rounded-[2rem] border border-surface-variant overflow-x-auto shadow-sm">
-                <table class="min-w-full text-left">
-                    <thead class="bg-surface-variant/30 border-b border-surface-variant">
+            <!-- Data Table Container with Glassmorphism -->
+            <div class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <table class="min-w-full text-left border-collapse">
+                    <thead class="bg-surface/40 border-b border-surface-variant/50">
                         <tr>
-                            <th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface/50">Curso</th>
-                            <th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface/50">Categoría</th>
-                            <th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface/50">Estado</th>
-                            <th class="px-8 py-4 text-xs font-bold uppercase tracking-widest text-on-surface/50">Acciones</th>
+                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Curso</th>
+                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Categoría</th>
+                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Estado</th>
+                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40 text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-surface-variant">
-                        ${courses.map(course => `
-                        <tr class="hover:bg-surface/50 transition-colors group">
+                    <tbody class="divide-y divide-surface-variant/30">
+                        ${courses.map((course, index) => `
+                        <tr class="hover:bg-white transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
                             <td class="px-8 py-6">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-surface-variant">
+                                <div class="flex items-center gap-5">
+                                    <div class="relative w-16 h-12 rounded-xl overflow-hidden shadow-sm border border-white ring-2 ring-white/50 group-hover:scale-105 transition-transform duration-300">
                                         <img src="${course.img}" class="w-full h-full object-cover">
                                     </div>
-                                    <div>
-                                        <p class="font-bold text-primary">${course.title}</p>
-                                        <p class="text-[10px] text-on-surface/40 uppercase tracking-widest">${course.duration} | ${course.level}</p>
+                                    <div class="flex flex-col">
+                                        <span class="font-extrabold text-primary text-base group-hover:text-[#0052b4] transition-colors">${course.title}</span>
+                                        <span class="text-xs text-on-surface/40 font-medium tracking-wide mt-0.5">${course.duration} &bull; ${course.level}</span>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-8 py-6">
-                                <span class="bg-primary/5 text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-primary/10">${course.category}</span>
+                                <span class="px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.15em] border bg-surface text-primary border-surface-variant/50 shadow-sm">
+                                    ${course.category}
+                                </span>
                             </td>
                             <td class="px-8 py-6">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full ${course.status === 'published' ? 'bg-secondary' : 'bg-on-surface/20'}"></span>
-                                    <span class="text-sm font-medium ${course.status === 'published' ? 'text-secondary' : 'text-on-surface/40'}">
+                                    <div class="relative flex items-center justify-center">
+                                        <span class="w-2.5 h-2.5 rounded-full ${course.status === 'published' ? 'bg-emerald-500' : 'bg-amber-400'} shadow-sm"></span>
+                                        ${course.status === 'published' ? '<span class="absolute w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping opacity-75"></span>' : ''}
+                                    </div>
+                                    <span class="text-xs font-bold uppercase tracking-wider ${course.status === 'published' ? 'text-emerald-700' : 'text-amber-700'}">
                                         ${course.status === 'published' ? 'Publicado' : 'Borrador'}
                                     </span>
                                 </div>
                             </td>
-                            <td class="px-8 py-6">
-                                <div class="flex gap-2">
-                                    <button onclick="window.editCourse(${course.id})" class="p-2 hover:bg-primary/10 text-primary rounded-lg transition-all" title="Editar">
+                            <td class="px-8 py-6 text-right">
+                                <div class="flex gap-2 justify-end opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+                                    <button onclick="window.editCourse(${course.id})" class="p-2.5 bg-surface hover:bg-primary hover:text-white text-primary rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Editar">
                                         <span class="material-symbols-outlined text-xl">edit</span>
                                     </button>
-                                    <button onclick="window.deleteCourse(${course.id})" class="p-2 hover:bg-accent/10 text-accent rounded-lg transition-all" title="Eliminar">
+                                    <button onclick="window.deleteCourse(${course.id})" class="p-2.5 bg-surface hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Eliminar">
                                         <span class="material-symbols-outlined text-xl">delete</span>
                                     </button>
                                 </div>
