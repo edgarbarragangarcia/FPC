@@ -198,6 +198,7 @@ export const DB = {
  * create table courses (
  *   id bigint primary key generated always as identity,
  *   title text not null,
+ *   description text,
  *   level text,
  *   duration text,
  *   category text,
