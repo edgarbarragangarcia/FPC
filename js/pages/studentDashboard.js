@@ -23,9 +23,10 @@ export const StudentDashboard = {
         }, 0);
 
         return `
-        <div class="max-w-6xl mx-auto px-4 pb-12" role="main" aria-label="Panel del estudiante">
-            <!-- Sticky Header Section -->
-            <div class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl py-6 md:py-10 -mx-4 px-4 space-y-8 mb-8">
+        <div class="h-full overflow-y-auto scroll-smooth bg-surface pb-12" role="main" aria-label="Panel del estudiante">
+            <div class="max-w-6xl mx-auto px-4">
+                <!-- Sticky Header Section -->
+                <div class="sticky top-0 z-40 bg-surface/95 backdrop-blur-md py-6 md:py-8 -mx-4 px-4 space-y-8 mb-4">
                 <!-- Welcome Section -->
                 <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-3xl p-6 md:p-10 text-white shadow-xl" aria-label="Bienvenida">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
@@ -153,8 +154,8 @@ export const StudentDashboard = {
                 <button onclick="window.location.hash='#/'" class="flex items-center gap-2 px-5 py-3 bg-white border border-surface-variant rounded-2xl font-bold text-sm text-on-surface/70 hover:text-accent hover:border-accent/30 transition-all accessible-focus">
                     <span class="material-symbols-outlined text-lg">logout</span>
                     Cerrar Sesión
-                </button>
-            </section>
+                </section>
+            </div>
         </div>
         `;
     },

@@ -62,14 +62,24 @@ const router = async () => {
             document.querySelector('header')?.classList.add('hidden');
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+        } else if (path === '/dashboard') {
+            document.querySelector('header')?.classList.remove('hidden');
+            document.querySelector('footer')?.classList.add('hidden');
+            view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+            view.classList.add('h-full');
+            document.body.classList.add('h-screen', 'overflow-hidden');
         } else if (path === '/login') {
             document.querySelector('header')?.classList.remove('hidden');
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+            view.classList.remove('h-full');
+            document.body.classList.remove('h-screen', 'overflow-hidden');
         } else {
             document.querySelector('header')?.classList.remove('hidden');
             document.querySelector('footer')?.classList.remove('hidden');
             view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+            view.classList.remove('h-full');
+            document.body.classList.remove('h-screen', 'overflow-hidden');
         }
 
         // Immediate Swap
