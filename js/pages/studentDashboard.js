@@ -23,68 +23,71 @@ export const StudentDashboard = {
         }, 0);
 
         return `
-        <div class="max-w-6xl mx-auto py-6 md:py-10 px-4 space-y-8" role="main" aria-label="Panel del estudiante">
-            <!-- Welcome Section -->
-            <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-3xl p-6 md:p-10 text-white shadow-xl" aria-label="Bienvenida">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-                
-                <div class="relative z-10 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
-                    <div class="w-20 h-20 rounded-2xl bg-white p-1 shadow-lg shrink-0">
-                        <img src="${user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=003F87&color=fff`}" 
-                             alt="Foto de perfil de ${user.name || user.email}" 
-                             class="w-full h-full object-cover rounded-xl">
+        <div class="max-w-6xl mx-auto px-4 pb-12" role="main" aria-label="Panel del estudiante">
+            <!-- Sticky Header Section -->
+            <div class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl py-6 md:py-10 -mx-4 px-4 space-y-8 mb-8">
+                <!-- Welcome Section -->
+                <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-3xl p-6 md:p-10 text-white shadow-xl" aria-label="Bienvenida">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white p-1 shadow-lg shrink-0">
+                            <img src="${user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=003F87&color=fff`}" 
+                                 alt="Foto de perfil de ${user.name || user.email}" 
+                                 class="w-full h-full object-cover rounded-xl">
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Panel del Estudiante</p>
+                            <h1 class="text-2xl md:text-3xl font-headline font-bold tracking-tight">Hola, ${user.name || 'Estudiante'}</h1>
+                            <p class="text-sm text-white/70 max-w-lg leading-relaxed hidden md:block">
+                                Bienvenido a tu espacio de aprendizaje inclusivo. Sigue avanzando a tu ritmo.
+                            </p>
+                        </div>
                     </div>
-                    <div class="space-y-1">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Panel del Estudiante</p>
-                        <h1 class="text-2xl md:text-3xl font-headline font-bold tracking-tight">Hola, ${user.name || 'Estudiante'}</h1>
-                        <p class="text-sm text-white/70 max-w-lg leading-relaxed">
-                            Bienvenido a tu espacio de aprendizaje inclusivo. Sigue avanzando a tu ritmo.
-                        </p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Quick Stats -->
-            <section aria-label="Resumen de progreso">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-white p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-shadow" role="status" aria-label="${activeCount} cursos activos">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
-                                <span class="material-symbols-outlined text-xl">school</span>
+                <!-- Quick Stats -->
+                <section aria-label="Resumen de progreso">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 md:p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-all" role="status" aria-label="${activeCount} cursos activos">
+                            <div class="flex items-center gap-3 mb-2 md:mb-3">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-lg">school</span>
+                                </div>
+                                <p class="text-[10px] md:text-xs font-bold text-on-surface/40 uppercase tracking-wider">Activos</p>
                             </div>
-                            <p class="text-xs font-bold text-on-surface/40 uppercase tracking-wider">Activos</p>
+                            <p class="text-xl md:text-2xl font-headline font-black text-primary">${activeCount}</p>
                         </div>
-                        <p class="text-2xl font-headline font-black text-primary">${activeCount}</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-shadow" role="status" aria-label="${completedCount} cursos completados">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-10 h-10 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center">
-                                <span class="material-symbols-outlined text-xl">verified</span>
+                        <div class="bg-white p-4 md:p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-all" role="status" aria-label="${completedCount} cursos completados">
+                            <div class="flex items-center gap-3 mb-2 md:mb-3">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-lg">verified</span>
+                                </div>
+                                <p class="text-[10px] md:text-xs font-bold text-on-surface/40 uppercase tracking-wider">Completados</p>
                             </div>
-                            <p class="text-xs font-bold text-on-surface/40 uppercase tracking-wider">Completados</p>
+                            <p class="text-xl md:text-2xl font-headline font-black text-secondary">${completedCount}</p>
                         </div>
-                        <p class="text-2xl font-headline font-black text-secondary">${completedCount}</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-shadow" role="status" aria-label="Progreso promedio ${avgProgress} por ciento">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-10 h-10 bg-accent/10 text-accent rounded-xl flex items-center justify-center">
-                                <span class="material-symbols-outlined text-xl">trending_up</span>
+                        <div class="bg-white p-4 md:p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-all" role="status" aria-label="Progreso promedio ${avgProgress} por ciento">
+                            <div class="flex items-center gap-3 mb-2 md:mb-3">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-accent/10 text-accent rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-lg">trending_up</span>
+                                </div>
+                                <p class="text-[10px] md:text-xs font-bold text-on-surface/40 uppercase tracking-wider">Progreso</p>
                             </div>
-                            <p class="text-xs font-bold text-on-surface/40 uppercase tracking-wider">Progreso</p>
+                            <p class="text-xl md:text-2xl font-headline font-black text-accent">${avgProgress}%</p>
                         </div>
-                        <p class="text-2xl font-headline font-black text-accent">${avgProgress}%</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-shadow" role="status" aria-label="${totalHours} horas totales de estudio">
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
-                                <span class="material-symbols-outlined text-xl">schedule</span>
+                        <div class="bg-white p-4 md:p-5 rounded-2xl border border-surface-variant shadow-sm hover:shadow-md transition-all" role="status" aria-label="${totalHours} horas totales de estudio">
+                            <div class="flex items-center gap-3 mb-2 md:mb-3">
+                                <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-lg">schedule</span>
+                                </div>
+                                <p class="text-[10px] md:text-xs font-bold text-on-surface/40 uppercase tracking-wider">Horas</p>
                             </div>
-                            <p class="text-xs font-bold text-on-surface/40 uppercase tracking-wider">Horas</p>
+                            <p class="text-xl md:text-2xl font-headline font-black text-blue-600">${totalHours}h</p>
                         </div>
-                        <p class="text-2xl font-headline font-black text-blue-600">${totalHours}h</p>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
 
             <!-- Enrolled Courses Section -->
             <section class="space-y-6" aria-label="Mis cursos inscritos">
