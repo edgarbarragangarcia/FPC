@@ -229,7 +229,18 @@ export const AdminCourses = {
                                 <input type="text" id="lesson-duration" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="Ej: 15min">
                             </div>
                         </div>
-                        <div class="space-y-2">
+                        <div id="lesson-file-container" class="hidden space-y-2">
+                            <label class="text-sm font-bold ml-1 text-secondary">Archivo del curso (PDFs, Docs)</label>
+                            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-secondary/30 rounded-2xl bg-secondary/5 hover:bg-secondary/10 cursor-pointer transition-all group">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <span class="material-symbols-outlined text-secondary text-3xl mb-2 group-hover:scale-110 transition-transform">cloud_upload</span>
+                                    <p id="lesson-file-name" class="text-sm text-secondary font-bold">Haz clic para subir un archivo</p>
+                                    <p class="text-xs text-secondary/60 mt-1">Máximo 50MB (PDF, DOCX, ZIP)</p>
+                                </div>
+                                <input id="lesson-file" type="file" class="hidden" accept=".pdf,.docx,.zip,.doc" />
+                            </label>
+                        </div>
+                        <div id="lesson-content-container" class="space-y-2">
                             <label class="text-sm font-bold ml-1">Contenido (URL o texto)</label>
                             <textarea id="lesson-content" rows="4" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" placeholder="URL del video, URL del PDF, o escribe el contenido de texto..."></textarea>
                         </div>
@@ -430,6 +441,7 @@ export const AdminCourses = {
             document.getElementById('lesson-form').reset();
             document.getElementById('lesson-id').value = '';
             document.getElementById('lesson-module-id').value = moduleId;
+            updateLessonUI('text');
             document.getElementById('lesson-modal').classList.remove('hidden');
         };
 
@@ -445,8 +457,32 @@ export const AdminCourses = {
             document.getElementById('lesson-type').value = lesson.content_type || 'text';
             document.getElementById('lesson-duration').value = lesson.duration || '';
             document.getElementById('lesson-content').value = lesson.content || '';
+            
+            // Trigger type change logic
+            updateLessonUI(lesson.content_type || 'text');
             document.getElementById('lesson-modal').classList.remove('hidden');
         };
+
+        function updateLessonUI(type) {
+            const fileContainer = document.getElementById('lesson-file-container');
+            if (type === 'pdf') {
+                fileContainer.classList.remove('hidden');
+            } else {
+                fileContainer.classList.add('hidden');
+            }
+        }
+
+        // Logic for type change
+        document.body.addEventListener('change', (e) => {
+            if (e.target.id === 'lesson-type') {
+                updateLessonUI(e.target.value);
+            }
+            if (e.target.id === 'lesson-file') {
+                const fileName = e.target.files[0]?.name || 'Haz clic para subir un archivo';
+                document.getElementById('lesson-file-name').innerText = fileName;
+                document.getElementById('lesson-file-name').classList.add('text-primary');
+            }
+        });
 
         window.closeLessonModal = () => {
             document.getElementById('lesson-modal').classList.add('hidden');
@@ -461,22 +497,44 @@ export const AdminCourses = {
 
         document.getElementById('lesson-form').onsubmit = async (e) => {
             e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const origText = btn.innerHTML;
+            
             const moduleId = parseInt(document.getElementById('lesson-module-id').value);
             const mod = currentModules.find(m => m.id === moduleId);
-            const lesson = {
-                id: document.getElementById('lesson-id').value ? parseInt(document.getElementById('lesson-id').value) : null,
-                module_id: moduleId,
-                title: document.getElementById('lesson-title').value,
-                content_type: document.getElementById('lesson-type').value,
-                content: document.getElementById('lesson-content').value,
-                duration: document.getElementById('lesson-duration').value,
-                position: mod?.lessons?.length || 0
-            };
+            const fileInput = document.getElementById('lesson-file');
+            const contentType = document.getElementById('lesson-type').value;
+            let content = document.getElementById('lesson-content').value;
+
             try {
+                // If PDF and file selected, upload it
+                if (contentType === 'pdf' && fileInput.files.length > 0) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Subiendo...';
+                    
+                    const fileUrl = await DB.uploadFile(fileInput.files[0]);
+                    content = fileUrl; // Use the URL as content
+                }
+
+                const lesson = {
+                    id: document.getElementById('lesson-id').value ? parseInt(document.getElementById('lesson-id').value) : null,
+                    module_id: moduleId,
+                    title: document.getElementById('lesson-title').value,
+                    content_type: contentType,
+                    content: content,
+                    duration: document.getElementById('lesson-duration').value,
+                    position: mod?.lessons?.length || 0
+                };
+
                 await DB.saveLesson(lesson);
                 window.closeLessonModal();
                 await loadModules();
-            } catch (e) { alert('Error: ' + e.message); }
+            } catch (e) { 
+                alert('Error: ' + e.message); 
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
         };
 
         // --- Publish Tab ---

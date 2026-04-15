@@ -192,6 +192,32 @@ export const DB = {
             mod.lessons = await DB.fetchLessons(mod.id);
         }
         return modules;
+    },
+
+    // --- Storage ---
+    uploadFile: async (file) => {
+        if (!file) return null;
+        
+        // Generate a unique filename
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `uploads/${fileName}`;
+
+        const { data, error } = await supabase.storage
+            .from('lesson-materials')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+
+        if (error) throw error;
+
+        // Get the public URL
+        const { data: { publicUrl } } = supabase.storage
+            .from('lesson-materials')
+            .getPublicUrl(filePath);
+
+        return publicUrl;
     }
 };
 
