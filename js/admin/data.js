@@ -39,11 +39,12 @@ export const DB = {
     saveCourse: async (course) => {
         let result;
         if (course.id) {
-            // Update
+            // Update - exclude ID from the data being sent
+            const { id, ...updateData } = course;
             result = await supabase
                 .from('courses')
-                .update(course)
-                .eq('id', course.id);
+                .update(updateData)
+                .eq('id', id);
         } else {
             // Create - omit ID for GENERATED ALWAYS AS IDENTITY
             const { id, ...courseData } = course;
@@ -139,7 +140,8 @@ export const DB = {
     saveModule: async (mod) => {
         let result;
         if (mod.id) {
-            result = await supabase.from('modules').update(mod).eq('id', mod.id);
+            const { id, ...updateData } = mod;
+            result = await supabase.from('modules').update(updateData).eq('id', id);
         } else {
             const { id, ...modData } = mod;
             result = await supabase.from('modules').insert([modData]).select();
@@ -168,7 +170,8 @@ export const DB = {
     saveLesson: async (lesson) => {
         let result;
         if (lesson.id) {
-            result = await supabase.from('lessons').update(lesson).eq('id', lesson.id);
+            const { id, ...updateData } = lesson;
+            result = await supabase.from('lessons').update(updateData).eq('id', id);
         } else {
             const { id, ...lessonData } = lesson;
             result = await supabase.from('lessons').insert([lessonData]).select();
