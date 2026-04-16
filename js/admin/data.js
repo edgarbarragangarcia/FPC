@@ -99,6 +99,17 @@ export const DB = {
         return { status: 'success' };
     },
 
+    unenrollCourse: async (courseId, userId) => {
+        const { error } = await supabase
+            .from('enrollments')
+            .delete()
+            .eq('course_id', courseId)
+            .eq('profile_id', userId);
+        
+        if (error) throw error;
+        return { status: 'success' };
+    },
+
     // --- Logs ---
     fetchLogs: async () => {
         const { data, error } = await supabase

@@ -124,10 +124,15 @@ export const StudentDashboard = {
                                             </div>
                                         </div>
 
-                                        <button class="w-full bg-surface-variant text-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-sm group-hover:bg-primary group-hover:text-white transition-all">
-                                            <span class="material-symbols-outlined text-lg">play_circle</span>
-                                            <span>${env.progress > 0 ? 'Continuar' : 'Empezar Curso'}</span>
-                                        </button>
+                                        <div class="flex gap-2">
+                                    <button data-id="${env.courses.id}" class="btn-start-course flex-1 bg-surface-variant text-primary py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-sm group-hover:bg-primary group-hover:text-white transition-all">
+                                        <span class="material-symbols-outlined text-lg">play_circle</span>
+                                        <span>${env.progress > 0 ? 'Continuar' : 'Empezar Curso'}</span>
+                                    </button>
+                                    <button data-id="${env.courses.id}" class="btn-unenroll p-3 text-on-surface/30 hover:text-accent hover:bg-accent/10 rounded-xl transition-all" title="Darme de baja">
+                                        <span class="material-symbols-outlined text-xl">delete_forever</span>
+                                    </button>
+                                </div>
                                     </div>
                                 </article>
                                 `).join('')}
@@ -141,10 +146,10 @@ export const StudentDashboard = {
                             <span class="material-symbols-outlined text-lg">explore</span>
                             Explorar Catálogo
                         </a>
-                        <button onclick="window.location.hash='#/'" class="flex items-center gap-2 px-5 py-3 bg-white border border-surface-variant rounded-xl font-bold text-xs text-on-surface/70 hover:text-accent transition-all">
-                            <span class="material-symbols-outlined text-lg">logout</span>
-                            Cerrar Sesión
-                        </button>
+                        <button id="btn-logout" class="flex items-center gap-2 px-5 py-3 bg-white border border-surface-variant rounded-xl font-bold text-xs text-on-surface/70 hover:text-accent transition-all">
+                    <span class="material-symbols-outlined text-lg">logout</span>
+                    Cerrar Sesión
+                </button>
                     </section>
                 </div>
             </div>
@@ -179,5 +184,30 @@ export const StudentDashboard = {
                 }
             };
         });
+        // Handle Unenrollment
+        document.querySelectorAll('.btn-unenroll').forEach(btn => {
+            btn.onclick = async () => {
+                if (confirm('¿Estás seguro que deseas darte de baja de este curso? Se perderá tu progreso.')) {
+                    try {
+                        await DB.unenrollCourse(btn.dataset.id, window.state.user.id);
+                        window.location.reload(); // Refresh to update list
+                    } catch (e) {
+                        alert('No se pudo procesar la baja. Intenta de nuevo.');
+                    }
+                }
+            };
+        });
+
+        // Handle Logout
+        const logoutBtn = document.getElementById('btn-logout');
+        if (logoutBtn) {
+            logoutBtn.onclick = async () => {
+                const { supabase } = await import('../admin/data.js');
+                await supabase.auth.signOut();
+                window.state.user = { name: 'Visitante', loggedIn: false };
+                window.location.hash = '#/';
+                window.location.reload(); // Hard refresh to clear state
+            };
+        }
     }
 };

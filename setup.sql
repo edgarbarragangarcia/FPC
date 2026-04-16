@@ -68,6 +68,7 @@ CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.
 -- Usuarios pueden ver sus propias inscripciones
 CREATE POLICY "Users can view own enrollments" ON enrollments FOR SELECT USING (auth.uid() = profile_id);
 CREATE POLICY "Users can enroll themselves" ON enrollments FOR INSERT WITH CHECK (auth.uid() = profile_id);
+CREATE POLICY "Users can unenroll themselves" ON enrollments FOR DELETE USING (auth.uid() = profile_id);
 
 -- 6. Tabla de Logs de Auditoría
 CREATE TABLE IF NOT EXISTS logs (
