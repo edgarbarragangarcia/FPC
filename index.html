@@ -482,7 +482,7 @@
         let cursorY = window.innerHeight / 2;
         let baseNoseX = null;
         let baseNoseY = null;
-        const sensitivity = 1.2; // Lower = slower cursor
+        const sensitivity = 2.2; // Intermediate speed
         let smoothX = window.innerWidth / 2;
         let smoothY = window.innerHeight / 2;
 
@@ -490,8 +490,8 @@
         let lastBlinkTime = 0;
         let blinkCount = 0;
         let wasEyeClosed = false;
-        const BLINK_THRESHOLD = 0.018; // EAR threshold for "eye closed"
-        const DOUBLE_BLINK_WINDOW = 800; // ms between blinks for double-blink
+        const BLINK_THRESHOLD = 0.19; // EAR below this = eye closed
+        const DOUBLE_BLINK_WINDOW = 900; // ms window for double-blink
 
         // Calculate Eye Aspect Ratio for right eye
         function getEAR(landmarks, eyeIndices) {
@@ -510,8 +510,8 @@
             return (vertA + vertB) / (2.0 * horiz);
         }
 
-        // Right eye landmark indices for MediaPipe Face Mesh
-        const RIGHT_EYE = [33, 160, 158, 133, 153, 144];
+        // Right eye landmark indices (user's right eye)
+        const RIGHT_EYE = [33, 159, 158, 133, 153, 145];
 
         async function startFaceNav() {
             try {
@@ -557,12 +557,12 @@
                         const dy = nose.y - baseNoseY;
 
                         // Target position based on head delta
-                        const targetX = cursorX + dx * sensitivity * window.innerWidth * 0.03;
-                        const targetY = cursorY + dy * sensitivity * window.innerHeight * 0.03;
+                        const targetX = cursorX + dx * sensitivity * window.innerWidth * 0.04;
+                        const targetY = cursorY + dy * sensitivity * window.innerHeight * 0.04;
 
-                        // Smooth interpolation (lerp) - 0.15 = smooth, 1.0 = instant
-                        cursorX += (targetX - cursorX) * 0.15;
-                        cursorY += (targetY - cursorY) * 0.15;
+                        // Smooth interpolation (lerp)
+                        cursorX += (targetX - cursorX) * 0.25;
+                        cursorY += (targetY - cursorY) * 0.25;
 
                         // Clamp to screen
                         cursorX = Math.max(0, Math.min(window.innerWidth - 10, cursorX));
