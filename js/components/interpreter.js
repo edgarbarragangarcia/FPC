@@ -103,7 +103,7 @@ export const Interpreter = {
                             </div>
 
                             <img id="lsc-avatar-img" src="./sign_language_avatar_1776366810694.png" 
-                                 class="h-[120%] object-contain mt-4 transform-gpu transition-transform duration-100 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                                 class="h-[250%] object-contain mt-20 transform-gpu transition-transform duration-100 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] origin-top">
                             
                             <!-- Transcription Bubble -->
                             <div class="absolute bottom-4 left-4 right-4 z-20">

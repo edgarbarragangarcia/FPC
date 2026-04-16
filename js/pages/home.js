@@ -9,7 +9,7 @@ export const Home = {
                     <div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-widest">
                         Desde 1982 transformando vidas
                     </div>
-                    <h1 class="text-4xl md:text-6xl lg:text-8xl font-headline font-bold text-primary leading-[1.05] tracking-tight">
+                    <h1 class="text-4xl md:text-5xl lg:text-7xl font-headline font-bold text-primary leading-[1.05] tracking-tight">
                         Donde la <span class="text-secondary italic">voluntad</span> rompe toda barrera.
                     </h1>
                     <p class="text-xl md:text-2xl text-on-surface/70 leading-relaxed max-w-2xl font-light">

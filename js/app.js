@@ -136,11 +136,52 @@ window.addEventListener('load', () => {
         document.getElementById('mobile-menu-backdrop')?.click(); // Close menu
         handleAccountClick();
     };
+
+    // Voice Guide Initial Setup
+    document.addEventListener('mouseover', (e) => {
+        if (!window.state.voiceEnabled) return;
+        const target = e.target.closest('a, button, h1, h2, h3, p');
+        if (target && target.innerText) {
+            speak(target.innerText);
+        }
+    });
+
+    document.addEventListener('focusin', (e) => {
+        if (!window.state.voiceEnabled) return;
+        if (e.target && e.target.innerText) {
+            speak(e.target.innerText);
+        }
+    });
 });
+
+const speak = (msg) => {
+    if (!window.state.voiceEnabled) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(msg);
+    utterance.lang = 'es-CO';
+    window.speechSynthesis.speak(utterance);
+};
+
+window.toggleVoice = () => {
+    window.state.voiceEnabled = !window.state.voiceEnabled;
+    const btn = document.getElementById('voice-guide-toggle');
+    const circle = document.getElementById('voice-circle');
+    
+    if (window.state.voiceEnabled) {
+        btn?.classList.replace('bg-surface-variant', 'bg-secondary');
+        circle?.classList.replace('translate-x-0', 'translate-x-6');
+        speak("Recorrido por voz activado.");
+    } else {
+        btn?.classList.replace('bg-secondary', 'bg-surface-variant');
+        circle?.classList.replace('translate-x-6', 'translate-x-0');
+        window.speechSynthesis.cancel();
+    }
+};
 
 // Global State (Simple)
 window.state = {
     user: { name: 'Visitante', loggedIn: false },
     cart: [],
-    lscEnabled: false
+    lscEnabled: false,
+    voiceEnabled: false
 };

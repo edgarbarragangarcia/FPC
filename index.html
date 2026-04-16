@@ -193,7 +193,7 @@
                         <p class="font-bold">Guía de lectura</p>
                         <p class="text-xs text-on-surface/60">Agrega una línea de enfoque visual</p>
                     </div>
-                    <button id="reading-guide-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                    <button id="reading-guide-toggle" onclick="window.toggleReadingGuide()" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
                         <div id="guide-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
@@ -204,8 +204,19 @@
                         <p class="font-bold">Lengua de Señas</p>
                         <p class="text-xs text-on-surface/60">Activar intérprete virtual (LSC)</p>
                     </div>
-                    <button id="lsc-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                    <button id="lsc-toggle" onclick="window.toggleLSC()" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
                         <div id="lsc-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
+                    </button>
+                </div>
+
+                <!-- Voice Guide -->
+                <div class="flex items-center justify-between py-4 border-t border-surface-variant">
+                    <div>
+                        <p class="font-bold">Recorrido por Voz</p>
+                        <p class="text-xs text-on-surface/60">Asistente de voz para personas ciegas</p>
+                    </div>
+                    <button id="voice-guide-toggle" onclick="window.toggleVoice()" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                        <div id="voice-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
             </div>
