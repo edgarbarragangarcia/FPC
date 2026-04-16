@@ -25,59 +25,59 @@ export const StudentDashboard = {
         return `
         <div class="h-screen flex flex-col bg-surface overflow-hidden" role="main" aria-label="Panel del estudiante">
             <!-- Fixed Top Section -->
-            <div class="shrink-0 bg-surface border-b border-surface-variant/30 px-4 pt-4 pb-3 z-40">
-                <div class="max-w-6xl mx-auto space-y-4">
+            <div class="shrink-0 bg-surface border-b border-surface-variant/30 px-4 pt-2 pb-2 z-40">
+                <div class="max-w-6xl mx-auto space-y-2">
                     <!-- Welcome Section -->
-                    <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-4 md:p-5 text-white shadow-lg" aria-label="Bienvenida">
-                        <div class="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-                        <div class="relative z-10 flex items-center gap-4">
-                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-white p-1 shadow-md shrink-0">
+                    <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-xl p-3 md:p-4 text-white shadow-md" aria-label="Bienvenida">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                        <div class="relative z-10 flex items-center gap-3">
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white p-1 shadow-sm shrink-0">
                                 <img src="${user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=003F87&color=fff`}" 
-                                     alt="Foto de perfil" class="w-full h-full object-cover rounded-md">
+                                     alt="Foto" class="w-full h-full object-cover rounded-md">
                             </div>
                             <div>
-                                <p class="text-[8px] font-bold uppercase tracking-[0.2em] text-white/50 leading-none mb-1">Bienvenido</p>
-                                <h1 class="text-lg md:text-xl font-headline font-bold tracking-tight leading-none">${user.name || 'Estudiante'}</h1>
+                                <p class="text-[7px] font-bold uppercase tracking-[0.2em] text-white/50 leading-none mb-1">Bienvenido</p>
+                                <h1 class="text-base md:text-lg font-headline font-bold tracking-tight leading-none">${user.name || 'Estudiante'}</h1>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Quick Stats (Compact) -->
-                    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4" aria-label="Resumen de progreso">
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-surface-variant shadow-sm flex items-center gap-3">
-                            <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-lg">school</span>
+                    <!-- Quick Stats (Ultra Compact) -->
+                    <section class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" aria-label="Resumen de progreso">
+                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                            <div class="w-8 h-8 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-base">school</span>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-on-surface/40 uppercase">Activos</p>
-                                <p class="text-lg font-black text-primary">${activeCount}</p>
+                                <p class="text-[8px] font-bold text-on-surface/40 uppercase">Activos</p>
+                                <p class="text-sm font-black text-primary leading-none">${activeCount}</p>
                             </div>
                         </div>
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-surface-variant shadow-sm flex items-center gap-3">
-                            <div class="w-10 h-10 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-lg">verified</span>
+                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                            <div class="w-8 h-8 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-base">verified</span>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-on-surface/40 uppercase">Completados</p>
-                                <p class="text-lg font-black text-secondary">${completedCount}</p>
+                                <p class="text-[8px] font-bold text-on-surface/40 uppercase">Listos</p>
+                                <p class="text-sm font-black text-secondary leading-none">${completedCount}</p>
                             </div>
                         </div>
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-surface-variant shadow-sm flex items-center gap-3">
-                            <div class="w-10 h-10 bg-accent/10 text-accent rounded-lg flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-lg">trending_up</span>
+                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                            <div class="w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-base">trending_up</span>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-on-surface/40 uppercase">Progreso</p>
-                                <p class="text-lg font-black text-accent">${avgProgress}%</p>
+                                <p class="text-[8px] font-bold text-on-surface/40 uppercase">Avance</p>
+                                <p class="text-sm font-black text-accent leading-none">${avgProgress}%</p>
                             </div>
                         </div>
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-surface-variant shadow-sm flex items-center gap-3">
-                            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-lg">schedule</span>
+                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-base">schedule</span>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-on-surface/40 uppercase">Horas</p>
-                                <p class="text-lg font-black text-blue-600">${totalHours}h</p>
+                                <p class="text-[8px] font-bold text-on-surface/40 uppercase">Horas</p>
+                                <p class="text-sm font-black text-blue-600 leading-none">${totalHours}h</p>
                             </div>
                         </div>
                     </section>
