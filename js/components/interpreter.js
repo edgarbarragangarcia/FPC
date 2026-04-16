@@ -32,10 +32,12 @@ export const Interpreter = {
                 const textEl = document.getElementById('lsc-transcription');
                 if (textEl) textEl.innerText = text;
                 
-                // Animate avatar
+                // Animate avatar via class
                 const avatar = document.getElementById('lsc-avatar-img');
                 if (avatar) {
-                    avatar.style.transform = `scale(${1 + (Math.random() * 0.05)}) rotate(${Math.random() * 2 - 1}deg)`;
+                    avatar.classList.add('lsc-animating');
+                    clearTimeout(this.animTimeout);
+                    this.animTimeout = setTimeout(() => avatar.classList.remove('lsc-animating'), 1000);
                 }
             };
         }
@@ -102,12 +104,12 @@ export const Interpreter = {
                                 <div class="w-1 h-5 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
                             </div>
 
-                            <img id="lsc-avatar-img" src="./sign_language_avatar_1776366810694.png" 
-                                 class="h-[250%] object-contain mt-20 transform-gpu transition-transform duration-100 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] origin-top">
+                            <img id="lsc-avatar-img" src="./assets/img/avatar.png" 
+                                 class="h-[250%] object-contain mt-20 transform-gpu transition-all duration-300 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] origin-top">
                             
                             <!-- Transcription Bubble -->
                             <div class="absolute bottom-4 left-4 right-4 z-20">
-                                <p id="lsc-transcription" class="text-[9px] text-white/90 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-center truncate italic">
+                                <p id="lsc-transcription" class="text-lg md:text-xl font-bold text-white bg-black/60 backdrop-blur-md px-6 py-4 rounded-3xl border border-white/20 text-center italic shadow-2xl">
                                     ${this.state.transcription}
                                 </p>
                             </div>

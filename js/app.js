@@ -178,6 +178,44 @@ window.toggleVoice = () => {
     }
 };
 
+window.toggleLSC = () => {
+    window.state.lscEnabled = !window.state.lscEnabled;
+    const btn = document.getElementById('lsc-toggle');
+    const circle = document.getElementById('lsc-circle');
+    
+    if (window.state.lscEnabled) {
+        btn?.classList.replace('bg-surface-variant', 'bg-secondary');
+        circle?.classList.replace('translate-x-0', 'translate-x-6');
+    } else {
+        btn?.classList.replace('bg-secondary', 'bg-surface-variant');
+        circle?.classList.replace('translate-x-6', 'translate-x-0');
+    }
+    
+    window.dispatchEvent(new CustomEvent('lsc-changed', { detail: window.state.lscEnabled }));
+};
+
+window.toggleReadingGuide = () => {
+    const guide = document.getElementById('reading-guide');
+    const btn = document.getElementById('reading-guide-toggle');
+    const circle = document.getElementById('guide-circle');
+    
+    const isVisible = !guide.classList.contains('hidden');
+    if (isVisible) {
+        guide.classList.add('hidden');
+        btn?.classList.replace('bg-secondary', 'bg-surface-variant');
+        circle?.classList.replace('translate-x-6', 'translate-x-0');
+        document.removeEventListener('mousemove', window.moveReadingGuide);
+    } else {
+        guide.classList.remove('hidden');
+        btn?.classList.replace('bg-surface-variant', 'bg-secondary');
+        circle?.classList.replace('translate-x-0', 'translate-x-6');
+        window.moveReadingGuide = (e) => {
+            guide.style.top = e.clientY + 'px';
+        };
+        document.addEventListener('mousemove', window.moveReadingGuide);
+    }
+};
+
 // Global State (Simple)
 window.state = {
     user: { name: 'Visitante', loggedIn: false },
