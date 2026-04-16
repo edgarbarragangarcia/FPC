@@ -249,12 +249,18 @@
     <div id="face-cam-container" class="hidden fixed top-20 left-4 z-[90] rounded-2xl overflow-hidden shadow-2xl border-2 border-secondary/50 bg-black">
         <video id="face-cam-video" class="w-40 h-30 object-cover transform scale-x-[-1]" autoplay muted playsinline></video>
         <canvas id="face-cam-canvas" class="hidden"></canvas>
-        <div id="face-nav-indicator" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div id="face-cursor" class="w-4 h-4 bg-secondary rounded-full opacity-70 transition-all duration-100 shadow-lg shadow-secondary/50"></div>
-        </div>
         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-2">
             <p id="face-action-label" class="text-[9px] text-white font-bold uppercase tracking-widest text-center">Mirando al frente</p>
         </div>
+    </div>
+
+    <!-- Face Cursor (visible on full screen) -->
+    <div id="face-screen-cursor" class="hidden fixed z-[200] pointer-events-none" style="top:50%;left:50%;">
+        <div class="relative">
+            <div class="w-8 h-8 border-4 border-secondary rounded-full animate-pulse shadow-lg shadow-secondary/50"></div>
+            <div class="absolute top-1/2 left-1/2 w-2 h-2 bg-secondary rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div id="face-cursor-label" class="absolute top-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black/80 text-white text-[10px] font-bold px-3 py-1 rounded-full"></div>
     </div>
 
     <!-- Course Detail Modal (Syllabus) -->
@@ -419,50 +425,65 @@
             speakText(text);
         });
 
-        // ========== FACE NAVIGATION LOGIC ==========
+        // ========== FACE NAVIGATION: CURSOR + BLINK CLICK ==========
         const faceToggle = document.getElementById('face-nav-toggle');
         const faceCircle = document.getElementById('face-circle');
         const faceCamContainer = document.getElementById('face-cam-container');
         const faceCamVideo = document.getElementById('face-cam-video');
-        const faceCursor = document.getElementById('face-cursor');
         const faceActionLabel = document.getElementById('face-action-label');
+        const faceScreenCursor = document.getElementById('face-screen-cursor');
+        const faceCursorLabel = document.getElementById('face-cursor-label');
         let faceNavEnabled = false;
         let faceStream = null;
         let faceMeshInstance = null;
         let faceCamera = null;
-        let baseNoseY = null;
+
+        // Cursor state
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
         let baseNoseX = null;
-        let mouthOpenCount = 0;
-        let focusableElements = [];
-        let currentFocusIndex = 0;
+        let baseNoseY = null;
+        const sensitivity = 3.5; // How much the cursor moves per head unit
 
-        function updateFocusables() {
-            focusableElements = Array.from(document.querySelectorAll(
-                '#router-view a, #router-view button, #router-view input, #router-view [tabindex], header a, header button'
-            )).filter(el => el.offsetParent !== null); // only visible
+        // Blink detection state
+        let lastBlinkTime = 0;
+        let blinkCount = 0;
+        let wasEyeClosed = false;
+        const BLINK_THRESHOLD = 0.018; // EAR threshold for "eye closed"
+        const DOUBLE_BLINK_WINDOW = 800; // ms between blinks for double-blink
+
+        // Calculate Eye Aspect Ratio for right eye
+        function getEAR(landmarks, eyeIndices) {
+            // eyeIndices: [p1, p2, p3, p4, p5, p6] (top-bottom pairs + corners)
+            const p1 = landmarks[eyeIndices[0]];
+            const p2 = landmarks[eyeIndices[1]];
+            const p3 = landmarks[eyeIndices[2]];
+            const p4 = landmarks[eyeIndices[3]];
+            const p5 = landmarks[eyeIndices[4]];
+            const p6 = landmarks[eyeIndices[5]];
+
+            const vertA = Math.sqrt(Math.pow(p2.x - p6.x, 2) + Math.pow(p2.y - p6.y, 2));
+            const vertB = Math.sqrt(Math.pow(p3.x - p5.x, 2) + Math.pow(p3.y - p5.y, 2));
+            const horiz = Math.sqrt(Math.pow(p1.x - p4.x, 2) + Math.pow(p1.y - p4.y, 2));
+
+            return (vertA + vertB) / (2.0 * horiz);
         }
 
-        function focusElement(index) {
-            if (focusableElements.length === 0) return;
-            currentFocusIndex = Math.max(0, Math.min(index, focusableElements.length - 1));
-            const el = focusableElements[currentFocusIndex];
-            el.focus();
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            el.style.outline = '4px solid #1B6D24';
-            el.style.outlineOffset = '4px';
-            // Remove outline from others
-            focusableElements.forEach((f, i) => {
-                if (i !== currentFocusIndex) { f.style.outline = ''; f.style.outlineOffset = ''; }
-            });
-            if (faceActionLabel) faceActionLabel.textContent = el.innerText?.substring(0, 30) || 'Elemento seleccionado';
-        }
+        // Right eye landmark indices for MediaPipe Face Mesh
+        const RIGHT_EYE = [33, 160, 158, 133, 153, 144];
 
         async function startFaceNav() {
             try {
-                faceStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240, facingMode: 'user' } });
+                faceStream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 320, height: 240, facingMode: 'user' }
+                });
                 faceCamVideo.srcObject = faceStream;
                 faceCamContainer.classList.remove('hidden');
-                updateFocusables();
+                faceScreenCursor.classList.remove('hidden');
+
+                // Reset cursor to center
+                cursorX = window.innerWidth / 2;
+                cursorY = window.innerHeight / 2;
 
                 if (typeof FaceMesh !== 'undefined') {
                     faceMeshInstance = new FaceMesh({
@@ -476,68 +497,104 @@
                     });
 
                     faceMeshInstance.onResults((results) => {
-                        if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+                        if (!results.multiFaceLandmarks || !results.multiFaceLandmarks.length) {
                             if (faceActionLabel) faceActionLabel.textContent = 'No se detecta rostro';
                             return;
                         }
 
-                        const landmarks = results.multiFaceLandmarks[0];
-                        const nose = landmarks[1]; // Nose tip
-                        const upperLip = landmarks[13];
-                        const lowerLip = landmarks[14];
+                        const lm = results.multiFaceLandmarks[0];
+                        const nose = lm[1];
 
-                        // Calibrate on first detection
-                        if (baseNoseY === null) {
-                            baseNoseY = nose.y;
+                        // Calibrate center on first frame
+                        if (baseNoseX === null) {
                             baseNoseX = nose.x;
+                            baseNoseY = nose.y;
                         }
 
-                        const deltaY = nose.y - baseNoseY;
-                        const deltaX = nose.x - baseNoseX;
-                        const mouthDist = Math.abs(upperLip.y - lowerLip.y);
+                        // Delta from center (inverted X because camera is mirrored)
+                        const dx = -(nose.x - baseNoseX);
+                        const dy = nose.y - baseNoseY;
 
-                        // Move cursor indicator
-                        if (faceCursor) {
-                            faceCursor.style.transform = `translate(${deltaX * 200}px, ${deltaY * 200}px)`;
+                        // Move cursor smoothly
+                        cursorX += dx * sensitivity * window.innerWidth * 0.05;
+                        cursorY += dy * sensitivity * window.innerHeight * 0.05;
+
+                        // Clamp to screen
+                        cursorX = Math.max(0, Math.min(window.innerWidth - 10, cursorX));
+                        cursorY = Math.max(0, Math.min(window.innerHeight - 10, cursorY));
+
+                        // Update visual cursor
+                        faceScreenCursor.style.left = cursorX + 'px';
+                        faceScreenCursor.style.top = cursorY + 'px';
+
+                        // Show what's under cursor
+                        const underCursor = document.elementFromPoint(cursorX, cursorY);
+                        if (underCursor && faceCursorLabel) {
+                            const label = underCursor.getAttribute('aria-label') ||
+                                          underCursor.innerText?.substring(0, 25) || '';
+                            faceCursorLabel.textContent = label;
+
+                            // Highlight hoverable elements
+                            if (underCursor.closest('a, button, input')) {
+                                faceScreenCursor.querySelector('.w-8').style.borderColor = '#E63946';
+                                faceScreenCursor.querySelector('.w-2').style.backgroundColor = '#E63946';
+                            } else {
+                                faceScreenCursor.querySelector('.w-8').style.borderColor = '#1B6D24';
+                                faceScreenCursor.querySelector('.w-2').style.backgroundColor = '#1B6D24';
+                            }
                         }
 
-                        // SCROLL: Head tilt up/down (threshold ~0.04)
-                        if (deltaY > 0.05) {
-                            window.scrollBy({ top: 40, behavior: 'auto' });
-                            if (faceActionLabel) faceActionLabel.textContent = '↓ Bajando';
-                        } else if (deltaY < -0.05) {
-                            window.scrollBy({ top: -40, behavior: 'auto' });
-                            if (faceActionLabel) faceActionLabel.textContent = '↑ Subiendo';
-                        }
-                        // FOCUS NAV: Head tilt left/right (threshold ~0.06)
-                        else if (deltaX > 0.08) {
-                            updateFocusables();
-                            focusElement(currentFocusIndex + 1);
-                        } else if (deltaX < -0.08) {
-                            updateFocusables();
-                            focusElement(currentFocusIndex - 1);
-                        }
-                        // MOUTH OPEN → CLICK
-                        else if (mouthDist > 0.04) {
-                            mouthOpenCount++;
-                            if (mouthOpenCount > 5) { // Sustained mouth open
-                                const el = focusableElements[currentFocusIndex];
-                                if (el) {
-                                    el.click();
+                        // Auto-scroll near edges
+                        if (cursorY < 80) window.scrollBy(0, -8);
+                        if (cursorY > window.innerHeight - 80) window.scrollBy(0, 8);
+
+                        // ===== RIGHT EYE BLINK DETECTION =====
+                        const ear = getEAR(lm, RIGHT_EYE);
+                        const isEyeClosed = ear < BLINK_THRESHOLD;
+
+                        if (isEyeClosed && !wasEyeClosed) {
+                            // Eye just closed = blink start
+                            const now = Date.now();
+                            if (now - lastBlinkTime < DOUBLE_BLINK_WINDOW) {
+                                blinkCount++;
+                            } else {
+                                blinkCount = 1;
+                            }
+                            lastBlinkTime = now;
+
+                            if (blinkCount >= 2) {
+                                // DOUBLE BLINK → CLICK!
+                                blinkCount = 0;
+                                const clickTarget = document.elementFromPoint(cursorX, cursorY);
+                                if (clickTarget) {
+                                    // Visual feedback
+                                    faceScreenCursor.querySelector('.w-8').style.transform = 'scale(1.5)';
+                                    setTimeout(() => {
+                                        faceScreenCursor.querySelector('.w-8').style.transform = 'scale(1)';
+                                    }, 200);
+
+                                    clickTarget.click();
                                     if (faceActionLabel) faceActionLabel.textContent = '✓ ¡Click!';
+                                    setTimeout(() => {
+                                        if (faceActionLabel) faceActionLabel.textContent = 'Mirando al frente';
+                                    }, 1000);
                                 }
-                                mouthOpenCount = 0;
-                            }
-                        } else {
-                            mouthOpenCount = 0;
-                            if (Math.abs(deltaY) < 0.05 && Math.abs(deltaX) < 0.08) {
-                                if (faceActionLabel) faceActionLabel.textContent = 'Mirando al frente';
+                            } else {
+                                if (faceActionLabel) faceActionLabel.textContent = '👁 Guiño detectado (x1)';
                             }
                         }
+                        wasEyeClosed = isEyeClosed;
 
-                        // Re-calibrate slowly
-                        baseNoseY = baseNoseY * 0.99 + nose.y * 0.01;
-                        baseNoseX = baseNoseX * 0.99 + nose.x * 0.01;
+                        // Slow re-calibration
+                        baseNoseX = baseNoseX * 0.995 + nose.x * 0.005;
+                        baseNoseY = baseNoseY * 0.995 + nose.y * 0.005;
+
+                        // Status label
+                        if (!isEyeClosed && Math.abs(dx) < 0.02 && Math.abs(dy) < 0.02) {
+                            if (faceActionLabel && faceActionLabel.textContent !== '✓ ¡Click!' && faceActionLabel.textContent !== '👁 Guiño detectado (x1)') {
+                                faceActionLabel.textContent = 'Mirando al frente';
+                            }
+                        }
                     });
 
                     faceCamera = new Camera(faceCamVideo, {
@@ -551,7 +608,7 @@
                 }
             } catch (e) {
                 console.error('Face Nav Error:', e);
-                alert('No se pudo acceder a la cámara. Verifica los permisos.');
+                alert('No se pudo acceder a la cámara. Verifica los permisos del navegador.');
                 faceNavEnabled = false;
                 faceToggle.classList.remove('bg-secondary');
                 faceToggle.classList.add('bg-surface-variant');
@@ -563,10 +620,9 @@
             if (faceCamera) { faceCamera.stop(); faceCamera = null; }
             if (faceStream) { faceStream.getTracks().forEach(t => t.stop()); faceStream = null; }
             faceCamContainer.classList.add('hidden');
-            baseNoseY = null;
+            faceScreenCursor.classList.add('hidden');
             baseNoseX = null;
-            // Remove outlines
-            focusableElements.forEach(f => { f.style.outline = ''; f.style.outlineOffset = ''; });
+            baseNoseY = null;
         }
 
         faceToggle.onclick = () => {
