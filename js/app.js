@@ -14,6 +14,15 @@ import { AdminReports } from './admin/pages/reports.js';
 import { Login } from './pages/login.js';
 import { StudentDashboard } from './pages/studentDashboard.js';
 import { Interpreter } from './components/interpreter.js';
+import { supabase } from './admin/data.js';
+
+// Global State Initialized Early
+window.state = {
+    user: { name: 'Visitante', loggedIn: false },
+    cart: [],
+    lscEnabled: false,
+    voiceEnabled: false
+};
 
 // Initialize Components
 Interpreter.init();
@@ -111,8 +120,36 @@ const router = async () => {
 };
 
 // Listen for hash changes
+// Auth Persistence Logic
+const checkSession = async () => {
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .single();
+            
+            if (profile) {
+                window.state.user = {
+                    loggedIn: true,
+                    email: session.user.email,
+                    id: profile.id,
+                    role: profile.role,
+                    name: profile.name,
+                    avatar: profile.avatar
+                };
+            }
+        }
+    } catch (e) {
+        console.warn('Session check failed:', e);
+    }
+};
+
 window.addEventListener('hashchange', router);
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
+    await checkSession();
     router();
     
     // Auth Button routing
@@ -138,10 +175,3 @@ window.addEventListener('load', () => {
     };
 });
 
-// Global State (Simple)
-window.state = {
-    user: { name: 'Visitante', loggedIn: false },
-    cart: [],
-    lscEnabled: false,
-    voiceEnabled: false
-};
