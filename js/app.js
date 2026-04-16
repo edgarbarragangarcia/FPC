@@ -157,8 +157,20 @@ window.addEventListener('load', () => {
 const speak = (msg) => {
     if (!window.state.voiceEnabled) return;
     window.speechSynthesis.cancel();
+    
     const utterance = new SpeechSynthesisUtterance(msg);
-    utterance.lang = 'es-CO';
+    utterance.lang = 'es-CO'; // Explicitly set Colombian locale
+    
+    // Find a match for Colombian voice
+    const voices = window.speechSynthesis.getVoices();
+    // Prefer voices that are es-CO or have 'Colombia' in the name
+    const colombianVoice = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia') || v.name.includes('Salome'));
+    
+    if (colombianVoice) {
+        utterance.voice = colombianVoice;
+    }
+    
+    utterance.rate = 0.95; // Slightly slower for better clarity
     window.speechSynthesis.speak(utterance);
 };
 
