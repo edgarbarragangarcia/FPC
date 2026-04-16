@@ -193,7 +193,7 @@
                         <p class="font-bold">Guía de lectura</p>
                         <p class="text-xs text-on-surface/60">Agrega una línea de enfoque visual</p>
                     </div>
-                    <button id="reading-guide-toggle" onclick="window.toggleReadingGuide()" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                    <button id="reading-guide-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
                         <div id="guide-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
@@ -204,7 +204,7 @@
                         <p class="font-bold">Lengua de Señas</p>
                         <p class="text-xs text-on-surface/60">Activar intérprete virtual (LSC)</p>
                     </div>
-                    <button id="lsc-toggle" onclick="window.toggleLSC()" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                    <button id="lsc-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
                         <div id="lsc-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
@@ -215,7 +215,7 @@
                         <p class="font-bold">Recorrido por Voz</p>
                         <p class="text-xs text-on-surface/60">Asistente de voz para personas ciegas</p>
                     </div>
-                    <button id="voice-guide-toggle" onclick="window.toggleVoice()" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                    <button id="voice-guide-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
                         <div id="voice-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
@@ -314,14 +314,84 @@
         const lscCircle = document.getElementById('lsc-circle');
         
         lscToggle.onclick = () => {
-            const isEnabled = !window.state.lscEnabled;
-            window.state.lscEnabled = isEnabled;
+            const isEnabled = !window.state?.lscEnabled;
+            if (window.state) window.state.lscEnabled = isEnabled;
             lscCircle.style.transform = isEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
             lscToggle.classList.toggle('bg-secondary', isEnabled);
             
             // Dispatch event for components to listen
             window.dispatchEvent(new CustomEvent('lsc-changed', { detail: isEnabled }));
         };
+
+        // ========== VOICE GUIDE LOGIC ==========
+        const voiceToggle = document.getElementById('voice-guide-toggle');
+        const voiceCircle = document.getElementById('voice-circle');
+        let voiceEnabled = false;
+        let lastSpoken = '';
+
+        // Pre-load voices
+        speechSynthesis.getVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+        }
+
+        function speakText(text) {
+            if (!voiceEnabled || !text) return;
+            const clean = text.trim().substring(0, 200);
+            if (!clean || clean === lastSpoken) return;
+            lastSpoken = clean;
+
+            speechSynthesis.cancel();
+
+            const u = new SpeechSynthesisUtterance(clean);
+            u.lang = 'es-CO';
+            u.volume = 1;
+            u.rate = 1;
+
+            const voices = speechSynthesis.getVoices();
+            const colombian = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia'));
+            const spanish = voices.find(v => v.lang.startsWith('es'));
+            if (colombian) u.voice = colombian;
+            else if (spanish) u.voice = spanish;
+
+            speechSynthesis.speak(u);
+        }
+
+        voiceToggle.onclick = () => {
+            voiceEnabled = !voiceEnabled;
+            if (window.state) window.state.voiceEnabled = voiceEnabled;
+
+            voiceCircle.style.transform = voiceEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
+            voiceToggle.classList.toggle('bg-secondary', voiceEnabled);
+            voiceToggle.classList.toggle('bg-surface-variant', !voiceEnabled);
+
+            if (voiceEnabled) {
+                // Speak immediately on user gesture (critical for Chrome)
+                const u = new SpeechSynthesisUtterance('Recorrido por voz activado');
+                u.lang = 'es-CO';
+                u.volume = 1;
+                speechSynthesis.speak(u);
+            } else {
+                speechSynthesis.cancel();
+            }
+        };
+
+        // Read elements on hover
+        document.addEventListener('mouseover', (e) => {
+            if (!voiceEnabled) return;
+            const el = e.target.closest('a, button, h1, h2, h3, h4, p, li, span, label, td, th');
+            if (el) {
+                const text = el.getAttribute('aria-label') || el.innerText;
+                speakText(text);
+            }
+        });
+
+        // Read elements on keyboard focus
+        document.addEventListener('focusin', (e) => {
+            if (!voiceEnabled) return;
+            const text = e.target.getAttribute('aria-label') || e.target.innerText;
+            speakText(text);
+        });
 
         // Load preferences
         const savedScale = localStorage.getItem('fpc-font-scale');
