@@ -222,7 +222,6 @@
                         <div id="voice-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
-                </div>
 
                 <!-- Face Navigation -->
                 <div class="flex items-center justify-between py-4 border-t border-surface-variant">
@@ -365,21 +364,18 @@
         function speakText(text) {
             if (!voiceEnabled || !text) return;
             const clean = text.trim().substring(0, 200);
-            if (!clean || clean === lastSpoken) return;
-            lastSpoken = clean;
+            if (!clean) return;
 
             speechSynthesis.cancel();
 
             const u = new SpeechSynthesisUtterance(clean);
-            u.lang = 'es-CO';
+            u.lang = 'es-ES';
             u.volume = 1;
             u.rate = 1;
 
             const voices = speechSynthesis.getVoices();
-            const colombian = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia'));
-            const spanish = voices.find(v => v.lang.startsWith('es'));
-            if (colombian) u.voice = colombian;
-            else if (spanish) u.voice = spanish;
+            const esVoice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang.startsWith('es'));
+            if (esVoice) u.voice = esVoice;
 
             speechSynthesis.speak(u);
         }
@@ -395,8 +391,11 @@
             if (voiceEnabled) {
                 // Speak immediately on user gesture (critical for Chrome)
                 const u = new SpeechSynthesisUtterance('Recorrido por voz activado');
-                u.lang = 'es-CO';
+                u.lang = 'es-ES';
                 u.volume = 1;
+                const voices = speechSynthesis.getVoices();
+                const esVoice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang.startsWith('es'));
+                if (esVoice) u.voice = esVoice;
                 speechSynthesis.speak(u);
             } else {
                 speechSynthesis.cancel();
