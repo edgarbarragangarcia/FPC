@@ -25,19 +25,19 @@ export const StudentDashboard = {
         return `
         <div class="h-screen flex flex-col bg-surface overflow-hidden" role="main" aria-label="Panel del estudiante">
             <!-- Fixed Top Section -->
-            <div class="shrink-0 bg-surface border-b border-surface-variant/30 px-4 pt-6 md:pt-8 pb-4 z-40">
-                <div class="max-w-6xl mx-auto space-y-6">
+            <div class="shrink-0 bg-surface border-b border-surface-variant/30 px-4 pt-4 pb-3 z-40">
+                <div class="max-w-6xl mx-auto space-y-4">
                     <!-- Welcome Section -->
-                    <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-5 md:p-8 text-white shadow-lg" aria-label="Bienvenida">
+                    <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-4 md:p-5 text-white shadow-lg" aria-label="Bienvenida">
                         <div class="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-                        <div class="relative z-10 flex items-center gap-5">
-                            <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-white p-1 shadow-md shrink-0">
+                        <div class="relative z-10 flex items-center gap-4">
+                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-white p-1 shadow-md shrink-0">
                                 <img src="${user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=003F87&color=fff`}" 
-                                     alt="Foto de perfil" class="w-full h-full object-cover rounded-lg">
+                                     alt="Foto de perfil" class="w-full h-full object-cover rounded-md">
                             </div>
                             <div>
-                                <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">Estudiante FPC</p>
-                                <h1 class="text-xl md:text-2xl font-headline font-bold tracking-tight">Hola, ${user.name || 'Estudiante'}</h1>
+                                <p class="text-[8px] font-bold uppercase tracking-[0.2em] text-white/50 leading-none mb-1">Bienvenido</p>
+                                <h1 class="text-lg md:text-xl font-headline font-bold tracking-tight leading-none">${user.name || 'Estudiante'}</h1>
                             </div>
                         </div>
                     </section>
