@@ -153,6 +153,35 @@ export const Home = {
                     </div>
                 </div>
             </section>
+
+            <!-- News & Impact Section -->
+            <section class="py-12 md:py-24 border-t border-surface-variant/30">
+                <div class="flex flex-col md:flex-row items-end justify-between gap-6 mb-12">
+                    <div class="space-y-4 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 text-accent rounded-full text-[10px] font-bold uppercase tracking-widest">
+                            Impacto y Actualidad
+                        </div>
+                        <h2 class="text-3xl md:text-5xl font-headline font-bold text-primary tracking-tight">Nuestra labor en video</h2>
+                        <p class="text-on-surface/60 max-w-xl">
+                            Sigue de cerca cómo transformamos realidades a través de la inclusión y la educación accesible en toda Colombia.
+                        </p>
+                    </div>
+                    <button class="bg-white border border-surface-variant px-8 py-3 rounded-2xl font-bold text-sm hover:bg-surface-variant transition-all hidden md:flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg">newspaper</span>
+                        Ver todas las noticias
+                    </button>
+                </div>
+
+                <div class="relative aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-surface-variant">
+                    <iframe 
+                        src="https://www.youtube.com/embed/rGamVF_p9OU" 
+                        class="absolute inset-0 w-full h-full border-none"
+                        title="Video institucional Fundación Promover"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </section>
         </div>
         `;
     },
