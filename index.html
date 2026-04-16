@@ -220,6 +220,16 @@
     <!-- Sign Language Interpreter Root -->
     <div id="interpreter-root"></div>
 
+    <!-- Course Detail Modal (Syllabus) -->
+    <div id="course-detail-modal" class="hidden fixed inset-0 z-[70] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-6 opacity-0 transition-opacity duration-300">
+        <div id="course-detail-content" class="bg-white rounded-[3rem] p-8 md:p-12 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20 transform translate-y-10 transition-transform duration-300 relative">
+            <button id="close-course-detail" class="absolute top-8 right-8 p-3 hover:bg-surface-variant rounded-full transition-all">
+                <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+            <div id="course-detail-render" class="space-y-8"></div>
+        </div>
+    </div>
+
     <!-- App Scripts (Modular) -->
     <script type="module" src="./js/app.js"></script>
 
