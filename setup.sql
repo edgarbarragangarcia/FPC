@@ -16,9 +16,10 @@ CREATE TABLE IF NOT EXISTS courses (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 2. Tabla de Perfiles de Usuario (UUID para compatibilidad con Supabase Auth)
+-- 2. Tabla de Perfiles de Usuario (Vinculada a Supabase Auth)
+-- Esta tabla se llena automáticamente mediante un Trigger cuando alguien se registra
 CREATE TABLE IF NOT EXISTS profiles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     name TEXT,
     email TEXT UNIQUE,
     role TEXT DEFAULT 'student',
@@ -26,7 +27,42 @@ CREATE TABLE IF NOT EXISTS profiles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 3. Tabla de Logs de Auditoría
+-- 3. Función y Trigger para creación automática de perfil (LA UNIÓN REAL)
+-- Esto asegura que cada vez que un usuario se registre en Auth, tenga su fila en profiles
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, name, email, role)
+  VALUES (new.id, new.raw_user_meta_data->>'full_name', new.email, 'student');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Borrar trigger si existe y crearlo
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- 4. Habilitar Seguridad (RLS)
+ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE enrollments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE modules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lessons ENABLE ROW LEVEL SECURITY;
+
+-- 5. Políticas de Acceso (Policies)
+-- Cualquiera puede ver cursos
+CREATE POLICY "Courses are viewable by everyone" ON courses FOR SELECT USING (true);
+
+-- Usuarios pueden ver su propio perfil
+CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+
+-- Usuarios pueden ver sus propias inscripciones
+CREATE POLICY "Users can view own enrollments" ON enrollments FOR SELECT USING (auth.uid() = profile_id);
+
+-- 6. Tabla de Logs de Auditoría
 CREATE TABLE IF NOT EXISTS logs (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     message TEXT,

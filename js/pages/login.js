@@ -205,32 +205,24 @@ export const Login = {
             btnRegText.innerText = 'Creando cuenta...';
 
             try {
-                // 1. Create auth user in Supabase
+                // 1. Create auth user in Supabase with metadata for the trigger
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email,
-                    password
+                    password,
+                    options: {
+                        data: {
+                            full_name: name
+                        }
+                    }
                 });
 
                 if (authError) throw authError;
 
-                // 2. Create profile row
-                const { error: profileError } = await supabase
-                    .from('profiles')
-                    .insert([{
-                        id: authData.user.id,
-                        name: name,
-                        email: email,
-                        role: 'student',
-                        avatar: null
-                    }]);
-
-                if (profileError) throw profileError;
-
-                // 3. Show success
+                // 2. Show success (The profile is created automatically by the backend trigger)
                 registerSuccess.innerHTML = `
                     <span class="material-symbols-outlined text-green-600 text-2xl mb-1 block">check_circle</span>
-                    <strong>¡Cuenta creada exitosamente!</strong><br>
-                    <span class="text-green-600/80">Revisa tu correo para confirmar tu cuenta, luego inicia sesión.</span>
+                    <strong>¡Registro iniciado!</strong><br>
+                    <span class="text-green-600/80">Te hemos enviado un correo de confirmación. Una vez confirmado, podrás iniciar sesión.</span>
                 `;
                 registerSuccess.classList.remove('hidden');
                 registerForm.reset();
