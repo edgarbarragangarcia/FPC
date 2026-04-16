@@ -139,14 +139,6 @@ export const StudentDashboard = {
                             </div>
                         `}
                     </section>
-
-                    <!-- Quick Actions -->
-                    <section class="flex flex-wrap gap-4 pt-4 border-t border-surface-variant">
-                        <a href="#/cursos" class="flex items-center gap-2 px-5 py-3 bg-white border border-surface-variant rounded-xl font-bold text-xs text-on-surface/70 hover:text-primary transition-all">
-                            <span class="material-symbols-outlined text-lg">explore</span>
-                            Explorar Catálogo
-                        </a>
-                    </section>
                 </div>
             </div>
         </div>
