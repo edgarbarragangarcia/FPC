@@ -146,10 +146,6 @@ export const StudentDashboard = {
                             <span class="material-symbols-outlined text-lg">explore</span>
                             Explorar Catálogo
                         </a>
-                        <button id="btn-logout" class="flex items-center gap-2 px-5 py-3 bg-white border border-surface-variant rounded-xl font-bold text-xs text-on-surface/70 hover:text-accent transition-all">
-                    <span class="material-symbols-outlined text-lg">logout</span>
-                    Cerrar Sesión
-                </button>
                     </section>
                 </div>
             </div>

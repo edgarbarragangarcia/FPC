@@ -152,26 +152,54 @@ window.addEventListener('load', async () => {
     await checkSession();
     router();
     
-    // Auth Button routing
+    // Dropdown & Auth Logic
     const btnDesktop = document.getElementById('btn-mi-cuenta-desktop');
     const btnMobile = document.getElementById('btn-mi-cuenta-mobile');
+    const userDropdown = document.getElementById('user-dropdown');
+    const btnLogoutGlobal = document.getElementById('btn-logout-global');
     
-    const handleAccountClick = () => {
+    // Update Dropdown UI based on state
+    const updateDropdownUI = () => {
+        const nameEl = document.getElementById('dropdown-user-name');
+        const roleEl = document.getElementById('dropdown-user-role');
+        const infoEl = document.getElementById('user-info-dropdown');
+
         if (window.state.user && window.state.user.loggedIn) {
-            if (window.state.user.role === 'admin') {
-                window.location.hash = '#/admin';
-            } else {
-                window.location.hash = '#/dashboard';
-            }
+            nameEl.innerText = window.state.user.name || window.state.user.email;
+            roleEl.innerText = window.state.user.role === 'admin' ? 'Administrador' : 'Estudiante';
+            infoEl.classList.remove('hidden');
+        } else {
+            infoEl.classList.add('hidden');
+        }
+    };
+
+    const toggleDropdown = (e) => {
+        e.stopPropagation();
+        if (window.state.user && window.state.user.loggedIn) {
+            userDropdown.classList.toggle('hidden');
+            updateDropdownUI();
         } else {
             window.location.hash = '#/login';
         }
     };
 
-    if(btnDesktop) btnDesktop.onclick = handleAccountClick;
-    if(btnMobile) btnMobile.onclick = () => {
-        document.getElementById('mobile-menu-backdrop')?.click(); // Close menu
-        handleAccountClick();
-    };
+    if(btnDesktop) btnDesktop.onclick = toggleDropdown;
+    if(btnMobile) btnMobile.onclick = toggleDropdown;
+
+    // Global Click to close dropdown
+    window.addEventListener('click', () => {
+        userDropdown?.classList.add('hidden');
+    });
+
+    // Global Logout
+    if (btnLogoutGlobal) {
+        btnLogoutGlobal.onclick = async () => {
+            const { supabase } = await import('./admin/data.js');
+            await supabase.auth.signOut();
+            window.state.user = { name: 'Visitante', loggedIn: false };
+            window.location.hash = '#/';
+            window.location.reload();
+        };
+    }
 });
 
