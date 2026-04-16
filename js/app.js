@@ -180,12 +180,14 @@ window.toggleVoice = () => {
     const circle = document.getElementById('voice-circle');
     
     if (window.state.voiceEnabled) {
-        btn?.classList.replace('bg-surface-variant', 'bg-secondary');
-        circle?.classList.replace('translate-x-0', 'translate-x-6');
+        btn.classList.add('bg-secondary');
+        btn.classList.remove('bg-surface-variant');
+        circle.style.transform = 'translateX(1.5rem)';
         speak("Recorrido por voz activado.");
     } else {
-        btn?.classList.replace('bg-secondary', 'bg-surface-variant');
-        circle?.classList.replace('translate-x-6', 'translate-x-0');
+        btn.classList.add('bg-surface-variant');
+        btn.classList.remove('bg-secondary');
+        circle.style.transform = 'translateX(0)';
         window.speechSynthesis.cancel();
     }
 };
@@ -196,11 +198,13 @@ window.toggleLSC = () => {
     const circle = document.getElementById('lsc-circle');
     
     if (window.state.lscEnabled) {
-        btn?.classList.replace('bg-surface-variant', 'bg-secondary');
-        circle?.classList.replace('translate-x-0', 'translate-x-6');
+        btn.classList.add('bg-secondary');
+        btn.classList.remove('bg-surface-variant');
+        circle.style.transform = 'translateX(1.5rem)';
     } else {
-        btn?.classList.replace('bg-secondary', 'bg-surface-variant');
-        circle?.classList.replace('translate-x-6', 'translate-x-0');
+        btn.classList.add('bg-surface-variant');
+        btn.classList.remove('bg-secondary');
+        circle.style.transform = 'translateX(0)';
     }
     
     window.dispatchEvent(new CustomEvent('lsc-changed', { detail: window.state.lscEnabled }));
@@ -214,13 +218,15 @@ window.toggleReadingGuide = () => {
     const isVisible = !guide.classList.contains('hidden');
     if (isVisible) {
         guide.classList.add('hidden');
-        btn?.classList.replace('bg-secondary', 'bg-surface-variant');
-        circle?.classList.replace('translate-x-6', 'translate-x-0');
+        btn.classList.add('bg-surface-variant');
+        btn.classList.remove('bg-secondary');
+        circle.style.transform = 'translateX(0)';
         document.removeEventListener('mousemove', window.moveReadingGuide);
     } else {
         guide.classList.remove('hidden');
-        btn?.classList.replace('bg-surface-variant', 'bg-secondary');
-        circle?.classList.replace('translate-x-0', 'translate-x-6');
+        btn.classList.add('bg-secondary');
+        btn.classList.remove('bg-surface-variant');
+        circle.style.transform = 'translateX(1.5rem)';
         window.moveReadingGuide = (e) => {
             guide.style.top = e.clientY + 'px';
         };

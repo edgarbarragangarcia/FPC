@@ -91,40 +91,32 @@ export const Interpreter = {
 
         root.innerHTML = `
             <div id="lsc-window" 
-                 class="fixed bottom-6 right-6 w-64 aspect-video bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl z-[100] overflow-hidden group animate-in slide-in-from-bottom-10 duration-500"
-                 style="resize: both; min-width: 200px; min-height: 120px;">
+                 class="fixed bottom-6 right-6 w-80 aspect-video bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl z-[100] overflow-hidden group animate-in slide-in-from-bottom-10 duration-500"
+                 style="resize: both; min-width: 250px; min-height: 150px; cursor: s-resize;">
                 
                 <!-- Header/Drag Handle -->
-                <div class="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-black/60 to-transparent flex items-center justify-between px-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity cursor-move" id="lsc-handle">
+                <div class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/60 to-transparent flex items-center justify-between px-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity cursor-move" id="lsc-handle">
                     <div class="flex items-center gap-2">
-                        <button id="lsc-mode-toggle" class="bg-black/40 hover:bg-black/60 px-2 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-widest border border-white/10">
-                            Modo: ${this.state.mode === 'avatar' ? 'Avatar IA' : 'Video En Vivo'}
+                        <button id="lsc-mode-toggle" class="bg-black/40 hover:bg-black/60 px-3 py-1 rounded-full text-[9px] font-bold text-white uppercase tracking-widest border border-white/10 shadow-lg">
+                            Modo: ${this.state.mode === 'avatar' ? 'Avatar IA' : 'Video LSC'}
                         </button>
                     </div>
-                    <button class="text-white hover:text-accent" id="lsc-minimize">
-                        <span class="material-symbols-outlined text-sm">close</span>
-                    </button>
+                    <div class="flex items-center gap-2">
+                         <span class="material-symbols-outlined text-white/40 text-sm">drag_handle</span>
+                         <button class="text-white hover:text-accent p-1" id="lsc-minimize">
+                            <span class="material-symbols-outlined text-sm">close</span>
+                         </button>
+                    </div>
                 </div>
 
                 <!-- Main Content Root -->
-                <div class="w-full h-full bg-black/95 flex items-center justify-center relative">
+                <div class="w-full h-full bg-black/95 flex items-center justify-center relative pointer-events-none">
                     ${this.state.mode === 'avatar' ? `
                         <!-- Avatar Mode -->
-                        <div class="flex flex-col items-center justify-center w-full h-full p-4 relative overflow-hidden">
+                        <div class="flex flex-col items-center justify-center w-full h-full p-4 relative overflow-hidden pointer-events-none">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-0"></div>
-                            
-                            <!-- Sound Wave Animation -->
-                            <div class="absolute bottom-12 flex items-center gap-1 opacity-50">
-                                <div class="w-1 h-3 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                                <div class="w-1 h-6 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                                <div class="w-1 h-4 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
-                                <div class="w-1 h-5 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
-                            </div>
-
                             <img id="lsc-avatar-img" src="./assets/img/avatar.png" 
                                  class="h-[250%] object-contain mt-20 transform-gpu transition-all duration-300 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] origin-top">
-                            
-                            <!-- Transcription Bubble -->
                             <div class="absolute bottom-4 left-4 right-4 z-20">
                                 <p id="lsc-transcription" class="text-lg md:text-xl font-bold text-white bg-black/60 backdrop-blur-md px-6 py-4 rounded-3xl border border-white/20 text-center italic shadow-2xl">
                                     ${this.state.transcription}
@@ -133,30 +125,32 @@ export const Interpreter = {
                         </div>
                     ` : `
                         <!-- Video Mode -->
-                        ${this.state.videoUrl.includes('placeholder') ? 
-                            `<div class="flex flex-col items-center text-center p-6 space-y-3">
-                                <div class="animate-pulse flex items-center justify-center w-12 h-12 bg-white/5 rounded-full border border-white/10">
-                                    <span class="material-symbols-outlined text-white/40 text-2xl">back_hand</span>
-                                </div>
-                                <div class="space-y-1">
-                                    <p class="text-[10px] font-bold text-white/80 leading-tight uppercase tracking-widest">Esperando Contenido</p>
-                                    <p class="text-[9px] text-white/40 leading-tight px-4">Este material aún no tiene un intérprete asignado.</p>
-                                </div>
-                                <a href="http://centroderelevo.gov.co/" target="_blank" class="mt-2 bg-secondary/80 hover:bg-secondary text-[8px] font-bold text-white px-3 py-1.5 rounded-full transition-all flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[10px]">external_link</span>
-                                    Centro de Relevo (Oficial)
-                                </a>
-                            </div>` : 
-                            `<iframe src="${this.state.videoUrl}" 
-                                     class="w-full h-full border-none" 
-                                     allow="autoplay; encrypted-media" 
-                                     allowfullscreen></iframe>`
-                        }
+                        <div class="w-full h-full pointer-events-auto">
+                            ${this.state.videoUrl.includes('placeholder') ? 
+                                `<div class="flex flex-col items-center justify-center h-full text-center p-6 space-y-4">
+                                    <div class="animate-pulse flex items-center justify-center w-16 h-16 bg-white/5 rounded-full border border-white/10">
+                                        <span class="material-symbols-outlined text-white/40 text-3xl">back_hand</span>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs font-bold text-white/80 uppercase tracking-widest">Esperando Contenido</p>
+                                        <p class="text-[10px] text-white/40 px-4">Este material no tiene intérprete aún.</p>
+                                    </div>
+                                    <a href="http://centroderelevo.gov.co/" target="_blank" class="bg-secondary/80 hover:bg-secondary text-[10px] font-bold text-white px-4 py-2 rounded-full transition-all flex items-center gap-2 pointer-events-auto">
+                                        <span class="material-symbols-outlined text-xs">external_link</span>
+                                        Centro de Relevo
+                                    </a>
+                                </div>` : 
+                                `<iframe src="${this.state.videoUrl}" 
+                                         class="w-full h-full border-none" 
+                                         allow="autoplay; encrypted-media" 
+                                         allowfullscreen></iframe>`
+                            }
+                        </div>
                     `}
                     
-                    <!-- Mode Label -->
-                    <div class="absolute top-2 left-2 bg-primary/80 px-2 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-tighter z-20">
-                        ${this.state.mode === 'avatar' ? 'Intérprete IA' : 'LSC En Vivo'}
+                    <!-- Resize Handle Icon (Visual only) -->
+                    <div class="absolute bottom-1 right-1 opacity-0 group-hover:opacity-40 transition-opacity">
+                        <span class="material-symbols-outlined text-white text-sm scale-x-[-1]">south_east</span>
                     </div>
                 </div>
             </div>
@@ -166,37 +160,45 @@ export const Interpreter = {
     },
 
     addEventListeners() {
-        // Minimize
-        document.getElementById('lsc-minimize')?.addEventListener('click', () => {
-             const lscToggle = document.getElementById('lsc-toggle');
-             if (lscToggle) lscToggle.click();
-        });
+        const minimize = document.getElementById('lsc-minimize');
+        if (minimize) {
+            minimize.onclick = (e) => {
+                e.stopPropagation();
+                window.toggleLSC();
+            };
+        }
 
-        // Mode Toggle
-        document.getElementById('lsc-mode-toggle')?.addEventListener('click', () => {
-            this.state.mode = this.state.mode === 'avatar' ? 'video' : 'avatar';
-            if (this.state.mode === 'avatar') this.startListening();
-            else this.stopListening();
-            this.render();
-        });
+        const modeToggle = document.getElementById('lsc-mode-toggle');
+        if (modeToggle) {
+            modeToggle.onclick = (e) => {
+                e.stopPropagation();
+                this.state.mode = this.state.mode === 'avatar' ? 'video' : 'avatar';
+                if (this.state.mode === 'avatar') this.startListening();
+                else this.stopListening();
+                this.render();
+            };
+        }
 
         // Basic Draggable Logic
         const windowEl = document.getElementById('lsc-window');
         const handle = document.getElementById('lsc-handle');
         
         if (handle && windowEl) {
+            let isDragging = false;
             let offset = { x: 0, y: 0 };
             
             const onMouseDown = (e) => {
-                this.state.isDragging = true;
-                offset.x = e.clientX - windowEl.offsetLeft;
-                offset.y = e.clientY - windowEl.offsetTop;
+                isDragging = true;
+                offset.x = e.clientX - windowEl.getBoundingClientRect().left;
+                offset.y = e.clientY - windowEl.getBoundingClientRect().top;
                 document.addEventListener('mousemove', onMouseMove);
                 document.addEventListener('mouseup', onMouseUp);
+                windowEl.style.transition = 'none';
+                handle.style.opacity = '1';
             };
 
             const onMouseMove = (e) => {
-                if (!this.state.isDragging) return;
+                if (!isDragging) return;
                 windowEl.style.left = (e.clientX - offset.x) + 'px';
                 windowEl.style.top = (e.clientY - offset.y) + 'px';
                 windowEl.style.bottom = 'auto';
@@ -204,9 +206,11 @@ export const Interpreter = {
             };
 
             const onMouseUp = () => {
-                this.state.isDragging = false;
+                isDragging = false;
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', onMouseUp);
+                windowEl.style.transition = 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)';
+                handle.style.opacity = '';
             };
 
             handle.addEventListener('mousedown', onMouseDown);
