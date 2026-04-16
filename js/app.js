@@ -13,6 +13,10 @@ import { AdminEnrollments } from './admin/pages/enrollments.js';
 import { AdminReports } from './admin/pages/reports.js';
 import { Login } from './pages/login.js';
 import { StudentDashboard } from './pages/studentDashboard.js';
+import { Interpreter } from './components/interpreter.js';
+
+// Initialize Components
+Interpreter.init();
 
 // Initialize Simulated DB
 let isAppInitialized = false;
@@ -137,5 +141,6 @@ window.addEventListener('load', () => {
 // Global State (Simple)
 window.state = {
     user: { name: 'Visitante', loggedIn: false },
-    cart: []
+    cart: [],
+    lscEnabled: false
 };

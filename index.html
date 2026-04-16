@@ -197,6 +197,17 @@
                         <div id="guide-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
+
+                <!-- Sign Language -->
+                <div class="flex items-center justify-between py-4 border-t border-surface-variant">
+                    <div>
+                        <p class="font-bold">Lengua de Señas</p>
+                        <p class="text-xs text-on-surface/60">Activar intérprete virtual (LSC)</p>
+                    </div>
+                    <button id="lsc-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                        <div id="lsc-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
+                    </button>
+                </div>
             </div>
             
             <button id="reset-acc" class="w-full mt-8 py-4 text-accent font-bold text-sm hover:underline">Restablecer valores predeterminados</button>
@@ -205,6 +216,9 @@
 
     <!-- Reading Guide Element -->
     <div id="reading-guide" class="hidden fixed h-1 bg-secondary left-0 right-0 z-50 pointer-events-none shadow-[0_0_15px_rgba(27,109,36,0.5)]"></div>
+
+    <!-- Sign Language Interpreter Root -->
+    <div id="interpreter-root"></div>
 
     <!-- App Scripts (Modular) -->
     <script type="module" src="./js/app.js"></script>
@@ -272,6 +286,20 @@
 
         window.onmousemove = (e) => {
             if(guideEnabled) guideLine.style.top = e.clientY + 'px';
+        };
+
+        // LSC Logic
+        const lscToggle = document.getElementById('lsc-toggle');
+        const lscCircle = document.getElementById('lsc-circle');
+        
+        lscToggle.onclick = () => {
+            const isEnabled = !window.state.lscEnabled;
+            window.state.lscEnabled = isEnabled;
+            lscCircle.style.transform = isEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
+            lscToggle.classList.toggle('bg-secondary', isEnabled);
+            
+            // Dispatch event for components to listen
+            window.dispatchEvent(new CustomEvent('lsc-changed', { detail: isEnabled }));
         };
 
         // Load preferences

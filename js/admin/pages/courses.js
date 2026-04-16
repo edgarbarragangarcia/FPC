@@ -244,6 +244,15 @@ export const AdminCourses = {
                             <label class="text-sm font-bold ml-1">Contenido (URL o texto)</label>
                             <textarea id="lesson-content" rows="4" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" placeholder="URL del video, URL del PDF, o escribe el contenido de texto..."></textarea>
                         </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold ml-1 text-secondary">Video de Intérprete LSC (Opcional)</label>
+                            <div class="flex gap-2">
+                                <div class="w-10 h-10 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-lg">back_hand</span>
+                                </div>
+                                <input type="url" id="lesson-lsc-url" class="flex-1 bg-secondary/5 border border-secondary/20 rounded-2xl px-4 py-2 text-sm focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="URL embebida del intérprete (YouTube/Vimeo)">
+                            </div>
+                        </div>
                         <div class="flex gap-3 pt-2">
                             <button type="button" onclick="window.closeLessonModal()" class="flex-1 py-3 border border-surface-variant rounded-2xl font-bold hover:bg-surface-variant transition-all">Cancelar</button>
                             <button type="submit" class="flex-1 py-3 bg-primary text-white rounded-2xl font-bold hover:opacity-90 transition-all">Guardar Lección</button>
@@ -457,6 +466,7 @@ export const AdminCourses = {
             document.getElementById('lesson-type').value = lesson.content_type || 'text';
             document.getElementById('lesson-duration').value = lesson.duration || '';
             document.getElementById('lesson-content').value = lesson.content || '';
+            document.getElementById('lesson-lsc-url').value = lesson.lsc_video_url || '';
             
             // Trigger type change logic
             updateLessonUI(lesson.content_type || 'text');
@@ -522,6 +532,7 @@ export const AdminCourses = {
                     title: document.getElementById('lesson-title').value,
                     content_type: contentType,
                     content: content,
+                    lsc_video_url: document.getElementById('lesson-lsc-url').value,
                     duration: document.getElementById('lesson-duration').value,
                     position: mod?.lessons?.length || 0
                 };

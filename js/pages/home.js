@@ -29,8 +29,8 @@ export const Home = {
                 <div class="relative lg:-mt-20">
                     <div class="absolute -inset-10 bg-secondary/5 rounded-full blur-[120px] -z-10"></div>
                     <div class="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white transform rotate-2 hover:rotate-0 transition-transform duration-700">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMTJH8dbnMCwZe3P5hXyrvwXTglZkdnH3Xv_WEb-Z-J78s4WfRPq9ECpTLFBqO6hBclnn6LVzDqJOEQHeXGkcu978LySNe8ARN-p2Avf2LlxjtEA8lT-qhQaxvadE3IUKG5AINm-RPwwGTBYEKq0Rk-FcsbC3ZyUQ-9mbntNAmL6DlL4Hq8vElxvOfm0KuGGjL-P0nIkOgSK43CXVh96lewEHl_x6KbilKk1lVapVS9ZiBsNv1v0wbzK8Zfcf2fByS9UcDjy0DeE2L" 
-                             alt="Comunidad Promover trabajando" 
+                        <img src="https://www.saldarriagaconcha.org/wp-content/uploads/2020/02/Jairo-Clopatofsky-Consejero-de-la-Participacio%CC%81n-de-las-Personas-con-Discapacidad.jpg" 
+                             alt="Retrato de Jairo Clopatofsky" 
                              class="w-full h-full object-cover">
                     </div>
                     <!-- Impact Floating Badge -->

@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS lessons (
     content TEXT,
     duration TEXT,
     position INT DEFAULT 0,
+    lsc_video_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

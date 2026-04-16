@@ -159,5 +159,33 @@ export const StudentDashboard = {
         </div>
         `;
     },
-    afterRender: async () => {}
+    afterRender: async () => {
+        // Handle Course Interaction
+        const courseButtons = document.querySelectorAll('button[aria-label*="curso"]');
+        courseButtons.forEach(btn => {
+            btn.onclick = async () => {
+                // Find course ID from context (extracted from aria-label in this simple case)
+                const courseTitle = btn.getAttribute('aria-label').split('curso ')[1];
+                const course = DB.getCourses().find(c => c.title === courseTitle);
+                
+                if (course) {
+                    console.log('Cargando curso:', course.title);
+                    // Fetch first lesson with LSC for demonstration
+                    const content = await DB.fetchCourseContent(course.id);
+                    const firstLesson = content[0]?.lessons?.[0];
+                    
+                    if (firstLesson && firstLesson.lsc_video_url) {
+                        window.dispatchEvent(new CustomEvent('lsc-video-update', { 
+                            detail: firstLesson.lsc_video_url 
+                        }));
+                        
+                        // Notify user
+                        if (!window.state.lscEnabled) {
+                            alert('Este curso tiene contenido en Lengua de Señas. Actívalo en el menú de accesibilidad.');
+                        }
+                    }
+                }
+            };
+        });
+    }
 };
