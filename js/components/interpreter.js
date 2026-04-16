@@ -16,6 +16,23 @@ export const Interpreter = {
     recognition: null,
 
     init() {
+        // Inject Styles
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes lsc-bounce {
+                0%, 100% { transform: scale(2.5) rotate(0deg) translateY(20px); }
+                50% { transform: scale(2.55) rotate(1deg) translateY(15px); }
+            }
+            .lsc-animating {
+                animation: lsc-bounce 0.3s ease-in-out infinite !important;
+            }
+            #lsc-transcription {
+                text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+                line-height: 1.5;
+            }
+        `;
+        document.head.appendChild(style);
+
         // Init Speech Recognition
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (SpeechRecognition) {
