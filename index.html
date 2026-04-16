@@ -174,19 +174,19 @@
                 <!-- Text Scale -->
                 <div>
                     <label class="block text-sm font-bold mb-3">Tamaño del texto</label>
-                    <div class="flex gap-2">
-                        <button onclick="window.changeFontSize(0.8)" class="flex-1 py-3 border border-surface-variant rounded-xl hover:bg-primary hover:text-white transition-all font-bold">Pequeño</button>
-                        <button onclick="window.changeFontSize(1)" class="flex-1 py-3 border border-primary bg-primary/5 text-primary rounded-xl font-bold">Normal</button>
-                        <button onclick="window.changeFontSize(1.3)" class="flex-1 py-3 border border-surface-variant rounded-xl hover:bg-primary hover:text-white transition-all font-bold">Grande</button>
+                    <div id="font-size-btns" class="flex gap-2">
+                        <button data-scale="0.8" class="font-btn flex-1 py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold">Pequeño</button>
+                        <button data-scale="1" class="font-btn flex-1 py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold">Normal</button>
+                        <button data-scale="1.3" class="font-btn flex-1 py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold">Grande</button>
                     </div>
                 </div>
 
                 <!-- Contrast -->
                 <div>
                     <label class="block text-sm font-bold mb-3">Modo de Visualización</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="window.setTheme('light')" class="py-3 border border-primary bg-primary/5 text-primary rounded-xl font-bold">Luz (Sobrio)</button>
-                        <button onclick="window.setTheme('dark')" class="py-3 border border-surface-variant rounded-xl hover:bg-primary hover:text-white transition-all font-bold">Alto Contraste</button>
+                    <div id="theme-btns" class="grid grid-cols-2 gap-2">
+                        <button data-theme="light" class="theme-btn py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold">Luz (Sobrio)</button>
+                        <button data-theme="dark" class="theme-btn py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold">Alto Contraste</button>
                     </div>
                 </div>
 
@@ -329,12 +329,45 @@
         closeAcc.onclick = () => accModal.classList.add('hidden');
         accModal.onclick = (e) => { if(e.target === accModal) accModal.classList.add('hidden'); }
 
+        // Font Size Buttons
+        const fontBtns = document.querySelectorAll('.font-btn');
+        const activeFont = 'border-secondary bg-secondary/10 text-secondary';
+        const inactiveFont = 'border-surface-variant text-on-surface';
+
+        fontBtns.forEach(btn => {
+            btn.onclick = () => {
+                const scale = btn.dataset.scale;
+                window.changeFontSize(scale);
+                fontBtns.forEach(b => {
+                    b.className = `font-btn flex-1 py-3 border rounded-xl transition-all font-bold ${b === btn ? activeFont : inactiveFont + ' hover:bg-secondary hover:text-white'}`;
+                });
+            };
+        });
+
+        // Theme Buttons
+        const themeBtns = document.querySelectorAll('.theme-btn');
+        themeBtns.forEach(btn => {
+            btn.onclick = () => {
+                const theme = btn.dataset.theme;
+                window.setTheme(theme);
+                themeBtns.forEach(b => {
+                    b.className = `theme-btn py-3 border rounded-xl font-bold transition-all ${b === btn ? activeFont : inactiveFont + ' hover:bg-secondary hover:text-white'}`;
+                });
+            };
+        });
+
         let guideEnabled = false;
         guideToggle.onclick = () => {
             guideEnabled = !guideEnabled;
             guideLine.classList.toggle('hidden', !guideEnabled);
             guideCircle.style.transform = guideEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
-            guideToggle.classList.toggle('bg-secondary', guideEnabled);
+            if (guideEnabled) {
+                guideToggle.classList.add('bg-secondary');
+                guideToggle.classList.remove('bg-surface-variant');
+            } else {
+                guideToggle.classList.remove('bg-secondary');
+                guideToggle.classList.add('bg-surface-variant');
+            }
         };
 
         window.onmousemove = (e) => {
@@ -349,7 +382,13 @@
             const isEnabled = !window.state?.lscEnabled;
             if (window.state) window.state.lscEnabled = isEnabled;
             lscCircle.style.transform = isEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
-            lscToggle.classList.toggle('bg-secondary', isEnabled);
+            if (isEnabled) {
+                lscToggle.classList.add('bg-secondary');
+                lscToggle.classList.remove('bg-surface-variant');
+            } else {
+                lscToggle.classList.remove('bg-secondary');
+                lscToggle.classList.add('bg-surface-variant');
+            }
             
             // Dispatch event for components to listen
             window.dispatchEvent(new CustomEvent('lsc-changed', { detail: isEnabled }));
@@ -443,7 +482,9 @@
         let cursorY = window.innerHeight / 2;
         let baseNoseX = null;
         let baseNoseY = null;
-        const sensitivity = 3.5; // How much the cursor moves per head unit
+        const sensitivity = 1.2; // Lower = slower cursor
+        let smoothX = window.innerWidth / 2;
+        let smoothY = window.innerHeight / 2;
 
         // Blink detection state
         let lastBlinkTime = 0;
@@ -515,9 +556,13 @@
                         const dx = -(nose.x - baseNoseX);
                         const dy = nose.y - baseNoseY;
 
-                        // Move cursor smoothly
-                        cursorX += dx * sensitivity * window.innerWidth * 0.05;
-                        cursorY += dy * sensitivity * window.innerHeight * 0.05;
+                        // Target position based on head delta
+                        const targetX = cursorX + dx * sensitivity * window.innerWidth * 0.03;
+                        const targetY = cursorY + dy * sensitivity * window.innerHeight * 0.03;
+
+                        // Smooth interpolation (lerp) - 0.15 = smooth, 1.0 = instant
+                        cursorX += (targetX - cursorX) * 0.15;
+                        cursorY += (targetY - cursorY) * 0.15;
 
                         // Clamp to screen
                         cursorX = Math.max(0, Math.min(window.innerWidth - 10, cursorX));
