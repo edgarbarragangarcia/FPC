@@ -138,18 +138,26 @@ window.addEventListener('load', () => {
     };
 
     // Voice Guide Initial Setup
+    let lastSpokenText = "";
+    
     document.addEventListener('mouseover', (e) => {
         if (!window.state.voiceEnabled) return;
-        const target = e.target.closest('a, button, h1, h2, h3, p');
-        if (target && target.innerText) {
-            speak(target.innerText);
+        const target = e.target.closest('a, button, h1, h2, h3, p, [aria-label]');
+        if (target) {
+            const textToSpeak = target.getAttribute('aria-label') || target.innerText || target.textContent;
+            if (textToSpeak && textToSpeak.trim() !== lastSpokenText) {
+                lastSpokenText = textToSpeak.trim();
+                speak(textToSpeak);
+            }
         }
     });
 
     document.addEventListener('focusin', (e) => {
         if (!window.state.voiceEnabled) return;
-        if (e.target && e.target.innerText) {
-            speak(e.target.innerText);
+        const target = e.target;
+        const textToSpeak = target.getAttribute('aria-label') || target.innerText || target.textContent;
+        if (textToSpeak) {
+            speak(textToSpeak);
         }
     });
 });
@@ -157,29 +165,54 @@ window.addEventListener('load', () => {
 const speak = (msg) => {
     if (!window.state.voiceEnabled || !msg) return;
     
-    // Safety check: some browsers need a user interaction to start audio
-    // but the toggle click should be enough.
-    
-    window.speechSynthesis.cancel();
-    
-    const utterance = new SpeechSynthesisUtterance(msg);
-    utterance.lang = 'es-CO';
-    
-    const voices = window.speechSynthesis.getVoices();
-    
-    // Refined search for Colombian or Spanish voices
-    let selectedVoice = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia') || v.name.includes('Salome'));
-    if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith('es-')); // Any Spanish
-    
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;
+    try {
+        window.speechSynthesis.cancel();
+        
+        const text = msg.trim().substring(0, 200); // Limit length
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-CO';
+        
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia'));
+        if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith('es-'));
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+        
+        window.speechSynthesis.speak(utterance);
+    } catch (e) {
+        console.error('TTS Error:', e);
     }
+};
+
+window.toggleVoice = () => {
+    // Warm up the engine
+    window.speechSynthesis.getVoices();
     
-    utterance.rate = 1.0;
-    utterance.volume = 1.0;
+    window.state.voiceEnabled = !window.state.voiceEnabled;
+    const btn = document.getElementById('voice-guide-toggle');
+    const circle = document.getElementById('voice-circle');
     
-    // Performance optimization: only speak if text has changed significantly or after pause
-    window.speechSynthesis.speak(utterance);
+    if (window.state.voiceEnabled) {
+        btn.classList.add('bg-secondary');
+        btn.classList.remove('bg-surface-variant');
+        circle.style.transform = 'translateX(1.5rem)';
+        
+        // Use a standard utterance for initialization
+        const initUtterance = new SpeechSynthesisUtterance("Voz activada");
+        initUtterance.lang = 'es-CO';
+        window.speechSynthesis.speak(initUtterance);
+    } else {
+        btn.classList.add('bg-surface-variant');
+        btn.classList.remove('bg-secondary');
+        circle.style.transform = 'translateX(0)';
+        window.speechSynthesis.cancel();
+    }
 };
 
 // Ensure voices are loaded
