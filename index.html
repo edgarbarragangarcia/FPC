@@ -14,6 +14,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- MediaPipe Face Mesh -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./css/style.css">
     <script>
         tailwind.config = {
@@ -219,6 +222,18 @@
                         <div id="voice-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
+                </div>
+
+                <!-- Face Navigation -->
+                <div class="flex items-center justify-between py-4 border-t border-surface-variant">
+                    <div>
+                        <p class="font-bold">Navegación Facial</p>
+                        <p class="text-xs text-on-surface/60">Controla la página con tu rostro</p>
+                    </div>
+                    <button id="face-nav-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                        <div id="face-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
+                    </button>
+                </div>
             </div>
             
             <button id="reset-acc" class="w-full mt-8 py-4 text-accent font-bold text-sm hover:underline">Restablecer valores predeterminados</button>
@@ -230,6 +245,18 @@
 
     <!-- Sign Language Interpreter Root -->
     <div id="interpreter-root"></div>
+
+    <!-- Face Navigation Camera Preview -->
+    <div id="face-cam-container" class="hidden fixed top-20 left-4 z-[90] rounded-2xl overflow-hidden shadow-2xl border-2 border-secondary/50 bg-black">
+        <video id="face-cam-video" class="w-40 h-30 object-cover transform scale-x-[-1]" autoplay muted playsinline></video>
+        <canvas id="face-cam-canvas" class="hidden"></canvas>
+        <div id="face-nav-indicator" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div id="face-cursor" class="w-4 h-4 bg-secondary rounded-full opacity-70 transition-all duration-100 shadow-lg shadow-secondary/50"></div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-2">
+            <p id="face-action-label" class="text-[9px] text-white font-bold uppercase tracking-widest text-center">Mirando al frente</p>
+        </div>
+    </div>
 
     <!-- Course Detail Modal (Syllabus) -->
     <div id="course-detail-modal" class="hidden fixed inset-0 z-[70] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 md:p-6 opacity-0 transition-opacity duration-300">
@@ -392,6 +419,169 @@
             const text = e.target.getAttribute('aria-label') || e.target.innerText;
             speakText(text);
         });
+
+        // ========== FACE NAVIGATION LOGIC ==========
+        const faceToggle = document.getElementById('face-nav-toggle');
+        const faceCircle = document.getElementById('face-circle');
+        const faceCamContainer = document.getElementById('face-cam-container');
+        const faceCamVideo = document.getElementById('face-cam-video');
+        const faceCursor = document.getElementById('face-cursor');
+        const faceActionLabel = document.getElementById('face-action-label');
+        let faceNavEnabled = false;
+        let faceStream = null;
+        let faceMeshInstance = null;
+        let faceCamera = null;
+        let baseNoseY = null;
+        let baseNoseX = null;
+        let mouthOpenCount = 0;
+        let focusableElements = [];
+        let currentFocusIndex = 0;
+
+        function updateFocusables() {
+            focusableElements = Array.from(document.querySelectorAll(
+                '#router-view a, #router-view button, #router-view input, #router-view [tabindex], header a, header button'
+            )).filter(el => el.offsetParent !== null); // only visible
+        }
+
+        function focusElement(index) {
+            if (focusableElements.length === 0) return;
+            currentFocusIndex = Math.max(0, Math.min(index, focusableElements.length - 1));
+            const el = focusableElements[currentFocusIndex];
+            el.focus();
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.style.outline = '4px solid #1B6D24';
+            el.style.outlineOffset = '4px';
+            // Remove outline from others
+            focusableElements.forEach((f, i) => {
+                if (i !== currentFocusIndex) { f.style.outline = ''; f.style.outlineOffset = ''; }
+            });
+            if (faceActionLabel) faceActionLabel.textContent = el.innerText?.substring(0, 30) || 'Elemento seleccionado';
+        }
+
+        async function startFaceNav() {
+            try {
+                faceStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240, facingMode: 'user' } });
+                faceCamVideo.srcObject = faceStream;
+                faceCamContainer.classList.remove('hidden');
+                updateFocusables();
+
+                if (typeof FaceMesh !== 'undefined') {
+                    faceMeshInstance = new FaceMesh({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+                    });
+                    faceMeshInstance.setOptions({
+                        maxNumFaces: 1,
+                        refineLandmarks: true,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.5
+                    });
+
+                    faceMeshInstance.onResults((results) => {
+                        if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+                            if (faceActionLabel) faceActionLabel.textContent = 'No se detecta rostro';
+                            return;
+                        }
+
+                        const landmarks = results.multiFaceLandmarks[0];
+                        const nose = landmarks[1]; // Nose tip
+                        const upperLip = landmarks[13];
+                        const lowerLip = landmarks[14];
+
+                        // Calibrate on first detection
+                        if (baseNoseY === null) {
+                            baseNoseY = nose.y;
+                            baseNoseX = nose.x;
+                        }
+
+                        const deltaY = nose.y - baseNoseY;
+                        const deltaX = nose.x - baseNoseX;
+                        const mouthDist = Math.abs(upperLip.y - lowerLip.y);
+
+                        // Move cursor indicator
+                        if (faceCursor) {
+                            faceCursor.style.transform = `translate(${deltaX * 200}px, ${deltaY * 200}px)`;
+                        }
+
+                        // SCROLL: Head tilt up/down (threshold ~0.04)
+                        if (deltaY > 0.05) {
+                            window.scrollBy({ top: 40, behavior: 'auto' });
+                            if (faceActionLabel) faceActionLabel.textContent = '↓ Bajando';
+                        } else if (deltaY < -0.05) {
+                            window.scrollBy({ top: -40, behavior: 'auto' });
+                            if (faceActionLabel) faceActionLabel.textContent = '↑ Subiendo';
+                        }
+                        // FOCUS NAV: Head tilt left/right (threshold ~0.06)
+                        else if (deltaX > 0.08) {
+                            updateFocusables();
+                            focusElement(currentFocusIndex + 1);
+                        } else if (deltaX < -0.08) {
+                            updateFocusables();
+                            focusElement(currentFocusIndex - 1);
+                        }
+                        // MOUTH OPEN → CLICK
+                        else if (mouthDist > 0.04) {
+                            mouthOpenCount++;
+                            if (mouthOpenCount > 5) { // Sustained mouth open
+                                const el = focusableElements[currentFocusIndex];
+                                if (el) {
+                                    el.click();
+                                    if (faceActionLabel) faceActionLabel.textContent = '✓ ¡Click!';
+                                }
+                                mouthOpenCount = 0;
+                            }
+                        } else {
+                            mouthOpenCount = 0;
+                            if (Math.abs(deltaY) < 0.05 && Math.abs(deltaX) < 0.08) {
+                                if (faceActionLabel) faceActionLabel.textContent = 'Mirando al frente';
+                            }
+                        }
+
+                        // Re-calibrate slowly
+                        baseNoseY = baseNoseY * 0.99 + nose.y * 0.01;
+                        baseNoseX = baseNoseX * 0.99 + nose.x * 0.01;
+                    });
+
+                    faceCamera = new Camera(faceCamVideo, {
+                        onFrame: async () => {
+                            await faceMeshInstance.send({ image: faceCamVideo });
+                        },
+                        width: 320,
+                        height: 240
+                    });
+                    faceCamera.start();
+                }
+            } catch (e) {
+                console.error('Face Nav Error:', e);
+                alert('No se pudo acceder a la cámara. Verifica los permisos.');
+                faceNavEnabled = false;
+                faceToggle.classList.remove('bg-secondary');
+                faceToggle.classList.add('bg-surface-variant');
+                faceCircle.style.transform = 'translateX(0)';
+            }
+        }
+
+        function stopFaceNav() {
+            if (faceCamera) { faceCamera.stop(); faceCamera = null; }
+            if (faceStream) { faceStream.getTracks().forEach(t => t.stop()); faceStream = null; }
+            faceCamContainer.classList.add('hidden');
+            baseNoseY = null;
+            baseNoseX = null;
+            // Remove outlines
+            focusableElements.forEach(f => { f.style.outline = ''; f.style.outlineOffset = ''; });
+        }
+
+        faceToggle.onclick = () => {
+            faceNavEnabled = !faceNavEnabled;
+            faceCircle.style.transform = faceNavEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
+            faceToggle.classList.toggle('bg-secondary', faceNavEnabled);
+            faceToggle.classList.toggle('bg-surface-variant', !faceNavEnabled);
+
+            if (faceNavEnabled) {
+                startFaceNav();
+            } else {
+                stopFaceNav();
+            }
+        };
 
         // Load preferences
         const savedScale = localStorage.getItem('fpc-font-scale');
