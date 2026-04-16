@@ -117,9 +117,9 @@ export const Courses = {
                             </div>
                         </div>
 
-                        <button onclick="window.location.hash='#/login'" class="w-full bg-gradient-to-r from-primary to-primary/80 text-white py-5 rounded-[2rem] font-bold text-lg shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
+                        <button id="enroll-btn-${course.id}" class="w-full bg-gradient-to-r from-primary to-primary/80 text-white py-5 rounded-[2rem] font-bold text-lg shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
                             <span class="material-symbols-outlined">rocket_launch</span>
-                            Inscribirme Ahora
+                            <span id="enroll-text-${course.id}">Inscribirme Ahora</span>
                         </button>
                     </div>
 
@@ -155,6 +155,36 @@ export const Courses = {
                     </div>
                 </div>
             `;
+
+            // Attach enrollment handler
+            const enrollBtn = document.getElementById(`enroll-btn-${course.id}`);
+            const enrollText = document.getElementById(`enroll-text-${course.id}`);
+
+            enrollBtn.onclick = async () => {
+                if (!window.state.user || !window.state.user.loggedIn) {
+                    window.location.hash = '#/login';
+                    return;
+                }
+
+                enrollText.innerText = 'Procesando...';
+                enrollBtn.disabled = true;
+
+                try {
+                    const res = await DB.enrollInCourse(courseId, window.state.user.id);
+                    if (res.status === 'success' || res.status === 'already_enrolled') {
+                        enrollText.innerText = '¡Inscrito!';
+                        enrollBtn.classList.replace('from-primary', 'from-secondary');
+                        setTimeout(() => {
+                            closeModal();
+                            window.location.hash = '#/dashboard';
+                        }, 1000);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    enrollText.innerText = 'Error al inscribir';
+                    enrollBtn.disabled = false;
+                }
+            };
         };
 
         const closeModal = () => {

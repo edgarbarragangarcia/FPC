@@ -86,6 +86,19 @@ export const DB = {
 
     getUsers: () => DB._users,
 
+    // --- Enrollments ---
+    enrollInCourse: async (courseId, userId) => {
+        const { data, error } = await supabase
+            .from('enrollments')
+            .insert([{ profile_id: userId, course_id: courseId }]);
+
+        if (error) {
+            if (error.code === '23505') return { status: 'already_enrolled' };
+            throw error;
+        }
+        return { status: 'success' };
+    },
+
     // --- Logs ---
     fetchLogs: async () => {
         const { data, error } = await supabase

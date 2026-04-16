@@ -52,6 +52,12 @@ ALTER TABLE modules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE lessons ENABLE ROW LEVEL SECURITY;
 
 -- 5. Políticas de Acceso (Policies)
+-- Borrar si ya existen para evitar errores
+DROP POLICY IF EXISTS "Courses are viewable by everyone" ON courses;
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can view own enrollments" ON enrollments;
+
 -- Cualquiera puede ver cursos
 CREATE POLICY "Courses are viewable by everyone" ON courses FOR SELECT USING (true);
 
