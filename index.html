@@ -49,9 +49,14 @@
         :root {
             --font-scale: 1;
         }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
         body {
             font-size: calc(1rem * var(--font-scale));
             transition: font-size 0.2s ease-in-out;
+            width: 100%;
         }
         .accessible-focus:focus-visible {
             outline: 3px solid #003F87;
@@ -76,29 +81,32 @@
 
     <!-- Header / Navigation -->
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-surface-variant px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2 md:gap-4 overflow-hidden">
             <button id="toggle-sidebar" class="lg:hidden p-2 hover:bg-surface-variant rounded-full accessible-focus" aria-label="Abrir menú lateral">
                 <span class="material-symbols-outlined">menu</span>
             </button>
-            <div class="flex flex-col">
-                <span class="font-headline font-bold text-primary text-xl tracking-tight leading-none">Fundación Promover por Colombia</span>
-                <span class="text-[10px] font-bold text-secondary tracking-[0.2em] uppercase mt-1">LMS Accesible</span>
+            <div class="flex flex-col min-w-0">
+                <span class="font-headline font-bold text-primary text-base md:text-xl tracking-tight leading-none truncate">Fundación Promover por Colombia</span>
+                <span class="text-[9px] font-bold text-secondary tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 truncate">LMS Accesible</span>
             </div>
         </div>
 
-        <nav class="hidden md:flex items-center gap-8">
-            <a href="#/" class="font-medium hover:text-primary transition-colors accessible-focus">Inicio</a>
-            <a href="#/cursos" class="font-medium hover:text-primary transition-colors accessible-focus">Explorar Cursos</a>
-            <a href="#/impacto" class="font-medium hover:text-primary transition-colors accessible-focus">Nuestra Misión</a>
+        <nav class="hidden lg:flex items-center gap-8">
+            <a href="#/" class="font-medium hover:text-primary transition-colors accessible-focus text-sm">Inicio</a>
+            <a href="#/cursos" class="font-medium hover:text-primary transition-colors accessible-focus text-sm">Explorar Cursos</a>
+            <a href="#/impacto" class="font-medium hover:text-primary transition-colors accessible-focus text-sm">Nuestra Misión</a>
         </nav>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 md:gap-3 flex-shrink-0">
             <!-- Accessibility Control Button -->
             <button id="accessibility-toggle" class="p-2 border border-surface-variant rounded-full hover:bg-surface-variant transition-all accessible-focus" aria-label="Opciones de accesibilidad">
                 <span class="material-symbols-outlined text-primary">accessibility_new</span>
             </button>
-            <button id="btn-mi-cuenta-desktop" class="bg-primary text-white px-6 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-all accessible-focus shadow-lg shadow-primary/20">
+            <button id="btn-mi-cuenta-desktop" class="hidden md:flex bg-primary text-white px-6 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-all accessible-focus shadow-lg shadow-primary/20">
                 Mi Cuenta
+            </button>
+            <button id="btn-mi-cuenta-mobile" class="md:hidden p-2 bg-primary text-white rounded-full transition-all accessible-focus" aria-label="Mi cuenta">
+                <span class="material-symbols-outlined">person</span>
             </button>
         </div>
     </header>
@@ -167,8 +175,8 @@
     </div>
 
     <!-- Accessibility Widget Modal (Hidden by default) -->
-    <div id="acc-modal" class="hidden fixed inset-0 z-[60] bg-black/40 flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-surface-variant translate-y-0 transition-transform duration-300">
+    <div id="acc-modal" class="hidden fixed inset-0 z-[60] bg-black/40 flex items-center justify-center p-4 md:p-6 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-surface-variant translate-y-0 transition-transform duration-300 my-auto">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="font-headline font-bold text-2xl text-primary">Ajustes de Accesibilidad</h2>
                 <button id="close-acc" class="p-2 hover:bg-surface-variant rounded-full transition-all">
