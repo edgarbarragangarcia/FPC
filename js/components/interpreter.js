@@ -54,14 +54,23 @@ export const Interpreter = {
                 </div>
 
                 <!-- Video Placeholder/Iframe -->
-                <div class="w-full h-full bg-black/80 flex items-center justify-center relative">
+                <div class="w-full h-full bg-black/95 flex items-center justify-center relative">
                     ${this.state.videoUrl.includes('placeholder') ? 
-                        `<div class="flex flex-col items-center text-center p-4">
-                            <span class="material-symbols-outlined text-white/20 text-4xl mb-2">back_hand</span>
-                            <p class="text-[9px] text-white/40 leading-tight">Configura un video LSC para esta lección</p>
+                        `<div class="flex flex-col items-center text-center p-6 space-y-3">
+                            <div class="animate-pulse flex items-center justify-center w-12 h-12 bg-white/5 rounded-full border border-white/10">
+                                <span class="material-symbols-outlined text-white/40 text-2xl">back_hand</span>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-white/80 leading-tight uppercase tracking-widest">Esperando Contenido</p>
+                                <p class="text-[9px] text-white/40 leading-tight px-4">Este material aún no tiene un intérprete asignado.</p>
+                            </div>
+                            <a href="http://centroderelevo.gov.co/" target="_blank" class="mt-2 bg-secondary/80 hover:bg-secondary text-[8px] font-bold text-white px-3 py-1.5 rounded-full transition-all flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[10px]">external_link</span>
+                                Centro de Relevo (Oficial)
+                            </a>
                         </div>` : 
                         `<iframe src="${this.state.videoUrl}" 
-                                 class="w-full h-full border-none pointer-events-none" 
+                                 class="w-full h-full border-none" 
                                  allow="autoplay; encrypted-media" 
                                  allowfullscreen></iframe>`
                     }
