@@ -220,9 +220,9 @@ export const Login = {
 
                 // 2. Show success (The profile is created automatically by the backend trigger)
                 registerSuccess.innerHTML = `
-                    <span class="material-symbols-outlined text-green-600 text-2xl mb-1 block">check_circle</span>
-                    <strong>¡Registro iniciado!</strong><br>
-                    <span class="text-green-600/80">Te hemos enviado un correo de confirmación. Una vez confirmado, podrás iniciar sesión.</span>
+                    <span class="material-symbols-outlined text-secondary text-2xl mb-1 block">verified_user</span>
+                    <strong>¡Cuenta creada con éxito!</strong><br>
+                    <span class="text-secondary/80">Ya puedes ir a la pestaña de Iniciar Sesión para entrar a la plataforma.</span>
                 `;
                 registerSuccess.classList.remove('hidden');
                 registerForm.reset();
