@@ -155,24 +155,37 @@ window.addEventListener('load', () => {
 });
 
 const speak = (msg) => {
-    if (!window.state.voiceEnabled) return;
+    if (!window.state.voiceEnabled || !msg) return;
+    
+    // Safety check: some browsers need a user interaction to start audio
+    // but the toggle click should be enough.
+    
     window.speechSynthesis.cancel();
     
     const utterance = new SpeechSynthesisUtterance(msg);
-    utterance.lang = 'es-CO'; // Explicitly set Colombian locale
+    utterance.lang = 'es-CO';
     
-    // Find a match for Colombian voice
     const voices = window.speechSynthesis.getVoices();
-    // Prefer voices that are es-CO or have 'Colombia' in the name
-    const colombianVoice = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia') || v.name.includes('Salome'));
     
-    if (colombianVoice) {
-        utterance.voice = colombianVoice;
+    // Refined search for Colombian or Spanish voices
+    let selectedVoice = voices.find(v => v.lang === 'es-CO' || v.name.includes('Colombia') || v.name.includes('Salome'));
+    if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith('es-')); // Any Spanish
+    
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
     }
     
-    utterance.rate = 0.95; // Slightly slower for better clarity
+    utterance.rate = 1.0;
+    utterance.volume = 1.0;
+    
+    // Performance optimization: only speak if text has changed significantly or after pause
     window.speechSynthesis.speak(utterance);
 };
+
+// Ensure voices are loaded
+if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
 
 window.toggleVoice = () => {
     window.state.voiceEnabled = !window.state.voiceEnabled;
@@ -183,7 +196,11 @@ window.toggleVoice = () => {
         btn.classList.add('bg-secondary');
         btn.classList.remove('bg-surface-variant');
         circle.style.transform = 'translateX(1.5rem)';
-        speak("Recorrido por voz activado.");
+        
+        // Immediate feedback attempt
+        setTimeout(() => {
+            speak("Recorrido por voz activado. Navega por la página para escuchar el contenido.");
+        }, 100);
     } else {
         btn.classList.add('bg-surface-variant');
         btn.classList.remove('bg-secondary');

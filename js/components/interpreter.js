@@ -91,8 +91,8 @@ export const Interpreter = {
 
         root.innerHTML = `
             <div id="lsc-window" 
-                 class="fixed bottom-6 right-6 w-80 aspect-video bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl z-[100] overflow-hidden group animate-in slide-in-from-bottom-10 duration-500"
-                 style="resize: both; min-width: 250px; min-height: 150px; cursor: s-resize;">
+                 class="fixed bottom-6 right-6 w-[450px] aspect-video bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl z-[100] overflow-hidden group animate-in slide-in-from-bottom-10 duration-500"
+                 style="resize: both; min-width: 350px; min-height: 220px; cursor: s-resize;">
                 
                 <!-- Header/Drag Handle -->
                 <div class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/60 to-transparent flex items-center justify-between px-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity cursor-move" id="lsc-handle">
