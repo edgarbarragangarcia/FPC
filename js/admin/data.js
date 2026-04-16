@@ -12,11 +12,12 @@ export const DB = {
     _logs: [],
 
     init: async () => {
-        console.log('Iniciando conexión con Supabase...');
-        // We will fetch initial data
-        await DB.fetchCourses();
-        await DB.fetchUsers();
-        await DB.fetchLogs();
+        // Parallel fetch for maximum speed
+        await Promise.all([
+            DB.fetchCourses(),
+            DB.fetchUsers(),
+            DB.fetchLogs()
+        ]);
     },
 
     // --- Courses ---
@@ -87,6 +88,23 @@ export const DB = {
     getUsers: () => DB._users,
 
     // --- Enrollments ---
+    _enrollmentsCache: {},
+    fetchUserEnrollments: async (userId) => {
+        if (DB._enrollmentsCache[userId]) return DB._enrollmentsCache[userId];
+
+        const { data, error } = await supabase
+            .from('enrollments')
+            .select(`
+                *,
+                courses (*)
+            `)
+            .eq('profile_id', userId);
+        
+        if (error) return [];
+        DB._enrollmentsCache[userId] = data;
+        return data;
+    },
+
     enrollInCourse: async (courseId, userId) => {
         const { data, error } = await supabase
             .from('enrollments')
@@ -96,6 +114,7 @@ export const DB = {
             if (error.code === '23505') return { status: 'already_enrolled' };
             throw error;
         }
+        delete DB._enrollmentsCache[userId]; // Invalidate cache
         return { status: 'success' };
     },
 
@@ -107,6 +126,7 @@ export const DB = {
             .eq('profile_id', userId);
         
         if (error) throw error;
+        delete DB._enrollmentsCache[userId]; // Invalidate cache
         return { status: 'success' };
     },
 
