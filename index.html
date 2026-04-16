@@ -12,6 +12,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <!-- Tailwind CSS (CDN for zero-install start) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Disable Tailwind production warning
+        if (window.location.host === 'promoverporcolombia.vercel.app') {
+            console.warn = (function(old) { return function() { if(!arguments[0].includes('cdn.tailwindcss.com')) old.apply(this, arguments); } })(console.warn);
+        }
+    </script>
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- MediaPipe Face Mesh -->
