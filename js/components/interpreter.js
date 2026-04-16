@@ -113,12 +113,17 @@ export const Interpreter = {
                 <div class="w-full h-full bg-black/95 flex items-center justify-center relative pointer-events-none">
                     ${this.state.mode === 'avatar' ? `
                         <!-- Avatar Mode -->
-                        <div class="flex flex-col items-center justify-center w-full h-full p-4 relative overflow-hidden pointer-events-none">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-0"></div>
-                            <img id="lsc-avatar-img" src="./assets/img/avatar.png" 
-                                 class="h-[250%] object-contain mt-20 transform-gpu transition-all duration-300 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)] origin-top">
-                            <div class="absolute bottom-4 left-4 right-4 z-20">
-                                <p id="lsc-transcription" class="text-lg md:text-xl font-bold text-white bg-black/60 backdrop-blur-md px-6 py-4 rounded-3xl border border-white/20 text-center italic shadow-2xl">
+                        <div class="flex flex-col items-center justify-center w-full h-full p-6 relative overflow-hidden pointer-events-none">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-black/90 z-0"></div>
+                            
+                            <!-- Large Clear Transcription -->
+                            <div class="z-20 w-full flex flex-col items-center justify-center gap-4">
+                                <div class="flex items-center gap-2 opacity-50 mb-2">
+                                    <div class="w-1.5 h-6 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                    <div class="w-1.5 h-10 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                    <div class="w-1.5 h-8 bg-secondary rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+                                </div>
+                                <p id="lsc-transcription" class="text-2xl md:text-3xl font-bold text-white bg-black/40 backdrop-blur-xl px-8 py-8 rounded-[2rem] border border-white/10 text-center italic shadow-2xl leading-relaxed">
                                     ${this.state.transcription}
                                 </p>
                             </div>
