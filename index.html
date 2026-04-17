@@ -123,51 +123,56 @@
     </a>
 
     <!-- Header / Navigation -->
-    <header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-surface-variant px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-2 md:gap-4 overflow-hidden">
-            <button id="toggle-sidebar" class="lg:hidden p-2 hover:bg-surface-variant rounded-full accessible-focus" aria-label="Abrir menú lateral">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-            <div class="flex flex-col min-w-0">
-                <span class="font-headline font-bold text-primary text-base md:text-xl tracking-tight leading-none truncate">Fundación Promover por Colombia</span>
-                <span class="text-[9px] font-bold text-secondary tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 truncate">LMS Accesible</span>
+    <header class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-surface-variant px-6 py-4">
+        <div class="max-w-screen-2xl mx-auto flex lg:grid lg:grid-cols-[1fr_auto_1fr] items-center justify-between w-full">
+            <!-- Left: Logo -->
+            <div class="flex items-center gap-2 md:gap-4 overflow-hidden">
+                <button id="toggle-sidebar" class="lg:hidden p-2 hover:bg-surface-variant rounded-full accessible-focus" aria-label="Abrir menú lateral">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="flex flex-col min-w-0">
+                    <span class="font-headline font-bold text-primary text-base md:text-xl tracking-tight leading-none truncate">Fundación Promover por Colombia</span>
+                    <span data-i18n="logo_sub" class="text-[9px] font-bold text-secondary tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 truncate">LMS Accesible</span>
+                </div>
             </div>
-        </div>
 
-        <nav class="hidden lg:flex items-center gap-8">
-            <a href="#/" class="font-medium hover:text-primary transition-colors accessible-focus text-sm">Inicio</a>
-            <a href="#/cursos" class="font-medium hover:text-primary transition-colors accessible-focus text-sm">Explorar Cursos</a>
-            <a href="#/impacto" class="font-medium hover:text-primary transition-colors accessible-focus text-sm">Nuestra Misión</a>
-        </nav>
+            <!-- Center: Nav (Centered on Desktop) -->
+            <nav class="hidden lg:flex items-center gap-10 justify-center">
+                <a href="#/" data-i18n="nav_home" class="font-bold hover:text-primary transition-colors accessible-focus text-sm relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all hover:after:w-full">Inicio</a>
+                <a href="#/cursos" data-i18n="nav_courses" class="font-bold hover:text-primary transition-colors accessible-focus text-sm relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all hover:after:w-full">Explorar Cursos</a>
+                <a href="#/impacto" data-i18n="nav_mission" class="font-bold hover:text-primary transition-colors accessible-focus text-sm relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all hover:after:w-full">Nuestra Misión</a>
+            </nav>
 
-        <div class="flex items-center gap-2 md:gap-3 flex-shrink-0 relative">
-            <!-- Accessibility Control Button -->
-            <button id="accessibility-toggle" class="p-2 border border-surface-variant rounded-full hover:bg-surface-variant transition-all accessible-focus" aria-label="Opciones de accesibilidad">
-                <span class="material-symbols-outlined text-primary">accessibility_new</span>
-            </button>
-            
-            <div class="relative">
-                <button id="btn-mi-cuenta-desktop" class="hidden md:flex bg-primary text-white px-6 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-all accessible-focus shadow-lg shadow-primary/20">
-                    Mi Cuenta
+            <!-- Right: Actions -->
+            <div class="flex items-center gap-2 md:gap-3 justify-end relative">
+                <!-- Accessibility Control Button -->
+                <button id="accessibility-toggle" class="p-2 border border-surface-variant rounded-full hover:bg-surface-variant transition-all accessible-focus" aria-label="Opciones de accesibilidad">
+                    <span class="material-symbols-outlined text-primary">accessibility_new</span>
                 </button>
-                <button id="btn-mi-cuenta-mobile" class="md:hidden p-2 bg-primary text-white rounded-full transition-all accessible-focus" aria-label="Mi cuenta">
-                    <span class="material-symbols-outlined">person</span>
-                </button>
-
-                <!-- User Dropdown Menu -->
-                <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-surface rounded-2xl shadow-xl border border-surface-variant py-2 z-[100] animate-in fade-in slide-in-from-top-2">
-                    <div id="user-info-dropdown" class="px-4 py-2 border-b border-surface-variant mb-2">
-                        <p id="dropdown-user-name" class="font-bold text-sm text-primary truncate">Visitante</p>
-                        <p id="dropdown-user-role" class="text-[10px] text-on-surface/50 uppercase font-bold tracking-wider">Estudiante</p>
-                    </div>
-                    <a id="dropdown-panel-link" href="#/dashboard" class="block px-4 py-2 text-sm font-medium hover:bg-surface-variant transition-colors flex items-center gap-2">
-                        <span class="material-symbols-outlined text-lg">dashboard</span>
-                        Mi Panel
-                    </a>
-                    <button id="btn-logout-global" class="w-full text-left px-4 py-2 text-sm font-bold text-accent hover:bg-accent/5 transition-colors flex items-center gap-2 border-t border-surface-variant/30 mt-2 pt-3">
-                        <span class="material-symbols-outlined text-lg">logout</span>
-                        Cerrar Sesión
+                
+                <div class="relative">
+                    <button id="btn-mi-cuenta-desktop" data-i18n="btn_account" class="hidden md:flex bg-primary text-white px-6 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-all accessible-focus shadow-lg shadow-primary/20">
+                        Mi Cuenta
                     </button>
+                    <button id="btn-mi-cuenta-mobile" class="md:hidden p-2 bg-primary text-white rounded-full transition-all accessible-focus" aria-label="Mi cuenta">
+                        <span class="material-symbols-outlined">person</span>
+                    </button>
+
+                    <!-- User Dropdown Menu -->
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-surface rounded-2xl shadow-xl border border-surface-variant py-2 z-[100] animate-in fade-in slide-in-from-top-2">
+                        <div id="user-info-dropdown" class="px-4 py-2 border-b border-surface-variant mb-2">
+                            <p id="dropdown-user-name" class="font-bold text-sm text-primary truncate">Visitante</p>
+                            <p id="dropdown-user-role" class="text-[10px] text-on-surface/50 uppercase font-bold tracking-wider">Estudiante</p>
+                        </div>
+                        <a id="dropdown-panel-link" href="#/dashboard" class="block px-4 py-2 text-sm font-medium hover:bg-surface-variant transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">dashboard</span>
+                            Mi Panel
+                        </a>
+                        <button id="btn-logout-global" class="w-full text-left px-4 py-2 text-sm font-bold text-accent hover:bg-accent/5 transition-colors flex items-center gap-2 border-t border-surface-variant/30 mt-2 pt-3">
+                            <span class="material-symbols-outlined text-lg">logout</span>
+                            Cerrar Sesión
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -175,7 +180,6 @@
 
     <!-- Main Dynamic Container -->
     <main id="main-content" class="flex-1">
-        <!-- The JS Router will inject pages here -->
         <div id="router-view" class="p-6 md:pt-4 md:px-12 md:pb-12 animate-in fade-in duration-500">
             <div class="flex items-center justify-center min-h-[50vh]">
                 <div class="animate-pulse text-outline">Cargando plataforma...</div>
@@ -188,23 +192,20 @@
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="flex flex-col items-center md:items-start">
                 <span class="font-headline font-bold text-primary text-lg">Fundación Promover por Colombia</span>
-                <p class="text-xs text-on-surface/50 mt-1">Transformando vidas desde el corazón de la inclusión.</p>
+                <p data-i18n="footer_desc" class="text-xs text-on-surface/50 mt-1">Transformando vidas desde el corazón de la inclusión.</p>
             </div>
             <div class="flex gap-8 text-sm font-medium text-on-surface/70">
-                <a href="#/" class="hover:text-primary transition-colors">Inicio</a>
-                <a href="#/cursos" class="hover:text-primary transition-colors">Cursos</a>
-                <a href="#/impacto" class="hover:text-primary transition-colors">Impacto</a>
+                <a href="#/" data-i18n="nav_home" class="hover:text-primary transition-colors">Inicio</a>
+                <a href="#/cursos" data-i18n="nav_courses" class="hover:text-primary transition-colors">Cursos</a>
+                <a href="#/impacto" data-i18n="nav_mission" class="hover:text-primary transition-colors">Impacto</a>
             </div>
-            <p class="text-[10px] text-on-surface/40 uppercase tracking-widest font-bold">© 2024 Todos los derechos reservados</p>
+            <p data-i18n="footer_rights" class="text-[10px] text-on-surface/40 uppercase tracking-widest font-bold">© 2024 Todos los derechos reservados</p>
         </div>
     </footer>
 
     <!-- Mobile Menu Drawer (Hidden by default) -->
     <div id="mobile-menu" class="fixed inset-0 z-[100] hidden">
-        <!-- Backdrop -->
         <div id="mobile-menu-backdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
-        
-        <!-- Drawer Container -->
         <div id="mobile-menu-content" class="absolute top-0 left-0 bottom-0 w-[80%] max-w-sm bg-surface shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col p-8">
             <div class="flex justify-between items-center mb-12">
                 <div class="flex flex-col">
@@ -215,7 +216,6 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
-
             <nav class="flex flex-col gap-6">
                 <a href="#/" class="mobile-nav-link flex items-center gap-4 text-xl font-bold text-primary py-2 border-b border-surface-variant/50">
                     <span class="material-symbols-outlined">home</span> Inicio
@@ -227,29 +227,36 @@
                     <span class="material-symbols-outlined">diversity_1</span> Impacto
                 </a>
             </nav>
-
-            <div class="mt-auto pt-8 border-t border-surface-variant">
-                <button id="btn-mi-cuenta-mobile" class="w-full bg-primary text-white py-4 rounded-2xl font-bold shadow-lg shadow-primary/20">
-                    Mi Cuenta
-                </button>
-            </div>
         </div>
     </div>
 
-    <!-- Accessibility Widget Modal (Hidden by default) -->
+    <!-- Accessibility Widget Modal -->
     <div id="acc-modal" class="hidden fixed inset-0 z-[60] bg-black/40 flex items-center justify-center p-4 md:p-6 backdrop-blur-sm overflow-y-auto">
         <div class="bg-surface rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-surface-variant translate-y-0 transition-transform duration-300 my-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="font-headline font-bold text-2xl text-primary">Ajustes de Accesibilidad</h2>
+                <h2 data-i18n="acc_title" class="font-headline font-bold text-2xl text-primary">Ajustes de Accesibilidad</h2>
                 <button id="close-acc" class="p-2 hover:bg-surface-variant rounded-full transition-all">
                     <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
             
             <div class="space-y-6">
+                <!-- Language Selection -->
+                <div>
+                    <label data-i18n="acc_lang_label" class="block text-sm font-bold mb-3">Idioma / Language</label>
+                    <div id="lang-btns" class="flex gap-2">
+                        <button data-lang="es" class="lang-btn flex-1 py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
+                            <span>🇪🇸</span> <span class="text-xs">Español</span>
+                        </button>
+                        <button data-lang="en" class="lang-btn flex-1 py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold flex items-center justify-center gap-2">
+                            <span>🇺🇸</span> <span class="text-xs">English</span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Text Scale -->
                 <div>
-                    <label class="block text-sm font-bold mb-3">Tamaño del texto</label>
+                    <label data-i18n="acc_text_size" class="block text-sm font-bold mb-3">Tamaño del texto</label>
                     <div id="font-size-btns" class="flex gap-2">
                         <button data-scale="0.8" class="font-btn flex-1 py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold">Pequeño</button>
                         <button data-scale="1" class="font-btn flex-1 py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold">Normal</button>
@@ -259,59 +266,26 @@
 
                 <!-- Contrast -->
                 <div>
-                    <label class="block text-sm font-bold mb-3">Modo de Visualización</label>
+                    <label data-i18n="acc_view_mode" class="block text-sm font-bold mb-3">Modo de Visualización</label>
                     <div id="theme-btns" class="grid grid-cols-2 gap-2">
-                        <button data-theme="light" class="theme-btn py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold">Luz (Sobrio)</button>
-                        <button data-theme="dark" class="theme-btn py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold">Alto Contraste</button>
+                        <button data-theme="light" data-i18n="acc_light" class="theme-btn py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold">Luz (Sobrio)</button>
+                        <button data-theme="dark" data-i18n="acc_dark" class="theme-btn py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold">Alto Contraste</button>
                     </div>
                 </div>
 
-                <!-- Reading Guide -->
+                <!-- More controls... -->
                 <div class="flex items-center justify-between py-2 border-t border-surface-variant pt-6">
                     <div>
-                        <p class="font-bold">Guía de lectura</p>
-                        <p class="text-xs text-on-surface/60">Agrega una línea de enfoque visual</p>
+                        <p data-i18n="acc_guide" class="font-bold">Guía de lectura</p>
+                        <p data-i18n="acc_guide_sub" class="text-xs text-on-surface/60">Agrega una línea de enfoque visual</p>
                     </div>
                     <button id="reading-guide-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
                         <div id="guide-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
                     </button>
                 </div>
-
-                <!-- Sign Language -->
-                <div class="flex items-center justify-between py-4 border-t border-surface-variant">
-                    <div>
-                        <p class="font-bold">Lengua de Señas</p>
-                        <p class="text-xs text-on-surface/60">Activar intérprete virtual (LSC)</p>
-                    </div>
-                    <button id="lsc-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
-                        <div id="lsc-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
-                    </button>
-                </div>
-
-                <!-- Voice Guide -->
-                <div class="flex items-center justify-between py-4 border-t border-surface-variant">
-                    <div>
-                        <p class="font-bold">Recorrido por Voz</p>
-                        <p class="text-xs text-on-surface/60">Asistente de voz para personas ciegas</p>
-                    </div>
-                    <button id="voice-guide-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
-                        <div id="voice-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
-                    </button>
-                </div>
-
-                <!-- Face Navigation -->
-                <div class="flex items-center justify-between py-4 border-t border-surface-variant">
-                    <div>
-                        <p class="font-bold">Navegación Facial</p>
-                        <p class="text-xs text-on-surface/60">Controla la página con tu rostro</p>
-                    </div>
-                    <button id="face-nav-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
-                        <div id="face-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
-                    </button>
-                </div>
             </div>
             
-            <button id="reset-acc" class="w-full mt-8 py-4 text-accent font-bold text-sm hover:underline">Restablecer valores predeterminados</button>
+            <button id="reset-acc" data-i18n="acc_reset" class="w-full mt-8 py-4 text-accent font-bold text-sm hover:underline">Restablecer valores predeterminados</button>
         </div>
     </div>
 
@@ -450,320 +424,27 @@
             if(guideEnabled) guideLine.style.top = e.clientY + 'px';
         };
 
-        // LSC Logic
-        const lscToggle = document.getElementById('lsc-toggle');
-        const lscCircle = document.getElementById('lsc-circle');
-        
-        lscToggle.onclick = () => {
-            const isEnabled = !window.state?.lscEnabled;
-            if (window.state) window.state.lscEnabled = isEnabled;
-            lscCircle.style.transform = isEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
-            if (isEnabled) {
-                lscToggle.classList.add('bg-secondary');
-                lscToggle.classList.remove('bg-surface-variant');
-            } else {
-                lscToggle.classList.remove('bg-secondary');
-                lscToggle.classList.add('bg-surface-variant');
-            }
-            
-            // Dispatch event for components to listen
-            window.dispatchEvent(new CustomEvent('lsc-changed', { detail: isEnabled }));
-        };
-
-        // ========== VOICE GUIDE LOGIC ==========
-        const voiceToggle = document.getElementById('voice-guide-toggle');
-        const voiceCircle = document.getElementById('voice-circle');
-        let voiceEnabled = false;
-        let lastSpoken = '';
-
-        // Pre-load voices
-        speechSynthesis.getVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-        }
-
-        function speakText(text) {
-            if (!voiceEnabled || !text) return;
-            const clean = text.trim().substring(0, 200);
-            if (!clean) return;
-
-            speechSynthesis.cancel();
-
-            const u = new SpeechSynthesisUtterance(clean);
-            u.lang = 'es-ES';
-            u.volume = 1;
-            u.rate = 1;
-
-            const voices = speechSynthesis.getVoices();
-            const esVoice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang.startsWith('es'));
-            if (esVoice) u.voice = esVoice;
-
-            speechSynthesis.speak(u);
-        }
-
-        voiceToggle.onclick = () => {
-            voiceEnabled = !voiceEnabled;
-            if (window.state) window.state.voiceEnabled = voiceEnabled;
-
-            voiceCircle.style.transform = voiceEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
-            voiceToggle.classList.toggle('bg-secondary', voiceEnabled);
-            voiceToggle.classList.toggle('bg-surface-variant', !voiceEnabled);
-
-            if (voiceEnabled) {
-                // Speak immediately on user gesture (critical for Chrome)
-                const u = new SpeechSynthesisUtterance('Recorrido por voz activado');
-                u.lang = 'es-ES';
-                u.volume = 1;
-                const voices = speechSynthesis.getVoices();
-                const esVoice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang.startsWith('es'));
-                if (esVoice) u.voice = esVoice;
-                speechSynthesis.speak(u);
-            } else {
-                speechSynthesis.cancel();
-            }
-        };
-
-        // Read elements on hover
-        document.addEventListener('mouseover', (e) => {
-            if (!voiceEnabled) return;
-            const el = e.target.closest('a, button, h1, h2, h3, h4, p, li, span, label, td, th');
-            if (el) {
-                const text = el.getAttribute('aria-label') || el.innerText;
-                speakText(text);
-            }
-        });
-
-        // Read elements on keyboard focus
-        document.addEventListener('focusin', (e) => {
-            if (!voiceEnabled) return;
-            const text = e.target.getAttribute('aria-label') || e.target.innerText;
-            speakText(text);
-        });
-
-        // ========== FACE NAVIGATION: CURSOR + BLINK CLICK ==========
-        const faceToggle = document.getElementById('face-nav-toggle');
-        const faceCircle = document.getElementById('face-circle');
-        const faceCamContainer = document.getElementById('face-cam-container');
-        const faceCamVideo = document.getElementById('face-cam-video');
-        const faceActionLabel = document.getElementById('face-action-label');
-        const faceScreenCursor = document.getElementById('face-screen-cursor');
-        const faceCursorLabel = document.getElementById('face-cursor-label');
-        let faceNavEnabled = false;
-        let faceStream = null;
-        let faceMeshInstance = null;
-        let faceCamera = null;
-
-        // Cursor state
-        let cursorX = window.innerWidth / 2;
-        let cursorY = window.innerHeight / 2;
-        let baseNoseX = null;
-        let baseNoseY = null;
-        const sensitivity = 2.8;
-        let smoothX = window.innerWidth / 2;
-        let smoothY = window.innerHeight / 2;
-
-        // Blink detection state
-        let lastBlinkTime = 0;
-        let blinkCount = 0;
-        let wasEyeClosed = false;
-        const BLINK_THRESHOLD = 0.19; // EAR below this = eye closed
-        const DOUBLE_BLINK_WINDOW = 900; // ms window for double-blink
-
-        // Calculate Eye Aspect Ratio for right eye
-        function getEAR(landmarks, eyeIndices) {
-            // eyeIndices: [p1, p2, p3, p4, p5, p6] (top-bottom pairs + corners)
-            const p1 = landmarks[eyeIndices[0]];
-            const p2 = landmarks[eyeIndices[1]];
-            const p3 = landmarks[eyeIndices[2]];
-            const p4 = landmarks[eyeIndices[3]];
-            const p5 = landmarks[eyeIndices[4]];
-            const p6 = landmarks[eyeIndices[5]];
-
-            const vertA = Math.sqrt(Math.pow(p2.x - p6.x, 2) + Math.pow(p2.y - p6.y, 2));
-            const vertB = Math.sqrt(Math.pow(p3.x - p5.x, 2) + Math.pow(p3.y - p5.y, 2));
-            const horiz = Math.sqrt(Math.pow(p1.x - p4.x, 2) + Math.pow(p1.y - p4.y, 2));
-
-            return (vertA + vertB) / (2.0 * horiz);
-        }
-
-        // Right eye landmark indices (user's right eye)
-        const RIGHT_EYE = [33, 159, 158, 133, 153, 145];
-
-        async function startFaceNav() {
-            try {
-                faceStream = await navigator.mediaDevices.getUserMedia({
-                    video: { width: 320, height: 240, facingMode: 'user' }
-                });
-                faceCamVideo.srcObject = faceStream;
-                faceCamContainer.classList.remove('hidden');
-                faceScreenCursor.classList.remove('hidden');
-
-                // Reset cursor to center
-                cursorX = window.innerWidth / 2;
-                cursorY = window.innerHeight / 2;
-
-                if (typeof FaceMesh !== 'undefined') {
-                    faceMeshInstance = new FaceMesh({
-                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
-                    });
-                    faceMeshInstance.setOptions({
-                        maxNumFaces: 1,
-                        refineLandmarks: true,
-                        minDetectionConfidence: 0.5,
-                        minTrackingConfidence: 0.5
-                    });
-
-                    faceMeshInstance.onResults((results) => {
-                        if (!results.multiFaceLandmarks || !results.multiFaceLandmarks.length) {
-                            if (faceActionLabel) faceActionLabel.textContent = 'No se detecta rostro';
-                            return;
-                        }
-
-                        const lm = results.multiFaceLandmarks[0];
-                        const nose = lm[1];
-
-                        // Calibrate center on first frame
-                        if (baseNoseX === null) {
-                            baseNoseX = nose.x;
-                            baseNoseY = nose.y;
-                        }
-
-                        // Delta from center (inverted X because camera is mirrored)
-                        const dx = -(nose.x - baseNoseX);
-                        const dy = nose.y - baseNoseY;
-
-                        // Target position based on head delta
-                        const targetX = cursorX + dx * sensitivity * window.innerWidth * 0.04;
-                        const targetY = cursorY + dy * sensitivity * window.innerHeight * 0.04;
-
-                        // Smooth interpolation (lerp)
-                        cursorX += (targetX - cursorX) * 0.25;
-                        cursorY += (targetY - cursorY) * 0.25;
-
-                        // Clamp to screen
-                        cursorX = Math.max(0, Math.min(window.innerWidth - 10, cursorX));
-                        cursorY = Math.max(0, Math.min(window.innerHeight - 10, cursorY));
-
-                        // Update visual cursor
-                        faceScreenCursor.style.left = cursorX + 'px';
-                        faceScreenCursor.style.top = cursorY + 'px';
-
-                        // Show what's under cursor
-                        const underCursor = document.elementFromPoint(cursorX, cursorY);
-                        if (underCursor && faceCursorLabel) {
-                            const label = underCursor.getAttribute('aria-label') ||
-                                          underCursor.innerText?.substring(0, 25) || '';
-                            faceCursorLabel.textContent = label;
-
-                            // Highlight hoverable elements
-                            if (underCursor.closest('a, button, input')) {
-                                faceScreenCursor.querySelector('.w-8').style.borderColor = '#E63946';
-                                faceScreenCursor.querySelector('.w-2').style.backgroundColor = '#E63946';
-                            } else {
-                                faceScreenCursor.querySelector('.w-8').style.borderColor = '#1B6D24';
-                                faceScreenCursor.querySelector('.w-2').style.backgroundColor = '#1B6D24';
-                            }
-                        }
-
-                        // Auto-scroll near edges
-                        if (cursorY < 80) window.scrollBy(0, -8);
-                        if (cursorY > window.innerHeight - 80) window.scrollBy(0, 8);
-
-                        // ===== RIGHT EYE BLINK DETECTION =====
-                        const ear = getEAR(lm, RIGHT_EYE);
-                        const isEyeClosed = ear < BLINK_THRESHOLD;
-
-                        if (isEyeClosed && !wasEyeClosed) {
-                            // Eye just closed = blink start
-                            const now = Date.now();
-                            if (now - lastBlinkTime < DOUBLE_BLINK_WINDOW) {
-                                blinkCount++;
-                            } else {
-                                blinkCount = 1;
-                            }
-                            lastBlinkTime = now;
-
-                            if (blinkCount >= 2) {
-                                // DOUBLE BLINK → CLICK!
-                                blinkCount = 0;
-                                const clickTarget = document.elementFromPoint(cursorX, cursorY);
-                                if (clickTarget) {
-                                    // Visual feedback
-                                    faceScreenCursor.querySelector('.w-8').style.transform = 'scale(1.5)';
-                                    setTimeout(() => {
-                                        faceScreenCursor.querySelector('.w-8').style.transform = 'scale(1)';
-                                    }, 200);
-
-                                    clickTarget.click();
-                                    if (faceActionLabel) faceActionLabel.textContent = '✓ ¡Click!';
-                                    setTimeout(() => {
-                                        if (faceActionLabel) faceActionLabel.textContent = 'Mirando al frente';
-                                    }, 1000);
-                                }
-                            } else {
-                                if (faceActionLabel) faceActionLabel.textContent = '👁 Guiño detectado (x1)';
-                            }
-                        }
-                        wasEyeClosed = isEyeClosed;
-
-                        // Slow re-calibration
-                        baseNoseX = baseNoseX * 0.995 + nose.x * 0.005;
-                        baseNoseY = baseNoseY * 0.995 + nose.y * 0.005;
-
-                        // Status label
-                        if (!isEyeClosed && Math.abs(dx) < 0.02 && Math.abs(dy) < 0.02) {
-                            if (faceActionLabel && faceActionLabel.textContent !== '✓ ¡Click!' && faceActionLabel.textContent !== '👁 Guiño detectado (x1)') {
-                                faceActionLabel.textContent = 'Mirando al frente';
-                            }
-                        }
-                    });
-
-                    faceCamera = new Camera(faceCamVideo, {
-                        onFrame: async () => {
-                            await faceMeshInstance.send({ image: faceCamVideo });
-                        },
-                        width: 320,
-                        height: 240
-                    });
-                    faceCamera.start();
+        // Language Buttons
+        const langBtns = document.querySelectorAll('.lang-btn');
+        langBtns.forEach(btn => {
+            btn.onclick = () => {
+                const lang = btn.dataset.lang;
+                if (window.i18n) {
+                    window.i18n.setLanguage(lang);
+                } else {
+                    localStorage.setItem('fpc_lang', lang);
+                    location.reload();
                 }
-            } catch (e) {
-                console.error('Face Nav Error:', e);
-                alert('No se pudo acceder a la cámara. Verifica los permisos del navegador.');
-                faceNavEnabled = false;
-                faceToggle.classList.remove('bg-secondary');
-                faceToggle.classList.add('bg-surface-variant');
-                faceCircle.style.transform = 'translateX(0)';
-            }
-        }
-
-        function stopFaceNav() {
-            if (faceCamera) { faceCamera.stop(); faceCamera = null; }
-            if (faceStream) { faceStream.getTracks().forEach(t => t.stop()); faceStream = null; }
-            faceCamContainer.classList.add('hidden');
-            faceScreenCursor.classList.add('hidden');
-            baseNoseX = null;
-            baseNoseY = null;
-        }
-
-        faceToggle.onclick = () => {
-            faceNavEnabled = !faceNavEnabled;
-            faceCircle.style.transform = faceNavEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
-            faceToggle.classList.toggle('bg-secondary', faceNavEnabled);
-            faceToggle.classList.toggle('bg-surface-variant', !faceNavEnabled);
-
-            if (faceNavEnabled) {
-                startFaceNav();
-            } else {
-                stopFaceNav();
-            }
-        };
+            };
+        });
 
         // Load preferences
         const savedScale = localStorage.getItem('fpc-font-scale');
         if(savedScale) window.changeFontSize(savedScale);
         const savedTheme = localStorage.getItem('fpc-theme');
         if(savedTheme) window.setTheme(savedTheme);
+        const savedLang = localStorage.getItem('fpc_lang') || 'es';
+        document.documentElement.lang = savedLang;
     </script>
 </body>
 </html>
