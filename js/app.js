@@ -165,13 +165,24 @@ window.addEventListener('load', async () => {
         const nameEl = document.getElementById('dropdown-user-name');
         const roleEl = document.getElementById('dropdown-user-role');
         const infoEl = document.getElementById('user-info-dropdown');
+        const panelLink = document.getElementById('dropdown-panel-link');
 
         if (window.state.user && window.state.user.loggedIn) {
             nameEl.innerText = window.state.user.name || window.state.user.email;
             roleEl.innerText = window.state.user.role === 'admin' ? 'Administrador' : 'Estudiante';
             infoEl.classList.remove('hidden');
+
+            if (window.state.user.role === 'admin') {
+                panelLink.href = '#/admin';
+                panelLink.innerHTML = '<span class="material-symbols-outlined text-lg">admin_panel_settings</span>Administración';
+            } else {
+                panelLink.href = '#/dashboard';
+                panelLink.innerHTML = '<span class="material-symbols-outlined text-lg">dashboard</span>Mi Panel';
+            }
         } else {
             infoEl.classList.add('hidden');
+            panelLink.href = '#/dashboard';
+            panelLink.innerHTML = '<span class="material-symbols-outlined text-lg">dashboard</span>Mi Panel';
         }
     };
 
