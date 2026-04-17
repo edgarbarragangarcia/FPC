@@ -145,6 +145,16 @@
 
             <!-- Right: Actions -->
             <div class="flex items-center gap-2 md:gap-3 justify-end relative">
+                <!-- Language Quick Switcher -->
+                <div class="flex items-center gap-1.5 mr-1">
+                    <button data-lang="es" class="nav-lang-btn w-8 h-8 rounded-full overflow-hidden border-2 border-transparent hover:border-primary transition-all accessible-focus" title="Español (Colombia)">
+                        <img src="https://flagcdn.com/w80/co.png" alt="Colombia" class="w-full h-full object-cover">
+                    </button>
+                    <button data-lang="en" class="nav-lang-btn w-8 h-8 rounded-full overflow-hidden border-2 border-transparent hover:border-primary transition-all accessible-focus" title="English (USA)">
+                        <img src="https://flagcdn.com/w80/us.png" alt="USA" class="w-full h-full object-cover">
+                    </button>
+                </div>
+
                 <!-- Accessibility Control Button -->
                 <button id="accessibility-toggle" class="p-2 border border-surface-variant rounded-full hover:bg-surface-variant transition-all accessible-focus" aria-label="Opciones de accesibilidad">
                     <span class="material-symbols-outlined text-primary">accessibility_new</span>
@@ -241,19 +251,6 @@
             </div>
             
             <div class="space-y-6">
-                <!-- Language Selection -->
-                <div>
-                    <label data-i18n="acc_lang_label" class="block text-sm font-bold mb-3">Idioma / Language</label>
-                    <div id="lang-btns" class="flex gap-2">
-                        <button data-lang="es" class="lang-btn flex-1 py-3 border border-secondary bg-secondary/10 text-secondary rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
-                            <span>🇪🇸</span> <span class="text-xs">Español</span>
-                        </button>
-                        <button data-lang="en" class="lang-btn flex-1 py-3 border border-surface-variant rounded-xl hover:bg-secondary hover:text-white transition-all font-bold flex items-center justify-center gap-2">
-                            <span>🇺🇸</span> <span class="text-xs">English</span>
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Text Scale -->
                 <div>
                     <label data-i18n="acc_text_size" class="block text-sm font-bold mb-3">Tamaño del texto</label>
@@ -461,19 +458,35 @@
             if(guideEnabled) guideLine.style.top = e.clientY + 'px';
         };
 
-        // Language Buttons
-        const langBtns = document.querySelectorAll('.lang-btn');
-        langBtns.forEach(btn => {
+        // Language Buttons (Navbar)
+        const navLangBtns = document.querySelectorAll('.nav-lang-btn');
+        const updateNavLangUI = (currentLang) => {
+            navLangBtns.forEach(btn => {
+                if (btn.dataset.lang === currentLang) {
+                    btn.classList.add('border-primary', 'scale-110', 'ring-2', 'ring-primary/20');
+                    btn.classList.remove('opacity-50');
+                } else {
+                    btn.classList.remove('border-primary', 'scale-110', 'ring-2', 'ring-primary/20');
+                    btn.classList.add('opacity-50');
+                }
+            });
+        };
+
+        navLangBtns.forEach(btn => {
             btn.onclick = () => {
                 const lang = btn.dataset.lang;
                 if (window.i18n) {
                     window.i18n.setLanguage(lang);
+                    updateNavLangUI(lang);
                 } else {
                     localStorage.setItem('fpc_lang', lang);
                     location.reload();
                 }
             };
         });
+
+        // Initialize Nav Lang UI
+        updateNavLangUI(localStorage.getItem('fpc_lang') || 'es');
 
         // LSC Toggle
         window.toggleLSC = () => {
