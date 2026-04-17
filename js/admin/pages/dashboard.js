@@ -6,7 +6,13 @@ export const AdminDashboard = {
         const courses = DB.getCourses();
         const users = DB.getUsers();
         const logs = DB.getLogs();
+        const enrollments = await DB.fetchAllEnrollments();
 
+        // Real Stats
+        const totalEnrollments = enrollments.length;
+        const avgCompletion = enrollments.length > 0 
+            ? Math.round(enrollments.reduce((acc, e) => acc + (e.progress || 0), 0) / enrollments.length) 
+            : 0;
         return `
         <div class="space-y-8 animate-in fade-in duration-700 pb-12">
             <!-- Premium Header -->
@@ -49,7 +55,7 @@ export const AdminDashboard = {
                 <div class="bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <p class="text-[11px] font-black text-emerald-600 uppercase tracking-[0.2em] mb-4">Inscripciones</p>
                     <div class="flex items-end justify-between">
-                        <span class="text-5xl font-headline font-extrabold text-primary">124</span>
+                        <span class="text-5xl font-headline font-extrabold text-primary">${totalEnrollments}</span>
                         <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center border border-emerald-100">
                             <span class="material-symbols-outlined text-[28px]">how_to_reg</span>
                         </div>
@@ -58,7 +64,7 @@ export const AdminDashboard = {
                 <div class="bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <p class="text-[11px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4">Completitud</p>
                     <div class="flex items-end justify-between">
-                        <span class="text-5xl font-headline font-extrabold text-primary">68%</span>
+                        <span class="text-5xl font-headline font-extrabold text-primary">${avgCompletion}%</span>
                         <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center border border-blue-100">
                             <span class="material-symbols-outlined text-[28px]">analytics</span>
                         </div>

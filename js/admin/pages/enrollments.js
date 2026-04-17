@@ -1,12 +1,9 @@
 // Admin Enrollments Management Page
+import { DB } from '../data.js';
+
 export const AdminEnrollments = {
     render: async () => {
-        // Placeholder for future DB integration
-        const enrollments = [
-            { id: 1, user: 'Juan Perez', course: 'Ley 2466 de Protección', date: new Date().toISOString(), status: 'active', progress: '30%' },
-            { id: 2, user: 'Maria Lopez', course: 'Liderazgo INCI', date: new Date().toISOString(), status: 'completed', progress: '100%' },
-            { id: 3, user: 'Carlos Ramirez', course: 'Emprendimiento Solidario', date: new Date().toISOString(), status: 'active', progress: '75%' }
-        ];
+        const enrollments = await DB.fetchAllEnrollments();
 
         return `
         <div class="space-y-8 animate-in fade-in duration-700 pb-12">
@@ -41,16 +38,16 @@ export const AdminEnrollments = {
                         ${enrollments.map((env, index) => `
                         <tr class="hover:bg-surface transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
                             <td class="px-8 py-6">
-                                <span class="font-extrabold text-primary text-base group-hover:text-[#0052b4] transition-colors">${env.user}</span>
+                                <span class="font-extrabold text-primary text-base group-hover:text-[#0052b4] transition-colors">${env.profiles?.name || env.profiles?.email || 'N/A'}</span>
                             </td>
                             <td class="px-8 py-6">
-                                <span class="text-xs font-bold text-on-surface/80 bg-surface px-3 py-1.5 rounded-lg border border-surface-variant/50 shadow-sm">${env.course}</span>
+                                <span class="text-xs font-bold text-on-surface/80 bg-surface px-3 py-1.5 rounded-lg border border-surface-variant/50 shadow-sm">${env.courses?.title || 'N/A'}</span>
                             </td>
                             <td class="px-8 py-6">
                                 <div class="w-full bg-surface-variant/50 rounded-full h-2.5 max-w-[120px] overflow-hidden">
-                                  <div class="bg-secondary h-2.5 rounded-full shadow-inner" style="width: ${env.progress}"></div>
+                                  <div class="bg-secondary h-2.5 rounded-full shadow-inner" style="width: ${env.progress}%"></div>
                                 </div>
-                                <span class="text-[10px] font-bold mt-1 text-on-surface/50 uppercase tracking-wider">${env.progress} Completado</span>
+                                <span class="text-[10px] font-bold mt-1 text-on-surface/50 uppercase tracking-wider">${env.progress}% Completado</span>
                             </td>
                             <td class="px-8 py-6">
                                 <span class="px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.15em] border ${env.status === 'active' ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} shadow-sm">
@@ -59,8 +56,8 @@ export const AdminEnrollments = {
                             </td>
                             <td class="px-8 py-6 text-right">
                                 <div class="flex gap-2 justify-end opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-                                    <button class="p-2.5 bg-surface hover:bg-primary hover:text-white text-primary rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Editar">
-                                        <span class="material-symbols-outlined text-xl">edit</span>
+                                    <button onclick="window.deleteEnrollment(${env.course_id}, '${env.profile_id}')" class="p-2.5 bg-surface hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Eliminar">
+                                        <span class="material-symbols-outlined text-xl">delete</span>
                                     </button>
                                 </div>
                             </td>
@@ -71,5 +68,20 @@ export const AdminEnrollments = {
             </div>
         </div>
         `;
+    },
+    afterRender: async () => {
+        window.deleteEnrollment = async (courseId, userId) => {
+            if (confirm('¿Eliminar esta inscripción?')) {
+                try {
+                    const result = await DB.unenrollCourse(courseId, userId);
+                    if (result.status === 'success') {
+                        await DB.log(`Inscripción eliminada (Usuario: ${userId}, Curso: ${courseId})`);
+                        location.reload();
+                    }
+                } catch (e) {
+                    alert('Error al eliminar: ' + e.message);
+                }
+            }
+        };
     }
 };
