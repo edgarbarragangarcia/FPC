@@ -91,7 +91,7 @@ export const Interpreter = {
 
         root.innerHTML = `
             <div id="lsc-window" 
-                 class="fixed bottom-6 right-6 w-[450px] aspect-video bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl z-[100] overflow-hidden group animate-in slide-in-from-bottom-10 duration-500"
+                 class="fixed bottom-6 right-6 w-[450px] aspect-video bg-surface/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl z-[100] overflow-hidden group animate-in slide-in-from-bottom-10 duration-500"
                  style="resize: both; min-width: 350px; min-height: 220px; cursor: s-resize;">
                 
                 <!-- Header/Drag Handle -->
@@ -133,7 +133,7 @@ export const Interpreter = {
                         <div class="w-full h-full pointer-events-auto">
                             ${this.state.videoUrl.includes('placeholder') ? 
                                 `<div class="flex flex-col items-center justify-center h-full text-center p-6 space-y-4">
-                                    <div class="animate-pulse flex items-center justify-center w-16 h-16 bg-white/5 rounded-full border border-white/10">
+                                    <div class="animate-pulse flex items-center justify-center w-16 h-16 bg-surface/5 rounded-full border border-white/10">
                                         <span class="material-symbols-outlined text-white/40 text-3xl">back_hand</span>
                                     </div>
                                     <div class="space-y-1">

@@ -29,9 +29,9 @@ export const StudentDashboard = {
                 <div class="max-w-6xl mx-auto space-y-2">
                     <!-- Welcome Section -->
                     <section class="relative overflow-hidden bg-gradient-to-br from-primary to-primary/80 rounded-xl p-3 md:p-4 text-white shadow-md" aria-label="Bienvenida">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-surface/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                         <div class="relative z-10 flex items-center gap-3">
-                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-white p-1 shadow-sm shrink-0">
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-surface p-1 shadow-sm shrink-0">
                                 <img src="${user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email)}&background=003F87&color=fff`}" 
                                      alt="Foto" class="w-full h-full object-cover rounded-md">
                             </div>
@@ -44,7 +44,7 @@ export const StudentDashboard = {
 
                     <!-- Quick Stats (Ultra Compact) -->
                     <section class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3" aria-label="Resumen de progreso">
-                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                        <div class="bg-surface p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
                             <div class="w-8 h-8 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
                                 <span class="material-symbols-outlined text-base">school</span>
                             </div>
@@ -53,7 +53,7 @@ export const StudentDashboard = {
                                 <p class="text-sm font-black text-primary leading-none">${activeCount}</p>
                             </div>
                         </div>
-                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                        <div class="bg-surface p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
                             <div class="w-8 h-8 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center shrink-0">
                                 <span class="material-symbols-outlined text-base">verified</span>
                             </div>
@@ -62,7 +62,7 @@ export const StudentDashboard = {
                                 <p class="text-sm font-black text-secondary leading-none">${completedCount}</p>
                             </div>
                         </div>
-                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                        <div class="bg-surface p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
                             <div class="w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center shrink-0">
                                 <span class="material-symbols-outlined text-base">trending_up</span>
                             </div>
@@ -71,7 +71,7 @@ export const StudentDashboard = {
                                 <p class="text-sm font-black text-accent leading-none">${avgProgress}%</p>
                             </div>
                         </div>
-                        <div class="bg-white p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
+                        <div class="bg-surface p-2 md:p-3 rounded-lg border border-surface-variant shadow-sm flex items-center gap-3">
                             <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center shrink-0">
                                 <span class="material-symbols-outlined text-base">schedule</span>
                             </div>
@@ -103,11 +103,11 @@ export const StudentDashboard = {
                         ` : `
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 ${enrollments.map(env => `
-                                <article class="group bg-white rounded-2xl border border-surface-variant overflow-hidden hover:shadow-xl transition-all duration-300">
+                                <article class="group bg-surface rounded-2xl border border-surface-variant overflow-hidden hover:shadow-xl transition-all duration-300">
                                     <div class="h-40 overflow-hidden relative">
                                         <img src="${env.courses.img}" alt="" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                         <div class="absolute top-3 right-3">
-                                            <span class="bg-white/90 backdrop-blur-md text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${env.status === 'active' ? 'text-primary border-primary/20' : 'text-secondary border-secondary/20'}">${env.status === 'active' ? 'En Curso' : 'Completado'}</span>
+                                            <span class="bg-surface/90 backdrop-blur-md text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${env.status === 'active' ? 'text-primary border-primary/20' : 'text-secondary border-secondary/20'}">${env.status === 'active' ? 'En Curso' : 'Completado'}</span>
                                         </div>
                                     </div>
                                     

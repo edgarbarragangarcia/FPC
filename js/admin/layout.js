@@ -14,7 +14,7 @@ export const AdminLayout = {
         return `
         <div class="flex flex-col lg:flex-row h-screen bg-surface overflow-hidden">
             <!-- Mobile Admin Header -->
-            <header class="lg:hidden bg-white/90 backdrop-blur-md border-b border-surface-variant p-4 flex justify-between items-center z-[110] shrink-0">
+            <header class="lg:hidden bg-surface/90 backdrop-blur-md border-b border-surface-variant p-4 flex justify-between items-center z-[110] shrink-0">
                 <div class="flex flex-col">
                     <span class="font-headline font-extrabold text-primary text-lg leading-none">Admin Panel</span>
                     <span class="text-[9px] font-bold text-secondary uppercase tracking-[0.2em] mt-1">LMS Promover</span>
@@ -25,7 +25,7 @@ export const AdminLayout = {
             </header>
 
             <!-- Admin Sidebar (Responsive Drawer) -->
-            <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-[120] w-72 bg-white/95 backdrop-blur-2xl border-r border-surface-variant/50 flex flex-col transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 lg:h-screen lg:shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-[120] w-72 bg-surface/95 backdrop-blur-2xl border-r border-surface-variant/50 flex flex-col transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 lg:h-screen lg:shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
                 <div class="flex-1 p-8 overflow-y-auto">
                     <div class="hidden lg:flex flex-col mb-12">
                         <span class="font-headline font-black text-primary text-2xl tracking-tight leading-none drop-shadow-sm">Admin Panel</span>
@@ -42,7 +42,7 @@ export const AdminLayout = {
                     </nav>
                 </div>
 
-                <div class="p-6 border-t border-surface-variant/40 shrink-0 bg-white/50">
+                <div class="p-6 border-t border-surface-variant/40 shrink-0 bg-surface/50">
                     <div class="flex items-center gap-4 mb-6 px-2">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 border-2 border-white flex items-center justify-center text-primary font-black shadow-sm group-hover:scale-105 transition-transform">
                             AD

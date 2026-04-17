@@ -4,13 +4,13 @@ export const Login = {
     render: async () => {
         return `
         <div class="flex items-center justify-center min-h-[70vh] animate-in fade-in duration-500">
-            <div class="bg-white/80 backdrop-blur-xl p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-surface-variant max-w-md w-full relative overflow-hidden">
+            <div class="bg-surface/80 backdrop-blur-xl p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-surface-variant max-w-md w-full relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
                 
                 <!-- Tabs -->
                 <div class="relative z-10 flex rounded-2xl bg-surface-variant/50 p-1 mb-8">
-                    <button id="tab-login" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all bg-white text-primary shadow-sm">Iniciar Sesión</button>
+                    <button id="tab-login" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all bg-surface text-primary shadow-sm">Iniciar Sesión</button>
                     <button id="tab-register" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all text-on-surface/50 hover:text-on-surface">Crear Cuenta</button>
                 </div>
 
@@ -110,14 +110,14 @@ export const Login = {
         tabLogin.onclick = () => {
             formLogin.classList.remove('hidden');
             formRegister.classList.add('hidden');
-            tabLogin.className = 'flex-1 py-3 rounded-xl font-bold text-sm transition-all bg-white text-primary shadow-sm';
+            tabLogin.className = 'flex-1 py-3 rounded-xl font-bold text-sm transition-all bg-surface text-primary shadow-sm';
             tabRegister.className = 'flex-1 py-3 rounded-xl font-bold text-sm transition-all text-on-surface/50 hover:text-on-surface';
         };
 
         tabRegister.onclick = () => {
             formRegister.classList.remove('hidden');
             formLogin.classList.add('hidden');
-            tabRegister.className = 'flex-1 py-3 rounded-xl font-bold text-sm transition-all bg-white text-secondary shadow-sm';
+            tabRegister.className = 'flex-1 py-3 rounded-xl font-bold text-sm transition-all bg-surface text-secondary shadow-sm';
             tabLogin.className = 'flex-1 py-3 rounded-xl font-bold text-sm transition-all text-on-surface/50 hover:text-on-surface';
         };
 

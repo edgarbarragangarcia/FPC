@@ -9,19 +9,19 @@ export const AdminCourses = {
         <div class="space-y-8 pb-12">
             <!-- Header -->
             <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-surface/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                 <div class="relative z-10 space-y-2 mb-6 md:mb-0">
                     <h2 class="text-4xl font-headline font-extrabold tracking-tight">Gestión de Cursos</h2>
                     <p class="text-white/80 text-lg font-medium">Crea, estructura y publica cursos para tus estudiantes.</p>
                 </div>
-                <button onclick="window.openCourseBuilder()" class="relative z-10 bg-white/10 hover:bg-white text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <button onclick="window.openCourseBuilder()" class="relative z-10 bg-surface/10 hover:bg-surface text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <span class="material-symbols-outlined font-light text-[22px]">add</span>
                     <span>Nuevo Curso</span>
                 </button>
             </header>
 
             <!-- Courses Table -->
-            <div class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div class="bg-surface/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                 <table class="min-w-full text-left border-collapse">
                     <thead class="bg-surface/40 border-b border-surface-variant/50">
                         <tr>
@@ -33,7 +33,7 @@ export const AdminCourses = {
                     </thead>
                     <tbody class="divide-y divide-surface-variant/30">
                         ${courses.map((course, index) => `
-                        <tr class="hover:bg-white transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
+                        <tr class="hover:bg-surface transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
                             <td class="px-8 py-6">
                                 <div class="flex items-center gap-5">
                                     <div class="relative w-16 h-12 rounded-xl overflow-hidden shadow-sm border border-white ring-2 ring-white/50 group-hover:scale-105 transition-transform duration-300">
@@ -90,7 +90,7 @@ export const AdminCourses = {
 
                     <!-- Tab Navigation -->
                     <div class="flex gap-1 bg-surface-variant/50 rounded-2xl p-1.5 mb-8" role="tablist">
-                        <button onclick="window.switchBuilderTab('info')" id="tab-info" class="builder-tab flex-1 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all bg-white text-primary shadow-sm" role="tab">
+                        <button onclick="window.switchBuilderTab('info')" id="tab-info" class="builder-tab flex-1 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all bg-surface text-primary shadow-sm" role="tab">
                             <span class="material-symbols-outlined text-lg">info</span> Información
                         </button>
                         <button onclick="window.switchBuilderTab('content')" id="tab-content" class="builder-tab flex-1 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all text-on-surface/50 hover:text-primary" role="tab">
@@ -103,7 +103,7 @@ export const AdminCourses = {
 
                     <!-- Tab 1: Course Info -->
                     <div id="panel-info" class="builder-panel">
-                        <form id="course-info-form" class="bg-white rounded-3xl border border-surface-variant p-8 space-y-6 shadow-sm">
+                        <form id="course-info-form" class="bg-surface rounded-3xl border border-surface-variant p-8 space-y-6 shadow-sm">
                             <input type="hidden" id="course-id">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2 md:col-span-2">
@@ -150,7 +150,7 @@ export const AdminCourses = {
 
                     <!-- Tab 2: Course Content (Modules & Lessons) -->
                     <div id="panel-content" class="builder-panel hidden">
-                        <div id="content-needs-save" class="hidden text-center py-16 bg-white rounded-3xl border border-surface-variant shadow-sm">
+                        <div id="content-needs-save" class="hidden text-center py-16 bg-surface rounded-3xl border border-surface-variant shadow-sm">
                             <span class="material-symbols-outlined text-5xl text-on-surface/20 mb-4 block">save</span>
                             <h3 class="text-lg font-bold text-on-surface/60">Primero guarda la información del curso</h3>
                             <p class="text-sm text-on-surface/40 mt-1">Ve a la pestaña "Información" y guarda los datos básicos.</p>
@@ -168,7 +168,7 @@ export const AdminCourses = {
                                 <!-- Modules loaded dynamically -->
                             </div>
 
-                            <div id="no-modules" class="hidden text-center py-12 bg-white rounded-3xl border-2 border-dashed border-surface-variant/50">
+                            <div id="no-modules" class="hidden text-center py-12 bg-surface rounded-3xl border-2 border-dashed border-surface-variant/50">
                                 <span class="material-symbols-outlined text-5xl text-on-surface/20 mb-3 block">folder_open</span>
                                 <h3 class="text-lg font-bold text-on-surface/60">Sin módulos aún</h3>
                                 <p class="text-sm text-on-surface/40 mt-1">Haz clic en "Agregar Módulo" para comenzar a estructurar el curso.</p>
@@ -178,7 +178,7 @@ export const AdminCourses = {
 
                     <!-- Tab 3: Publish -->
                     <div id="panel-publish" class="builder-panel hidden">
-                        <div class="bg-white rounded-3xl border border-surface-variant p-8 shadow-sm space-y-8">
+                        <div class="bg-surface rounded-3xl border border-surface-variant p-8 shadow-sm space-y-8">
                             <h3 class="text-xl font-bold text-primary">Resumen del Curso</h3>
                             <div id="publish-summary" class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <!-- Filled dynamically -->
@@ -201,7 +201,7 @@ export const AdminCourses = {
 
             <!-- Lesson Editor Modal -->
             <div id="lesson-modal" class="hidden fixed inset-0 z-[250] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
-                <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-surface-variant">
+                <div class="bg-surface rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-surface-variant">
                     <div class="flex justify-between items-center mb-6">
                         <h3 id="lesson-modal-title" class="text-2xl font-headline font-bold text-primary">Nueva Lección</h3>
                         <button onclick="window.closeLessonModal()" class="p-2 hover:bg-surface-variant rounded-full transition-all">
@@ -271,10 +271,10 @@ export const AdminCourses = {
         // --- Tab Switching ---
         window.switchBuilderTab = (tab) => {
             document.querySelectorAll('.builder-tab').forEach(t => {
-                t.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+                t.classList.remove('bg-surface', 'text-primary', 'shadow-sm');
                 t.classList.add('text-on-surface/50');
             });
-            document.getElementById(`tab-${tab}`).classList.add('bg-white', 'text-primary', 'shadow-sm');
+            document.getElementById(`tab-${tab}`).classList.add('bg-surface', 'text-primary', 'shadow-sm');
             document.getElementById(`tab-${tab}`).classList.remove('text-on-surface/50');
 
             document.querySelectorAll('.builder-panel').forEach(p => p.classList.add('hidden'));
@@ -379,7 +379,7 @@ export const AdminCourses = {
             noModules.classList.add('hidden');
 
             container.innerHTML = currentModules.map((mod, mi) => `
-                <div class="bg-white rounded-2xl border border-surface-variant shadow-sm overflow-hidden">
+                <div class="bg-surface rounded-2xl border border-surface-variant shadow-sm overflow-hidden">
                     <div class="flex items-center justify-between px-6 py-4 bg-surface/30 border-b border-surface-variant/50">
                         <div class="flex items-center gap-3">
                             <span class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-black">${mi + 1}</span>

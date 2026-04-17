@@ -9,21 +9,21 @@ export const AdminUsers = {
         <div class="space-y-8 animate-in fade-in duration-700 pb-12">
             <!-- Premium Header with Gradient & Glassmorphism -->
             <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-surface/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                 
                 <div class="relative z-10 space-y-2 mb-6 md:mb-0">
                     <h2 class="text-4xl font-headline font-extrabold tracking-tight">Gestión de Usuarios</h2>
                     <p class="text-white/80 text-lg font-medium">Administra los roles y accesos de los estudiantes e instructores.</p>
                 </div>
                 
-                <button id="btn-new-user" class="relative z-10 bg-white/10 hover:bg-white text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <button id="btn-new-user" class="relative z-10 bg-surface/10 hover:bg-surface text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <span class="material-symbols-outlined font-light text-[22px]">person_add</span> 
                     <span>Nuevo Usuario</span>
                 </button>
             </header>
 
             <!-- Data Table Container with Glassmorphism -->
-            <div class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div class="bg-surface/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                 <table class="min-w-full text-left border-collapse">
                     <thead class="bg-surface/40 border-b border-surface-variant/50">
                         <tr>
@@ -35,7 +35,7 @@ export const AdminUsers = {
                     </thead>
                     <tbody class="divide-y divide-surface-variant/30">
                         ${users.map((user, index) => `
-                        <tr class="hover:bg-white transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
+                        <tr class="hover:bg-surface transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
                             <td class="px-8 py-6">
                                 <div class="flex items-center gap-5">
                                     <div class="relative">
@@ -81,7 +81,7 @@ export const AdminUsers = {
             <!-- Edit Role Modal -->
             <div id="user-edit-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
                 <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" id="close-user-modal-bg"></div>
-                <div class="relative bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full transform translate-y-4 transition-transform duration-300" id="user-edit-content">
+                <div class="relative bg-surface rounded-3xl shadow-2xl p-8 max-w-md w-full transform translate-y-4 transition-transform duration-300" id="user-edit-content">
                     <button id="close-user-modal" class="absolute top-4 right-4 text-on-surface/50 hover:text-on-surface">
                         <span class="material-symbols-outlined">close</span>
                     </button>

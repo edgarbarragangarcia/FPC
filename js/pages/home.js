@@ -20,7 +20,7 @@ export const Home = {
                             Ingresar al LMS
                             <span class="material-symbols-outlined">school</span>
                         </a>
-                        <a href="#/impacto" class="bg-white border border-surface-variant text-on-surface px-10 py-5 rounded-2xl font-bold text-lg hover:bg-surface-variant transition-all accessible-focus">
+                        <a href="#/impacto" class="bg-surface border border-surface-variant text-on-surface px-10 py-5 rounded-2xl font-bold text-lg hover:bg-surface-variant transition-all accessible-focus">
                             Conoce Nuestra Labor
                         </a>
                     </div>
@@ -34,7 +34,7 @@ export const Home = {
                              class="w-full h-full object-cover">
                     </div>
                     <!-- Impact Floating Badge -->
-                    <div class="absolute -bottom-8 -left-8 bg-white p-8 rounded-3xl shadow-2xl border border-surface-variant max-w-[280px] animate-bounce-slow">
+                    <div class="absolute -bottom-8 -left-8 bg-surface p-8 rounded-3xl shadow-2xl border border-surface-variant max-w-[280px] animate-bounce-slow">
                         <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Hito Legislativo</p>
                         <p class="text-sm font-medium text-on-surface leading-snug">Autor de la <strong>Ley 361 de 1997</strong> (Ley Clopatofsky), base de la inclusión en Colombia.</p>
                     </div>
@@ -42,7 +42,7 @@ export const Home = {
             </section>
 
             <!-- ¿Qué hace la Fundación? 4 Pilares -->
-            <section class="py-12 md:py-24 bg-white rounded-[2.5rem] md:rounded-[4rem] px-6 md:px-16 border border-surface-variant mb-16 md:mb-32">
+            <section class="py-12 md:py-24 bg-surface rounded-[2.5rem] md:rounded-[4rem] px-6 md:px-16 border border-surface-variant mb-16 md:mb-32">
                 <div class="max-w-4xl mb-12 md:mb-20">
                     <h2 class="text-3xl md:text-6xl font-headline font-bold text-primary mb-6">Nuestra Labor Social</h2>
                     <p class="text-lg md:text-xl text-on-surface/60 leading-relaxed">No solo formamos personas; transformamos el ecosistema social y legal de Colombia para asegurar que la discapacidad jamás sea sinónimo de exclusión.</p>
@@ -93,18 +93,18 @@ export const Home = {
                                  alt="Retrato formal Jairo Clopatofsky" 
                                  class="w-full h-full object-cover opacity-60 mix-blend-luminosity">
                         </div>
-                        <div class="relative bg-white/10 backdrop-blur-sm border border-white/20 p-12 rounded-[4rem] text-white">
+                        <div class="relative bg-surface/10 backdrop-blur-sm border border-white/20 p-12 rounded-[4rem] text-white">
                             <p class="text-sm font-bold uppercase tracking-[0.3em] mb-4 opacity-70">El Fundador</p>
                             <h3 class="text-4xl font-headline font-bold mb-6">Jairo Clopatofsky Ghisays</h3>
                             <p class="text-lg leading-relaxed mb-8 font-light italic opacity-90">
                                 "Mi vida cambió en un segundo, pero mi propósito se fortaleció para siempre. No descansaremos hasta que Colombia sea ejemplo mundial de accesibilidad."
                             </p>
                             <div class="flex gap-4">
-                                <div class="bg-white/20 p-4 rounded-2xl text-center flex-1">
+                                <div class="bg-surface/20 p-4 rounded-2xl text-center flex-1">
                                     <p class="text-2xl font-bold">1ro</p>
                                     <p class="text-[10px] uppercase">Congresista en silla de ruedas</p>
                                 </div>
-                                <div class="bg-white/20 p-4 rounded-2xl text-center flex-1">
+                                <div class="bg-surface/20 p-4 rounded-2xl text-center flex-1">
                                     <p class="text-2xl font-bold">+30</p>
                                     <p class="text-[10px] uppercase">Años de Liderazgo</p>
                                 </div>
@@ -166,7 +166,7 @@ export const Home = {
                             Sigue de cerca cómo transformamos realidades a través de la inclusión y la educación accesible en toda Colombia.
                         </p>
                     </div>
-                    <button class="bg-white border border-surface-variant px-8 py-3 rounded-2xl font-bold text-sm hover:bg-surface-variant transition-all hidden md:flex items-center gap-2">
+                    <button class="bg-surface border border-surface-variant px-8 py-3 rounded-2xl font-bold text-sm hover:bg-surface-variant transition-all hidden md:flex items-center gap-2">
                         <span class="material-symbols-outlined text-lg">newspaper</span>
                         Ver todas las noticias
                     </button>

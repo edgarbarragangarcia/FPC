@@ -64,7 +64,7 @@ export const Mission = {
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <!-- Education -->
-                    <div class="flex gap-8 p-10 bg-white border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
+                    <div class="flex gap-8 p-10 bg-surface border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
                         <div class="shrink-0 w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center">
                             <span class="material-symbols-outlined text-3xl">school</span>
                         </div>
@@ -74,7 +74,7 @@ export const Mission = {
                         </div>
                     </div>
                     <!-- Laboral -->
-                    <div class="flex gap-8 p-10 bg-white border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
+                    <div class="flex gap-8 p-10 bg-surface border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
                         <div class="shrink-0 w-16 h-16 bg-secondary text-white rounded-2xl flex items-center justify-center">
                             <span class="material-symbols-outlined text-3xl">handshake</span>
                         </div>
@@ -84,7 +84,7 @@ export const Mission = {
                         </div>
                     </div>
                     <!-- Legal -->
-                    <div class="flex gap-8 p-10 bg-white border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
+                    <div class="flex gap-8 p-10 bg-surface border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
                         <div class="shrink-0 w-16 h-16 bg-accent text-white rounded-2xl flex items-center justify-center">
                             <span class="material-symbols-outlined text-3xl">policy</span>
                         </div>
@@ -94,7 +94,7 @@ export const Mission = {
                         </div>
                     </div>
                     <!-- Rehab -->
-                    <div class="flex gap-8 p-10 bg-white border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
+                    <div class="flex gap-8 p-10 bg-surface border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
                         <div class="shrink-0 w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center">
                             <span class="material-symbols-outlined text-3xl">universal_accessibility</span>
                         </div>
@@ -113,7 +113,7 @@ export const Mission = {
                     <h2 class="text-3xl md:text-6xl font-headline font-bold mb-8">Únete a la Revolución de la Inclusión</h2>
                     <p class="text-white/80 text-xl md:text-2xl max-w-2xl mx-auto mb-12 leading-relaxed">Cada curso que tomas, cada certificado que obtienes, es un paso hacia una Colombia más justa.</p>
                     <div class="flex justify-center flex-wrap gap-4">
-                        <a href="#/cursos" class="bg-white text-primary px-12 py-5 rounded-3xl font-bold text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl">
+                        <a href="#/cursos" class="bg-surface text-primary px-12 py-5 rounded-3xl font-bold text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl">
                             Explorar Cursos LMS
                         </a>
                     </div>

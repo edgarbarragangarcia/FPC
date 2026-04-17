@@ -12,21 +12,21 @@ export const AdminEnrollments = {
         <div class="space-y-8 animate-in fade-in duration-700 pb-12">
             <!-- Premium Header -->
             <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-surface/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                 
                 <div class="relative z-10 space-y-2 mb-6 md:mb-0">
                     <h2 class="text-4xl font-headline font-extrabold tracking-tight">Gestión de Inscripciones</h2>
                     <p class="text-white/80 text-lg font-medium">Asigna y supervisa las matrículas de los estudiantes.</p>
                 </div>
                 
-                <button class="relative z-10 bg-white/10 hover:bg-white text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <button class="relative z-10 bg-surface/10 hover:bg-surface text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <span class="material-symbols-outlined font-light text-[22px]">add</span> 
                     <span>Nueva Inscripción</span>
                 </button>
             </header>
 
             <!-- Data Table Container -->
-            <div class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <div class="bg-surface/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                 <table class="min-w-full text-left border-collapse">
                     <thead class="bg-surface/40 border-b border-surface-variant/50">
                         <tr>
@@ -39,7 +39,7 @@ export const AdminEnrollments = {
                     </thead>
                     <tbody class="divide-y divide-surface-variant/30">
                         ${enrollments.map((env, index) => `
-                        <tr class="hover:bg-white transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
+                        <tr class="hover:bg-surface transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
                             <td class="px-8 py-6">
                                 <span class="font-extrabold text-primary text-base group-hover:text-[#0052b4] transition-colors">${env.user}</span>
                             </td>

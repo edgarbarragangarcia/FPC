@@ -25,11 +25,11 @@ export const Courses = {
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
                 ${dummyCourses.map(course => `
-                <div class="group bg-white rounded-[2.5rem] border border-surface-variant overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 flex flex-col">
+                <div class="group bg-surface rounded-[2.5rem] border border-surface-variant overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 flex flex-col">
                     <div class="h-64 overflow-hidden relative">
                         <img src="${course.img}" alt="${course.title}" class="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110">
                         <div class="absolute top-4 left-4 flex gap-2">
-                            <span class="bg-white/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-primary/10">${course.category}</span>
+                            <span class="bg-surface/90 backdrop-blur-md text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-primary/10">${course.category}</span>
                             <span class="bg-secondary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">${course.level}</span>
                         </div>
                     </div>
@@ -135,13 +135,13 @@ export const Courses = {
                                 <p class="text-on-surface/40 italic p-8 bg-surface rounded-3xl text-center border-2 border-dashed border-surface-variant">Próximamente disponible</p>
                             ` : modules.map((mod, i) => `
                                 <div class="bg-surface/50 border border-surface-variant/50 rounded-3xl overflow-hidden">
-                                    <div class="px-6 py-4 bg-white/50 border-b border-surface-variant/50 flex items-center gap-4">
+                                    <div class="px-6 py-4 bg-surface/50 border-b border-surface-variant/50 flex items-center gap-4">
                                         <span class="w-8 h-8 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-sm">${i+1}</span>
                                         <h4 class="font-bold text-primary text-sm">${mod.title}</h4>
                                     </div>
                                     <div class="p-2 space-y-1">
                                         ${(mod.lessons || []).map(lesson => `
-                                            <div class="flex items-center gap-3 px-4 py-2 hover:bg-white rounded-xl transition-colors">
+                                            <div class="flex items-center gap-3 px-4 py-2 hover:bg-surface rounded-xl transition-colors">
                                                 <span class="material-symbols-outlined text-lg text-on-surface/30">
                                                     ${lesson.content_type === 'video' ? 'play_circle' : 'article'}
                                                 </span>

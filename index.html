@@ -85,6 +85,14 @@
             background-color: rgb(var(--color-surface));
             color: rgb(var(--color-on-surface));
         }
+        
+        /* Ensure primary and secondary buttons have readable text in high contrast */
+        html.dark .bg-primary, html.dark .bg-secondary {
+            color: #000000 !important;
+        }
+        html.dark .text-primary {
+            color: #ffff00 !important;
+        }
     </style>
 </head>
 <body class="bg-surface text-on-surface font-body min-h-screen flex flex-col">
