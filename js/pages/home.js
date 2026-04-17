@@ -89,7 +89,7 @@ export const Home = {
                 <div class="lg:col-span-5 order-2 lg:order-1">
                     <div class="relative scale-95 hover:scale-100 transition-transform duration-500">
                         <div class="absolute inset-0 bg-primary rounded-[4rem] transform -rotate-3 overflow-hidden">
-                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz-5l6lA9QvG_7-Xp9Xv9Xv9Xv9Xv9Xv9Xv9Xv" 
+                             <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800" 
                                  alt="Retrato formal Jairo Clopatofsky" 
                                  class="w-full h-full object-cover opacity-60 mix-blend-luminosity">
                         </div>

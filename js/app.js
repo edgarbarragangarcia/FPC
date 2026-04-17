@@ -125,11 +125,13 @@ const checkSession = async () => {
     try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
-            const { data: profile } = await supabase
+            const { data: profiles } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', session.user.id)
-                .single();
+                .limit(1);
+            
+            const profile = profiles && profiles.length > 0 ? profiles[0] : null;
             
             if (profile) {
                 window.state.user = {
