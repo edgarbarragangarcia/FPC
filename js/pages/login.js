@@ -143,17 +143,35 @@ export const Login = {
                 if (error) throw error;
 
                 if (data.session) {
-                    // Optimized: Fetch profile by ID (Primary Key) instead of email
-                    const { data: profileData, error: profileError } = await supabase
+                    // Optimized & bulletproof: Fetch profile without using .single() to avoid 406 errors
+                    let { data: profiles, error: profileError } = await supabase
                         .from('profiles')
                         .select('*')
                         .eq('id', data.user.id)
-                        .maybeSingle(); // Better handling for missing/multiple rows
+                        .limit(1);
 
                     if (profileError) throw profileError;
 
+                    let profileData = profiles && profiles.length > 0 ? profiles[0] : null;
+
+                    // Fallback: If trigger failed to create the profile, let's create it manually exactly here
                     if (!profileData) {
-                        throw new Error('No se encontró un perfil para este usuario. Contacta al administrador.');
+                        console.warn("Perfil no encontrado, intentando crearlo manualmente...");
+                        const { data: newProfile, error: insertError } = await supabase
+                            .from('profiles')
+                            .insert([{
+                                id: data.user.id,
+                                email: data.user.email,
+                                name: data.user.user_metadata?.full_name || 'Usuario',
+                                role: 'student'
+                            }])
+                            .select()
+                            .limit(1);
+                            
+                        if (insertError) {
+                            throw new Error('Tu cuenta se creó en el sistema pero el perfil falló. Contacta al administrador.');
+                        }
+                        profileData = newProfile[0];
                     }
 
                     window.state.user = { 
