@@ -52,10 +52,10 @@ export const AdminLayout = {
                             <p class="text-[9px] text-on-surface/50 uppercase font-bold tracking-[0.2em] mt-1">Super Usuario</p>
                         </div>
                     </div>
-                    <a href="#/" class="flex items-center justify-center gap-3 w-full py-3.5 rounded-2xl font-bold text-accent bg-accent/5 hover:bg-accent hover:text-white transition-all duration-300 shadow-sm hover:shadow-md">
+                    <button id="btn-admin-logout" class="flex items-center justify-center gap-3 w-full py-3.5 rounded-2xl font-bold text-red-500 bg-red-50 hover:bg-red-500 hover:text-white border border-red-100 hover:border-red-500 transition-all duration-300 shadow-sm hover:shadow-md">
                         <span class="material-symbols-outlined text-[20px]">logout</span>
-                        <span class="tracking-wide">Salir a App</span>
-                    </a>
+                        <span class="tracking-wide">Cerrar Sesión</span>
+                    </button>
                 </div>
             </aside>
 
@@ -76,6 +76,17 @@ export const AdminLayout = {
         const sidebar = document.getElementById('admin-sidebar');
         const backdrop = document.getElementById('admin-sidebar-backdrop');
         const links = document.querySelectorAll('.admin-nav-link');
+        const logoutBtn = document.getElementById('btn-admin-logout');
+
+        if (logoutBtn) {
+            logoutBtn.onclick = async () => {
+                const { supabase } = await import('./data.js');
+                await supabase.auth.signOut();
+                window.state.user = { name: 'Visitante', loggedIn: false };
+                window.location.hash = '#/';
+                window.location.reload();
+            };
+        }
 
         if (toggleBtn) {
             const openSidebar = () => {
