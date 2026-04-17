@@ -86,12 +86,32 @@
             color: rgb(var(--color-on-surface));
         }
         
+        /* High-Contrast AAA Text Enforcement */
+        html.dark .text-on-surface\/40, 
+        html.dark .text-on-surface\/50,
+        html.dark .text-white\/50,
+        html.dark .text-white\/70 {
+            color: rgba(255, 255, 255, 0.95) !important;
+        }
+
         /* Ensure primary and secondary buttons have readable text in high contrast */
-        html.dark .bg-primary, html.dark .bg-secondary {
+        html.dark .bg-primary, html.dark .bg-secondary, html.dark .bg-accent {
             color: #000000 !important;
         }
+
         html.dark .text-primary {
             color: #ffff00 !important;
+        }
+
+        /* Border contrast in dark mode */
+        html.dark .border-surface-variant {
+            border-color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* Button hover contrast */
+        html.dark .hover\:bg-primary:hover {
+            background-color: #ffffff !important;
+            color: #000000 !important;
         }
     </style>
 </head>

@@ -1,4 +1,5 @@
 // Admin Reports Page
+import { DB } from '../data.js';
 export const AdminReports = {
     render: async () => {
         const enrollments = await DB.fetchAllEnrollments();
@@ -63,6 +64,6 @@ export const AdminReports = {
                 </div>
             </div>
         </div>
-        `;     `;
+        `;
     }
 };
