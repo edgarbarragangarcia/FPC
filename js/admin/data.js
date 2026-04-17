@@ -87,6 +87,29 @@ export const DB = {
 
     getUsers: () => DB._users,
 
+    updateUser: async (id, data) => {
+        const { error } = await supabase
+            .from('profiles')
+            .update(data)
+            .eq('id', id);
+        
+        if (error) throw error;
+        await DB.log(`Usuario actualizado (ID: ${id})`);
+        await DB.fetchUsers();
+    },
+
+    deleteUser: async (id) => {
+        // Only deletes the profile, not the auth.users, but prevents login
+        const { error } = await supabase
+            .from('profiles')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
+        await DB.log(`Perfil de usuario eliminado (ID: ${id})`);
+        await DB.fetchUsers();
+    },
+
     // --- Enrollments ---
     _enrollmentsCache: {},
     fetchUserEnrollments: async (userId) => {
