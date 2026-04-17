@@ -1,6 +1,12 @@
 // Admin Reports Page
 export const AdminReports = {
     render: async () => {
+        const enrollments = await DB.fetchAllEnrollments();
+        const totalEnrollments = enrollments.length;
+        const avgCompletion = enrollments.length > 0 
+            ? Math.round(enrollments.reduce((acc, e) => acc + (e.progress || 0), 0) / enrollments.length) 
+            : 0;
+            
         return `
         <div class="space-y-8 animate-in fade-in duration-700 pb-12">
             <!-- Premium Header -->
@@ -42,21 +48,21 @@ export const AdminReports = {
                     <h3 class="text-2xl font-headline font-extrabold text-primary mb-6">Métricas Destacadas del Mes</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
-                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Nuevos Usuarios</p>
-                            <p class="text-3xl font-extrabold text-secondary">+15%</p>
+                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Total Inscritos</p>
+                            <p class="text-3xl font-extrabold text-secondary">${totalEnrollments}</p>
                         </div>
                         <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
-                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Abandono de Cursos</p>
-                            <p class="text-3xl font-extrabold text-emerald-600">-5%</p>
+                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Promedio Progreso</p>
+                            <p class="text-3xl font-extrabold text-emerald-600">${avgCompletion}%</p>
                         </div>
                         <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
-                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Horas de Estudio</p>
-                            <p class="text-3xl font-extrabold text-accent">340h</p>
+                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Actividad de Sistema</p>
+                            <p class="text-3xl font-extrabold text-accent">Óptimo</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        `;
+        `;     `;
     }
 };
