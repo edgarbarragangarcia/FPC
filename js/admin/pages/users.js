@@ -16,7 +16,7 @@ export const AdminUsers = {
                     <p class="text-white/80 text-lg font-medium">Administra los roles y accesos de los estudiantes e instructores.</p>
                 </div>
                 
-                <button class="relative z-10 bg-white/10 hover:bg-white text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <button id="btn-new-user" class="relative z-10 bg-white/10 hover:bg-white text-white hover:text-primary backdrop-blur-md border border-white/30 px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                     <span class="material-symbols-outlined font-light text-[22px]">person_add</span> 
                     <span>Nuevo Usuario</span>
                 </button>
