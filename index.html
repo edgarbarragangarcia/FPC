@@ -273,8 +273,38 @@
                     </div>
                 </div>
 
-                <!-- More controls... -->
+                <!-- Universal Accessibility Extras -->
                 <div class="flex items-center justify-between py-2 border-t border-surface-variant pt-6">
+                    <div>
+                        <p data-i18n="acc_lsc" class="font-bold">Lengua de Señas</p>
+                        <p data-i18n="acc_lsc_sub" class="text-xs text-on-surface/60">Activar intérprete virtual (LSC)</p>
+                    </div>
+                    <button id="lsc-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                        <div id="lsc-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between py-2 border-t border-surface-variant">
+                    <div>
+                        <p data-i18n="acc_voice" class="font-bold">Recorrido por Voz</p>
+                        <p data-i18n="acc_voice_sub" class="text-xs text-on-surface/60">Asistente de voz para personas ciegas</p>
+                    </div>
+                    <button id="voice-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                        <div id="voice-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between py-2 border-t border-surface-variant">
+                    <div>
+                        <p data-i18n="acc_face" class="font-bold">Navegación Facial</p>
+                        <p data-i18n="acc_face_sub" class="text-xs text-on-surface/60">Controla la página con tu rostro</p>
+                    </div>
+                    <button id="face-toggle" class="w-12 h-6 bg-surface-variant rounded-full p-1 relative transition-all">
+                        <div id="face-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all translate-x-0"></div>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between py-2 border-t border-surface-variant">
                     <div>
                         <p data-i18n="acc_guide" class="font-bold">Guía de lectura</p>
                         <p data-i18n="acc_guide_sub" class="text-xs text-on-surface/60">Agrega una línea de enfoque visual</p>
@@ -345,6 +375,13 @@
         const guideToggle = document.getElementById('reading-guide-toggle');
         const guideLine = document.getElementById('reading-guide');
         const guideCircle = document.getElementById('guide-circle');
+        
+        const lscToggle = document.getElementById('lsc-toggle');
+        const lscCircle = document.getElementById('lsc-circle');
+        const voiceToggle = document.getElementById('voice-toggle');
+        const voiceCircle = document.getElementById('voice-circle');
+        const faceToggle = document.getElementById('face-toggle');
+        const faceCircle = document.getElementById('face-circle');
 
         // Mobile Menu Logic
         const menuBtn = document.getElementById('toggle-sidebar');
@@ -437,6 +474,108 @@
                 }
             };
         });
+
+        // LSC Toggle
+        window.toggleLSC = () => {
+            window.state.lscEnabled = !window.state.lscEnabled;
+            lscCircle.style.transform = window.state.lscEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
+            lscToggle.classList.toggle('bg-secondary', window.state.lscEnabled);
+            lscToggle.classList.toggle('bg-surface-variant', !window.state.lscEnabled);
+            window.dispatchEvent(new CustomEvent('lsc-changed', { detail: window.state.lscEnabled }));
+        };
+        lscToggle.onclick = window.toggleLSC;
+
+        // Voice Toggle (Simulado)
+        window.toggleVoice = () => {
+            window.state.voiceEnabled = !window.state.voiceEnabled;
+            voiceCircle.style.transform = window.state.voiceEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
+            voiceToggle.classList.toggle('bg-secondary', window.state.voiceEnabled);
+            voiceToggle.classList.toggle('bg-surface-variant', !window.state.voiceEnabled);
+            if (window.state.voiceEnabled) {
+                const utter = new SpeechSynthesisUtterance("Recorrido por voz activado. Navegando plataforma F P C.");
+                utter.lang = document.documentElement.lang === 'en' ? 'en-US' : 'es-ES';
+                window.speechSynthesis.speak(utter);
+            }
+        };
+        voiceToggle.onclick = window.toggleVoice;
+
+        // Face Navigation logic
+        let faceMesh;
+        let camera;
+        const videoElement = document.getElementById('face-cam-video');
+        const faceActionLabel = document.getElementById('face-action-label');
+        const faceCursor = document.getElementById('face-screen-cursor');
+
+        async function initFaceMesh() {
+            if (!faceMesh) {
+                faceMesh = new FaceMesh({locateFile: (file) => {
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+                }});
+                faceMesh.setOptions({
+                    maxNumFaces: 1,
+                    refineLandmarks: true,
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+                faceMesh.onResults(onFaceResults);
+
+                camera = new Camera(videoElement, {
+                    onFrame: async () => {
+                        await faceMesh.send({image: videoElement});
+                    },
+                    width: 640,
+                    height: 480
+                });
+            }
+            camera.start();
+            faceCursor.classList.remove('hidden');
+        }
+
+        function onFaceResults(results) {
+            if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) return;
+            
+            const landmarks = results.multiFaceLandmarks[0];
+            const nose = landmarks[1]; // Nose tip
+            
+            // Map nose position to screen
+            const x = (1 - nose.x) * window.innerWidth;
+            const y = nose.y * window.innerHeight;
+            
+            faceCursor.style.left = x + 'px';
+            faceCursor.style.top = y + 'px';
+
+            // Detect Tilt for Scrolling
+            const midEyeX = (landmarks[33].x + landmarks[263].x) / 2;
+            const eyeDiff = nose.x - midEyeX;
+
+            if (eyeDiff > 0.05) {
+                window.scrollBy(0, 10);
+                faceActionLabel.innerText = "Desplazando Abajo";
+            } else if (eyeDiff < -0.05) {
+                window.scrollBy(0, -10);
+                faceActionLabel.innerText = "Desplazando Arriba";
+            } else {
+                faceActionLabel.innerText = "Mirando al Frente";
+            }
+        }
+
+        window.toggleFace = () => {
+            window.state.faceEnabled = !window.state.faceEnabled;
+            faceCircle.style.transform = window.state.faceEnabled ? 'translateX(1.5rem)' : 'translateX(0)';
+            faceToggle.classList.toggle('bg-secondary', window.state.faceEnabled);
+            faceToggle.classList.toggle('bg-surface-variant', !window.state.faceEnabled);
+            
+            const camContainer = document.getElementById('face-cam-container');
+            if (window.state.faceEnabled) {
+                camContainer.classList.remove('hidden');
+                initFaceMesh();
+            } else {
+                camContainer.classList.add('hidden');
+                faceCursor.classList.add('hidden');
+                if (camera) camera.stop();
+            }
+        };
+        faceToggle.onclick = window.toggleFace;
 
         // Load preferences
         const savedScale = localStorage.getItem('fpc-font-scale');
