@@ -28,7 +28,7 @@ export const translations = {
         
         // Home Page
         hero_tag: "Desde 1982 transformando vidas",
-        hero_title: "Donde la voluntad rompe toda barrera.",
+        hero_title: 'Donde la <span class="text-secondary italic">voluntad</span> rompe toda barrera.',
         hero_desc: "Fundación Promover por Colombia, liderada por el Senador Jairo Clopatofsky, es el motor de la inclusión real para la población con discapacidad.",
         hero_btn_lms: "Ingresar al LMS",
         hero_btn_mission: "Conoce Nuestra Labor",
@@ -106,7 +106,7 @@ export const translations = {
         
         // Home Page
         hero_tag: "Transforming lives since 1982",
-        hero_title: "Where will breaks every barrier.",
+        hero_title: 'Where <span class="text-secondary italic">willpower</span> breaks every barrier.',
         hero_desc: "Promover por Colombia Foundation, led by Senator Jairo Clopatofsky, is the engine of real inclusion for the population with disabilities.",
         hero_btn_lms: "Enter LMS",
         hero_btn_mission: "Learn About Our Work",
@@ -191,8 +191,10 @@ export const i18n = {
             if (translation !== key) {
                 if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                     el.placeholder = translation;
+                } else if (translation.includes('<span') || el.hasAttribute('data-i18n-html')) {
+                    el.innerHTML = translation;
                 } else if (el.tagName === 'LI' && el.querySelector('span.material-symbols-outlined')) {
-                    // Preservar iconos si existen (esto es más complejo, pero para este caso)
+                    // Preservar iconos si existen
                     const icon = el.querySelector('span.material-symbols-outlined').outerHTML;
                     el.innerHTML = `${icon} ${translation}`;
                 } else {
@@ -205,7 +207,7 @@ export const i18n = {
                             break;
                         }
                     }
-                    if (!foundText) el.innerText = translation;
+                    if (!foundText) el.innerHTML = translation;
                 }
             }
         });
