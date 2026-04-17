@@ -172,14 +172,32 @@ export const Home = {
                     </button>
                 </div>
 
-                <div class="relative aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-surface-variant">
-                    <iframe 
-                        src="https://www.youtube.com/embed/rGamVF_p9OU" 
-                        class="absolute inset-0 w-full h-full border-none"
-                        title="Video institucional Fundación Promover"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-surface-variant/30 p-8 md:p-12 rounded-[3.5rem] border border-surface-variant shadow-sm">
+                    <div class="relative aspect-video w-full rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-surface-variant flex-shrink-0">
+                        <iframe 
+                            src="https://www.youtube.com/embed/rGamVF_p9OU" 
+                            class="absolute inset-0 w-full h-full border-none"
+                            title="Video institucional Fundación Promover"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-widest">
+                            Entrevista KienyKe
+                        </div>
+                        <h3 class="text-2xl md:text-4xl font-headline font-bold text-primary leading-tight">El futuro es inclusivo o no será</h3>
+                        <div class="space-y-4 text-base md:text-lg text-on-surface/70 leading-relaxed font-light">
+                            <p>En esta conversación profunda, el fundador <strong>Jairo Clopatofsky</strong> detalla los próximos pasos del Movimiento Promover Colombia.</p>
+                            <p>Descubre cómo nuestra filosofía de <em>autonomía</em> y <em>educación técnica adaptada</em> se está integrando en las políticas públicas para garantizar que el conocimiento y el trabajo no tengan barreras de entrada para nadie.</p>
+                        </div>
+                        <div class="pt-2 flex items-center gap-3">
+                            <div class="bg-primary/10 w-10 h-10 rounded-full flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined">play_circle</span>
+                            </div>
+                            <p class="font-bold text-sm text-primary tracking-wide">Analice nuestra visión (5 Min)</p>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
