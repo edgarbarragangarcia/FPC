@@ -131,8 +131,8 @@ export const AdminUsers = {
         let currentUserEditing = null;
 
         const openModal = (id) => {
-            const user = users.find(u => u.id === id);
-            if (!user) return;
+            const user = users.find(u => u.id == id);
+            if(!user) return alert('Usuario no encontrado al intentar editar.');
             currentUserEditing = user.id;
 
             nameInput.value = user.name || '';
@@ -160,26 +160,38 @@ export const AdminUsers = {
 
         // Edit clicks
         document.querySelectorAll('.edit-user-btn').forEach(btn => {
-            btn.onclick = () => openModal(btn.dataset.id);
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                openModal(id);
+            });
         });
 
         // Delete clicks
         document.querySelectorAll('.delete-user-btn').forEach(btn => {
-            btn.onclick = async () => {
-                const id = btn.dataset.id;
-                const user = users.find(u => u.id === id);
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                // Use non-strict equality in case id is somehow transformed
+                const user = users.find(u => u.id == id);
+                if (!user) return alert('Usuario no encontrado');
+
                 if (confirm(`¿Estás seguro de eliminar el perfil de ${user.name}? (El usuario no podrá entrar al sistema)`)) {
+                    const originalHTML = btn.innerHTML;
                     btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span>';
                     try {
                         await DB.deleteUser(id);
                         await DB.fetchUsers(); // Refresh
                         window.dispatchEvent(new Event('hashchange')); // Reload panel
-                    } catch (e) {
+                    } catch (err) {
                         alert("Error al eliminar. Revisa si tienes permisos.");
-                        console.error(e);
+                        console.error(err);
+                        btn.innerHTML = originalHTML;
                     }
                 }
-            };
+            });
         });
 
         // Save Role
