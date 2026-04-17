@@ -143,20 +143,25 @@ export const Login = {
                 if (error) throw error;
 
                 if (data.session) {
+                    // Optimized: Fetch profile by ID (Primary Key) instead of email
                     const { data: profileData, error: profileError } = await supabase
                         .from('profiles')
                         .select('*')
-                        .eq('email', email)
-                        .single();
+                        .eq('id', data.user.id)
+                        .maybeSingle(); // Better handling for missing/multiple rows
 
                     if (profileError) throw profileError;
+
+                    if (!profileData) {
+                        throw new Error('No se encontró un perfil para este usuario. Contacta al administrador.');
+                    }
 
                     window.state.user = { 
                         loggedIn: true, 
                         email: data.user.email, 
                         id: profileData.id,
-                        role: profileData.role,
-                        name: profileData.name,
+                        role: profileData.role || 'student',
+                        name: profileData.name || 'Usuario',
                         avatar: profileData.avatar
                     };
                     
