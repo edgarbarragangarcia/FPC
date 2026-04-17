@@ -6,19 +6,19 @@ export const Mission = {
             <!-- Impact Story -->
             <section class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-32">
                 <div class="lg:col-span-12 text-center mb-12 space-y-4 px-4">
-                     <span class="inline-block px-4 py-1.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-[0.2em]">Más de 3 Décadas de Lucha</span>
-                     <h2 class="text-3xl md:text-5xl lg:text-7xl font-headline font-bold text-primary tracking-tight">El Legado de <span class="text-primary underline decoration-4 underline-offset-8">Jairo Clopatofsky</span></h2>
+                     <span data-i18n="mission_tag" class="inline-block px-4 py-1.5 rounded-full bg-accent text-white font-bold text-xs uppercase tracking-[0.2em]">Más de 3 Décadas de Lucha</span>
+                     <h2 data-i18n="mission_title" class="text-3xl md:text-5xl lg:text-7xl font-headline font-bold text-primary tracking-tight">El Legado de <span class="text-primary underline decoration-4 underline-offset-8">Jairo Clopatofsky</span></h2>
                 </div>
                 
                 <div class="lg:col-span-7 space-y-8 animate-in slide-in-from-left duration-700">
-                    <p class="text-xl md:text-3xl font-light text-on-surface/80 leading-relaxed italic border-l-8 border-secondary pl-8">
+                    <p data-i18n="mission_quote" class="text-xl md:text-3xl font-light text-on-surface/80 leading-relaxed italic border-l-8 border-secondary pl-8">
                         "Fundación Promover por Colombia nació de la necesidad de demostrar que la inclusión no es un favor, es un derecho fundamental e irrevocable."
                     </p>
                     <div class="space-y-6 text-lg md:text-xl text-on-surface/70 leading-relaxed font-light">
-                        <p>
+                        <p data-i18n="mission_p1">
                             Jairo Clopatofsky Ghisays ha marcado la historia de Colombia como el primer congresista usuario de silla de ruedas. Su labor no se limitó a ocupar un curul; se enfocó en transformar el marco legal del país.
                         </p>
-                        <p>
+                        <p data-i18n="mission_p2">
                             La fundación es la herramienta a través de la cual materializamos los logros legislativos en beneficios reales para el ciudadano. Desde la <strong>Ley 361 de 1997 (conocida como Ley Clopatofsky)</strong>, la cual fue la primera en garantizar derechos de educación y trabajo para discapacitados, hasta la labor incansable que permitió armonizar estas normas con la Ley 1618 de 2013.
                         </p>
                     </div>
