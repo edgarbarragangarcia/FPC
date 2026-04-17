@@ -210,8 +210,14 @@ window.addEventListener('load', async () => {
             const { supabase } = await import('./admin/data.js');
             await supabase.auth.signOut();
             window.state.user = { name: 'Visitante', loggedIn: false };
-            window.location.hash = '#/';
-            window.location.reload();
+            updateDropdownUI();
+            
+            // Si ya estamos en inicio, forzamos re-render. Si no, cambiar el hash disparará el router naturalmente.
+            if (window.location.hash === '#/') {
+                window.dispatchEvent(new Event('hashchange'));
+            } else {
+                window.location.hash = '#/';
+            }
         };
     }
 });

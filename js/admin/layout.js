@@ -83,8 +83,16 @@ export const AdminLayout = {
                 const { supabase } = await import('./data.js');
                 await supabase.auth.signOut();
                 window.state.user = { name: 'Visitante', loggedIn: false };
-                window.location.hash = '#/';
-                window.location.reload();
+                
+                // Hide user info globally if possible
+                const infoEl = document.getElementById('user-info-dropdown');
+                if(infoEl) infoEl.classList.add('hidden');
+                
+                if (window.location.hash === '#/') {
+                    window.dispatchEvent(new Event('hashchange'));
+                } else {
+                    window.location.hash = '#/';
+                }
             };
         }
 
