@@ -84,7 +84,8 @@ CREATE TABLE IF NOT EXISTS enrollments (
     course_id BIGINT REFERENCES courses(id) ON DELETE CASCADE,
     progress INT DEFAULT 0,
     status TEXT DEFAULT 'active',
-    enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(profile_id, course_id)
 );
 
 -- 5. Tabla de Módulos (Course Builder)
