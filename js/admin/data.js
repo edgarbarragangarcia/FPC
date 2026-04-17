@@ -110,8 +110,23 @@ export const DB = {
         await DB.fetchUsers();
     },
 
-    // --- Enrollments ---
-    _enrollmentsCache: {},
+    fetchAllEnrollments: async () => {
+        const { data, error } = await supabase
+            .from('enrollments')
+            .select(`
+                *,
+                courses (title),
+                profiles (name, email)
+            `)
+            .order('enrolled_at', { ascending: false });
+        
+        if (error) {
+            console.error('Error fetching all enrollments:', error);
+            return [];
+        }
+        return data;
+    },
+
     fetchUserEnrollments: async (userId) => {
         if (DB._enrollmentsCache[userId]) return DB._enrollmentsCache[userId];
 
@@ -173,23 +188,6 @@ export const DB = {
             .from('logs')
             .insert([{ message }]);
         await DB.fetchLogs();
-    },
-
-    // --- Student Enrollments ---
-    fetchUserEnrollments: async (userId) => {
-        const { data, error } = await supabase
-            .from('enrollments')
-            .select(`
-                *,
-                courses (*)
-            `)
-            .eq('profile_id', userId);
-        
-        if (error) {
-            console.error('Error fetching enrollments:', error);
-            return [];
-        }
-        return data;
     },
 
     // --- Modules ---
