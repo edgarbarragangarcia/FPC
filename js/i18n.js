@@ -191,30 +191,13 @@ export const i18n = {
             if (translation !== key) {
                 if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                     el.placeholder = translation;
-                } else if (translation.includes('<') || el.hasAttribute('data-i18n-html')) {
-                    // Si la traducción contiene HTML, o el elemento lo requiere, reemplazamos todo
-                    el.innerHTML = translation;
                 } else if (el.tagName === 'LI' && el.querySelector('span.material-symbols-outlined')) {
-                    // Preservar iconos si existen
+                    // Preservar iconos solo si es una lista con icono
                     const icon = el.querySelector('span.material-symbols-outlined').outerHTML;
                     el.innerHTML = `${icon} ${translation}`;
                 } else {
-                    // Si el elemento tiene hijos complejos (como strong, span, etc), 
-                    // y la traducción es texto puro, limpiamos e insertamos para evitar duplicados
-                    if (el.children.length > 0) {
-                        el.innerHTML = translation;
-                    } else {
-                        // Optimización para nodos de texto puro
-                        let foundText = false;
-                        for (let node of el.childNodes) {
-                            if (node.nodeType === 3 && node.textContent.trim().length > 0) {
-                                node.textContent = translation;
-                                foundText = true;
-                                break;
-                            }
-                        }
-                        if (!foundText) el.innerHTML = translation;
-                    }
+                    // Para todos los demás, reemplazo total para evitar duplicados en inglés/español
+                    el.innerHTML = translation;
                 }
             }
         });
