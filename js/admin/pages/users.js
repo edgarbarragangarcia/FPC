@@ -64,10 +64,10 @@ export const AdminUsers = {
                             </td>
                             <td class="px-8 py-6 text-right">
                                 <div class="flex gap-2 justify-end opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-                                    <button class="p-2.5 bg-surface hover:bg-primary hover:text-white text-primary rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Editar">
+                                    <button class="p-2.5 bg-surface hover:bg-primary hover:text-white text-primary rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" onclick="window.openUserModal('${user.id}')" title="Editar">
                                         <span class="material-symbols-outlined text-xl">edit</span>
                                     </button>
-                                    <button class="p-2.5 bg-surface hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Eliminar">
+                                    <button class="p-2.5 bg-surface hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" onclick="window.deleteUserButton(this, '${user.id}')" title="Eliminar">
                                         <span class="material-symbols-outlined text-xl">delete</span>
                                     </button>
                                 </div>
@@ -130,9 +130,9 @@ export const AdminUsers = {
 
         let currentUserEditing = null;
 
-        const openModal = (id) => {
+        window.openUserModal = (id) => {
             const user = users.find(u => u.id == id);
-            if(!user) return alert('Usuario no encontrado al intentar editar.');
+            if(!user) return alert('Usuario no encontrado. Por favor recarga la página.');
             currentUserEditing = user.id;
 
             nameInput.value = user.name || '';
@@ -148,6 +148,25 @@ export const AdminUsers = {
             }, 10);
         };
 
+        window.deleteUserButton = async (btnElement, id) => {
+            const user = users.find(u => u.id == id);
+            if (!user) return alert('Usuario no encontrado');
+
+            if (confirm(`¿Estás seguro de eliminar el perfil de ${user.name}? (El usuario no podrá entrar al sistema)`)) {
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span>';
+                try {
+                    await DB.deleteUser(id);
+                    await DB.fetchUsers(); // Refresh
+                    window.dispatchEvent(new Event('hashchange')); // Reload panel
+                } catch (err) {
+                    alert("Error al eliminar. Revisa si tienes permisos.");
+                    console.error(err);
+                    btnElement.innerHTML = originalHTML;
+                }
+            }
+        };
+
         const closeModal = () => {
             modal.classList.replace('opacity-100', 'opacity-0');
             content.classList.replace('translate-y-0', 'translate-y-4');
@@ -157,42 +176,6 @@ export const AdminUsers = {
 
         document.getElementById('close-user-modal').onclick = closeModal;
         document.getElementById('close-user-modal-bg').onclick = closeModal;
-
-        // Edit clicks
-        document.querySelectorAll('.edit-user-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const id = btn.getAttribute('data-id');
-                openModal(id);
-            });
-        });
-
-        // Delete clicks
-        document.querySelectorAll('.delete-user-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const id = btn.getAttribute('data-id');
-                // Use non-strict equality in case id is somehow transformed
-                const user = users.find(u => u.id == id);
-                if (!user) return alert('Usuario no encontrado');
-
-                if (confirm(`¿Estás seguro de eliminar el perfil de ${user.name}? (El usuario no podrá entrar al sistema)`)) {
-                    const originalHTML = btn.innerHTML;
-                    btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span>';
-                    try {
-                        await DB.deleteUser(id);
-                        await DB.fetchUsers(); // Refresh
-                        window.dispatchEvent(new Event('hashchange')); // Reload panel
-                    } catch (err) {
-                        alert("Error al eliminar. Revisa si tienes permisos.");
-                        console.error(err);
-                        btn.innerHTML = originalHTML;
-                    }
-                }
-            });
-        });
 
         // Save Role
         saveBtn.onclick = async () => {
