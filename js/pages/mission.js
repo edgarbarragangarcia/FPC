@@ -96,7 +96,7 @@ export const Mission = {
                     <!-- Rehab -->
                     <div class="flex gap-8 p-10 bg-surface border border-surface-variant rounded-[3.5rem] hover:shadow-xl transition-all">
                         <div class="shrink-0 w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center">
-                            <span class="material-symbols-outlined text-3xl">universal_accessibility</span>
+                            <span class="material-symbols-outlined text-3xl">sports_basketball</span>
                         </div>
                         <div>
                             <h3 class="text-2xl font-bold text-primary mb-4">Vida Independiente</h3>
