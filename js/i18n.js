@@ -33,7 +33,7 @@ export const translations = {
         hero_btn_lms: "Ingresar al LMS",
         hero_btn_mission: "Conoce Nuestra Labor",
         hero_badge_tag: "Hito Legislativo",
-        hero_badge_desc: "Autor de la Ley 361 de 1997, base de la inclusión en Colombia.",
+        hero_badge_desc: 'Autor de la <strong>Ley 361 de 1997</strong> (Ley Clopatofsky), base de la inclusión en Colombia.',
         
         pillars_title: "Nuestra Labor Social",
         pillars_desc: "No solo formamos personas; transformamos el ecosistema social y legal de Colombia.",
@@ -111,7 +111,7 @@ export const translations = {
         hero_btn_lms: "Enter LMS",
         hero_btn_mission: "Learn About Our Work",
         hero_badge_tag: "Legislative Milestone",
-        hero_badge_desc: "Author of Law 361 of 1997, the basis of inclusion in Colombia.",
+        hero_badge_desc: 'Author of <strong>Law 361 of 1997</strong> (Clopatofsky Law), the foundation of inclusion in Colombia.',
         
         pillars_title: "Our Social Work",
         pillars_desc: "We don't just train people; we transform the social and legal ecosystem of Colombia.",
@@ -191,23 +191,30 @@ export const i18n = {
             if (translation !== key) {
                 if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                     el.placeholder = translation;
-                } else if (translation.includes('<span') || el.hasAttribute('data-i18n-html')) {
+                } else if (translation.includes('<') || el.hasAttribute('data-i18n-html')) {
+                    // Si la traducción contiene HTML, o el elemento lo requiere, reemplazamos todo
                     el.innerHTML = translation;
                 } else if (el.tagName === 'LI' && el.querySelector('span.material-symbols-outlined')) {
                     // Preservar iconos si existen
                     const icon = el.querySelector('span.material-symbols-outlined').outerHTML;
                     el.innerHTML = `${icon} ${translation}`;
                 } else {
-                    // Si el elemento tiene hijos que no son texto (como iconos), solo cambiamos el nodo de texto
-                    let foundText = false;
-                    for (let node of el.childNodes) {
-                        if (node.nodeType === 3 && node.textContent.trim().length > 0) {
-                            node.textContent = translation;
-                            foundText = true;
-                            break;
+                    // Si el elemento tiene hijos complejos (como strong, span, etc), 
+                    // y la traducción es texto puro, limpiamos e insertamos para evitar duplicados
+                    if (el.children.length > 0) {
+                        el.innerHTML = translation;
+                    } else {
+                        // Optimización para nodos de texto puro
+                        let foundText = false;
+                        for (let node of el.childNodes) {
+                            if (node.nodeType === 3 && node.textContent.trim().length > 0) {
+                                node.textContent = translation;
+                                foundText = true;
+                                break;
+                            }
                         }
+                        if (!foundText) el.innerHTML = translation;
                     }
-                    if (!foundText) el.innerHTML = translation;
                 }
             }
         });
