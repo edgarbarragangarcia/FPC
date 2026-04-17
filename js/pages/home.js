@@ -168,17 +168,13 @@ export const Home = {
                     </div>
                 </div>
             </section>
-        </div>iv>
-                </div>
-            </section>
         </div>
         `;
     },
     afterRender: async () => {
-        // Optional: Trigger LSC automatically for the news section if LSC is enabled
         if (window.state.lscEnabled) {
             window.dispatchEvent(new CustomEvent('lsc-video-update', { 
-                detail: 'https://www.youtube.com/embed/videoseries?list=PLfVvntL9D5fREh-pYofTirX-xWAb-XWp2' // Example LSC Playlist
+                detail: 'https://www.youtube.com/embed/videoseries?list=PLfVvntL9D5fREh-pYofTirX-xWAb-XWp2'
             }));
         }
     }
