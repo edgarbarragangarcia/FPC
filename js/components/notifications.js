@@ -128,6 +128,66 @@ export const Notifications = {
                 if (container.children.length === 0) container.classList.add('pointer-events-none');
             }, 300);
         };
+    },
+
+    prompt: (title, message, placeholder, onConfirm) => {
+        Notifications.init();
+        const container = document.getElementById('ui-overlay-container');
+        container.classList.remove('pointer-events-none');
+        
+        const modalId = `prompt-${Date.now()}`;
+        const backdrop = document.createElement('div');
+        backdrop.className = 'fixed inset-0 bg-primary/20 backdrop-blur-md opacity-0 transition-opacity duration-300 pointer-events-auto';
+        
+        const modal = document.createElement('div');
+        modal.id = modalId;
+        modal.className = 'relative w-full max-w-md bg-surface rounded-[2rem] p-8 shadow-2xl border border-white modal-animate-in pointer-events-auto';
+        modal.innerHTML = `
+            <div class="flex flex-col">
+                <h3 class="text-xl font-headline font-bold text-primary mb-2">${title}</h3>
+                <p class="text-on-surface/50 text-sm mb-6">${message}</p>
+                <input type="text" id="${modalId}-input" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 mb-6 focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="${placeholder}" autofocus>
+                <div class="flex gap-3">
+                    <button id="${modalId}-cancel" class="flex-1 py-4 border border-surface-variant rounded-2xl font-bold text-on-surface/40 hover:bg-surface-variant/20 transition-all">Cancelar</button>
+                    <button id="${modalId}-save" class="flex-1 py-4 bg-primary text-white rounded-2xl font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all">Guardar</button>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(backdrop);
+        container.appendChild(modal);
+        requestAnimationFrame(() => backdrop.style.opacity = '1');
+
+        const input = document.getElementById(`${modalId}-input`);
+        input.focus();
+
+        const cleanup = () => {
+            backdrop.style.opacity = '0';
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                if (container.contains(backdrop)) container.removeChild(backdrop);
+                if (container.contains(modal)) container.removeChild(modal);
+                if (container.children.length === 0) container.classList.add('pointer-events-none');
+            }, 300);
+        };
+
+        document.getElementById(`${modalId}-save`).onclick = () => {
+            const val = input.value.trim();
+            if (val) {
+                cleanup();
+                if (onConfirm) onConfirm(val);
+            } else {
+                input.classList.add('ring-2', 'ring-red-400');
+            }
+        };
+
+        document.getElementById(`${modalId}-cancel`).onclick = cleanup;
+        
+        // Enter key support
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') document.getElementById(`${modalId}-save`).click();
+            if (e.key === 'Escape') cleanup();
+        };
     }
 };
 

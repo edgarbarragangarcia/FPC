@@ -468,14 +468,14 @@ export const AdminCourses = {
 
         // --- Module Actions ---
         window.addModule = async () => {
-            const title = window.prompt('Nombre del módulo:'); // Keeping simple prompt but fixing error UI
-            if (!title) return;
-            try {
-                await DB.saveModule({ course_id: currentCourseId, title, position: currentModules.length });
-                await loadModules();
-            } catch (e) { 
-                UI.alert('Error', 'No pudimos crear el módulo: ' + e.message, 'error'); 
-            }
+            UI.prompt('Nuevo Módulo', 'Ingresa el nombre para el nuevo módulo de este curso.', 'Ej: Introducción al tema', async (title) => {
+                try {
+                    await DB.saveModule({ course_id: currentCourseId, title, position: currentModules.length });
+                    await loadModules();
+                } catch (e) { 
+                    UI.alert('Error', 'No pudimos crear el módulo: ' + e.message, 'error'); 
+                }
+            });
         };
 
         window.deleteModuleConfirm = async (id) => {
