@@ -18,11 +18,11 @@ export const CoursePlayer = {
         const modules = await DB.fetchCourseContent(courseId);
 
         return `
-        <div class="h-full flex flex-col md:flex-row overflow-hidden animate-in fade-in duration-700">
+        <div class="h-full flex flex-col md:flex-row bg-surface overflow-hidden">
             <!-- Sidebar: Curriculum Navigation -->
-            <aside class="w-full md:w-85 bg-surface-variant/10 border-r-2 border-surface-variant/40 flex flex-col h-full z-10 relative shrink-0">
+            <aside class="w-full md:w-[340px] bg-surface-variant/10 border-r-2 border-surface-variant/40 flex flex-col h-full z-10 relative shrink-0 shadow-lg">
                 <!-- Static Sidebar Header -->
-                <div class="shrink-0 p-6 bg-primary text-white border-b-2 border-primary-dark shadow-md z-20">
+                <div class="shrink-0 p-6 bg-primary text-white border-b-2 border-primary-dark z-20">
                     <div class="flex items-center gap-3 mb-3">
                         <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
                             <span class="material-symbols-outlined text-sm">arrow_back</span>
