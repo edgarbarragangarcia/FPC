@@ -103,8 +103,8 @@ const router = async () => {
             document.querySelector('footer')?.classList.remove('hidden');
             
             if (path === '/cursos') {
-                // Special high alignment for Courses page only
-                view.style.paddingTop = '80px';
+                // Restoration to 128px as per user's highlighted screenshot
+                view.style.paddingTop = '128px';
                 view.className = 'animate-in fade-in duration-500'; 
             } else {
                 // Standard padding for other public pages
