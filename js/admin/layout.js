@@ -12,7 +12,7 @@ export const AdminLayout = {
         ];
 
         return `
-        <div class="flex flex-col lg:flex-row h-[calc(100vh-80px)] bg-surface overflow-hidden relative">
+        <div class="flex flex-col lg:flex-row h-full bg-surface overflow-hidden relative">
 
             <!-- Admin Sidebar (Responsive Drawer) -->
             <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-[120] w-72 bg-surface/95 backdrop-blur-2xl border-r border-surface-variant/50 flex flex-col transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 lg:h-full lg:shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">

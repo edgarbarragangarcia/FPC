@@ -82,25 +82,25 @@ const router = async () => {
         const mainHeader = document.getElementById('main-header');
         if (mainHeader) mainHeader.classList.remove('hidden');
         
-        // Account for fixed header height
-        document.body.style.paddingTop = '80px';
-        
-        if (path.startsWith('/admin')) {
-            content = AdminLayout.render(content);
+        // Reset body
+        document.body.style.paddingTop = '0';
+        document.body.classList.remove('h-screen', 'overflow-hidden');
+        view.className = ''; // Reset classes
+        view.style = '';    // Reset styles
+
+        if (path.startsWith('/admin') || path === '/dashboard' || path === '/curso') {
             document.querySelector('footer')?.classList.add('hidden');
-            view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            document.body.classList.add('h-screen', 'overflow-hidden');
-        } else if (path === '/dashboard' || path === '/curso' || path === '/login') {
-            document.querySelector('footer')?.classList.add('hidden');
-            view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            view.classList.add('h-full');
-            if (path !== '/login') document.body.classList.add('h-screen', 'overflow-hidden');
-            else document.body.classList.remove('h-screen', 'overflow-hidden');
+            
+            // Layout Estático e Independiente
+            view.classList.add('fixed', 'top-[80px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
+            
+            if (path.startsWith('/admin')) {
+                content = AdminLayout.render(content);
+            }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
             view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            view.classList.remove('h-full');
-            document.body.classList.remove('h-screen', 'overflow-hidden');
+            // Allow normal scroll for public pages
         }
 
         // Immediate Swap
