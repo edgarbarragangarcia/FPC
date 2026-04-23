@@ -245,14 +245,19 @@ export const CoursePlayer = {
                     </div>
                 `;
 
-                // Extract text from PDF using PDF.js, then enable TTS
+                // Extract text from PDF using PDF.js
                 const extractPdfText = async (pdfUrl) => {
                     if (!window.pdfjsLib) {
                         console.warn('PDF.js not loaded');
-                        return title; // Fallback to title
+                        return null;
                     }
                     try {
-                        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+                        // Fetch the PDF as binary data to avoid CORS issues with PDF.js URL loading
+                        const response = await fetch(pdfUrl);
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        const arrayBuffer = await response.arrayBuffer();
+                        
+                        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                         let fullText = '';
                         for (let i = 1; i <= pdf.numPages; i++) {
                             const page = await pdf.getPage(i);
@@ -260,22 +265,31 @@ export const CoursePlayer = {
                             const pageText = content.items.map(item => item.str).join(' ');
                             fullText += pageText + '\n\n';
                         }
-                        return fullText.trim() || title;
+                        return fullText.trim() || null;
                     } catch (err) {
                         console.warn('PDF text extraction failed:', err);
-                        return title; // Fallback
+                        return null;
                     }
                 };
 
                 extractPdfText(url).then(pdfText => {
-                    currentTranscript = pdfText;
                     const readBtn = document.getElementById('btn-read-aloud');
-                    if (readBtn) {
-                        readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>Lectura por voz';
-                        readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    if (pdfText) {
+                        currentTranscript = pdfText;
+                        if (readBtn) {
+                            readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>Lectura por voz';
+                            readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                        }
+                    } else {
+                        currentTranscript = '';
+                        if (readBtn) {
+                            readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_off</span>No disponible';
+                            readBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                        }
                     }
                     bindReadAloudBtn();
                 });
+
 
             } else {
                 viewport.innerHTML = `
