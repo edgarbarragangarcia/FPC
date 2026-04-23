@@ -6,8 +6,8 @@ export const Courses = {
         const dummyCourses = DB.getCourses();
 
         return `
-        <div class="max-w-7xl mx-auto pb-12 pt-4">
-            <header class="bg-surface lg:bg-transparent flex flex-col md:flex-row md:items-end justify-between gap-8 pb-6 pt-2 mb-8 px-4 -mx-4">
+        <div class="max-w-7xl mx-auto py-12">
+            <header class="bg-surface lg:bg-transparent flex flex-col md:flex-row md:items-end justify-between gap-8 py-6 mb-12 px-4 -mx-4">
                 <div class="space-y-4">
                     <h2 class="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tight">Catálogo de Cursos</h2>
                     <p class="text-on-surface/60 max-w-xl">
@@ -81,7 +81,7 @@ export const Courses = {
                     <span class="material-symbols-outlined animate-spin text-primary text-4xl">sync</span>
                 </div>
             `;
-            
+
             setTimeout(() => {
                 modal.classList.replace('opacity-0', 'opacity-100');
                 content.classList.replace('translate-y-10', 'translate-y-0');
@@ -89,7 +89,7 @@ export const Courses = {
 
             // Fetch Syllabus
             const modules = await DB.fetchCourseContent(courseId);
-            
+
             renderRoot.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <!-- Left: Info -->
@@ -136,7 +136,7 @@ export const Courses = {
                             ` : modules.map((mod, i) => `
                                 <div class="bg-surface/50 border border-surface-variant/50 rounded-3xl overflow-hidden">
                                     <div class="px-6 py-4 bg-surface/50 border-b border-surface-variant/50 flex items-center gap-4">
-                                        <span class="w-8 h-8 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-sm">${i+1}</span>
+                                        <span class="w-8 h-8 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-sm">${i + 1}</span>
                                         <h4 class="font-bold text-primary text-sm">${mod.title}</h4>
                                     </div>
                                     <div class="p-2 space-y-1">

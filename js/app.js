@@ -56,7 +56,7 @@ const routes = {
     '/admin/usuarios': AdminUsers,
     '/admin/inscripciones': AdminEnrollments,
     '/admin/reportes': AdminReports,
-    
+
     // Auth
     '/login': Login,
     '/dashboard': StudentDashboard,
@@ -70,53 +70,53 @@ const router = async () => {
     try {
         // Prepare content
         if (!isAppInitialized) await initAppPromise;
-        
+
         const routePath = path.split('?')[0];
         const component = routes[routePath] || Home;
         // Pre-fetch specific data if needed
         if (path === '/admin/cursos') await DB.fetchCourses();
         if (path === '/admin/usuarios') await DB.fetchUsers();
-        
+
         let content = await component.render();
 
         // Account for fixed header height (80px) globally
         const mainHeader = document.getElementById('main-header');
         if (mainHeader) mainHeader.classList.remove('hidden');
-        
+
         // Reset body and view styles
         document.body.classList.remove('h-screen', 'overflow-hidden');
-        view.className = ''; 
+        view.className = '';
         view.style = '';
 
         if (path.startsWith('/admin') || path === '/dashboard' || path === '/curso') {
             document.querySelector('footer')?.classList.add('hidden');
-            
+
             // Layout Estático e Independiente
             view.classList.add('fixed', 'top-[80px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
             document.body.classList.add('h-screen', 'overflow-hidden');
             document.documentElement.classList.add('h-screen', 'overflow-hidden');
-            
+
             if (path.startsWith('/admin')) {
                 content = AdminLayout.render(content);
             }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
-            // Public pages: EXACTLY 80px top, NO internal padding
+            // Public pages start exactly below the 80px navbar
             view.style.paddingTop = '80px';
-            view.className = 'animate-in fade-in duration-500'; // Reset classes, only animation
+            view.classList.add('p-6', 'md:px-12', 'md:pb-12');
             document.body.classList.remove('h-screen', 'overflow-hidden');
             document.documentElement.classList.remove('h-screen', 'overflow-hidden');
         }
 
         // Immediate Swap
         view.innerHTML = content;
-        
+
         // Post-render logic
         if (path.startsWith('/admin') && AdminLayout.afterRender) {
             await AdminLayout.afterRender();
         }
         if (component.afterRender) await component.afterRender();
-        
+
         window.scrollTo(0, 0);
 
     } catch (error) {
@@ -143,9 +143,9 @@ const checkSession = async () => {
                 .select('*')
                 .eq('id', session.user.id)
                 .limit(1);
-            
+
             const profile = profiles && profiles.length > 0 ? profiles[0] : null;
-            
+
             if (profile) {
                 window.state.user = {
                     loggedIn: true,
@@ -166,13 +166,13 @@ window.addEventListener('hashchange', router);
 window.addEventListener('load', async () => {
     await checkSession();
     router();
-    
+
     // Dropdown & Auth Logic
     const btnDesktop = document.getElementById('btn-mi-cuenta-desktop');
     const btnMobile = document.getElementById('btn-mi-cuenta-mobile');
     const userDropdown = document.getElementById('user-dropdown');
     const btnLogoutGlobal = document.getElementById('btn-logout-global');
-    
+
     // Update Dropdown UI based on state
     const updateDropdownUI = () => {
         const nameEl = document.getElementById('dropdown-user-name');
@@ -209,8 +209,8 @@ window.addEventListener('load', async () => {
         }
     };
 
-    if(btnDesktop) btnDesktop.onclick = toggleDropdown;
-    if(btnMobile) btnMobile.onclick = toggleDropdown;
+    if (btnDesktop) btnDesktop.onclick = toggleDropdown;
+    if (btnMobile) btnMobile.onclick = toggleDropdown;
 
     // Global Click to close dropdown
     window.addEventListener('click', () => {
@@ -224,7 +224,7 @@ window.addEventListener('load', async () => {
             await supabase.auth.signOut();
             window.state.user = { name: 'Visitante', loggedIn: false };
             updateDropdownUI();
-            
+
             // Si ya estamos en inicio, forzamos re-render. Si no, cambiar el hash disparará el router naturalmente.
             if (window.location.hash === '#/') {
                 window.dispatchEvent(new Event('hashchange'));

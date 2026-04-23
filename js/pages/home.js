@@ -4,7 +4,7 @@ export const Home = {
         return `
         <div class="max-w-7xl mx-auto px-4">
             <!-- Hero Section: The Spark of a Mission -->
-            <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-0 pb-12 md:pb-24 animate-in fade-in duration-1000">
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-4 md:pt-0 pb-12 md:pb-24 animate-in fade-in duration-1000">
                 <!-- Column 1: Image (Appears first on mobile) -->
                 <div class="relative lg:-mt-20 order-1 lg:order-2">
                     <div class="absolute -inset-10 bg-secondary/5 rounded-full blur-[120px] -z-10"></div>
@@ -175,7 +175,7 @@ export const Home = {
     },
     afterRender: async () => {
         if (window.state.lscEnabled) {
-            window.dispatchEvent(new CustomEvent('lsc-video-update', { 
+            window.dispatchEvent(new CustomEvent('lsc-video-update', {
                 detail: 'https://www.youtube.com/embed/videoseries?list=PLfVvntL9D5fREh-pYofTirX-xWAb-XWp2'
             }));
         }
