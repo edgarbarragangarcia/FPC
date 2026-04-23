@@ -322,16 +322,28 @@ export const CoursePlayer = {
                                 return numA - numB;
                             });
 
+                            const parser = new DOMParser();
                             for (const filename of slideFiles) {
                                 const xmlContent = await zip.file(filename).async("string");
                                 
                                 // Extract text from <a:t> tags
-                                const textMatches = xmlContent.match(/<a:t>.*?<\/a:t>/g) || [];
-                                const slideText = textMatches.map(match => {
-                                    return match.replace(/<\/?a:t>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-                                }).join(' ');
+                                const xmlDoc = parser.parseFromString(xmlContent, "text/xml");
+                                const tNodes = xmlDoc.getElementsByTagName("a:t");
+                                let slideText = "";
                                 
-                                if (slideText) fullText += slideText + '\n\n';
+                                if (tNodes.length > 0) {
+                                    for (let i = 0; i < tNodes.length; i++) {
+                                        slideText += tNodes[i].textContent + " ";
+                                    }
+                                } else {
+                                    // Fallback Regex if DOMParser misses namespaces
+                                    const textMatches = xmlContent.match(/<a:t[^>]*>.*?<\/a:t>/g) || [];
+                                    slideText = textMatches.map(match => {
+                                        return match.replace(/<a:t[^>]*>/, '').replace(/<\/a:t>/, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+                                    }).join(' ');
+                                }
+                                
+                                if (slideText.trim()) fullText += slideText.trim() + '\n\n';
                             }
                             return fullText.trim() || null;
                             
