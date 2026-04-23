@@ -118,100 +118,11 @@ export const CoursePlayer = {
         let currentTranscript = '';
         let isReading = false;
         
-        window.loadLesson = (id, type, url, title, text, transcript) => {
-            const viewport = document.getElementById('lesson-viewport');
-            const meta = document.getElementById('lesson-meta');
-            const titleEl = document.getElementById('active-lesson-title');
-            const contentEl = document.getElementById('active-lesson-content');
-            
-            // Set transcript for TTS (fallback to text if transcript is empty and type is text)
-            currentTranscript = transcript || (type === 'text' ? text : '');
-            if (window.speechSynthesis) window.speechSynthesis.cancel();
-            
-            // Always show the button if it's a valid content type, but update its appearance if empty
+        // Reusable: bind TTS to whichever btn-read-aloud exists in the DOM
+        const bindReadAloudBtn = () => {
             const readBtn = document.getElementById('btn-read-aloud');
-            if (readBtn) {
-                if (!currentTranscript) {
-                    readBtn.classList.add('opacity-40', 'cursor-not-allowed');
-                    readBtn.title = "No hay transcripción disponible para esta lección todavía.";
-                } else {
-                    readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-                    readBtn.title = "Escuchar contenido de la lección";
-                }
-            }
+            if (!readBtn) return;
 
-            meta.classList.remove('hidden');
-            titleEl.innerText = title;
-
-            // Update LSC if enabled
-            const lesson = DB.getCourses().flatMap(c => c.content || []).flatMap(m => m.lessons || []).find(l => l.id == id);
-            if (lesson && lesson.lsc_video_url) {
-                window.dispatchEvent(new CustomEvent('lsc-video-update', { detail: lesson.lsc_video_url }));
-            }
-
-            if (type === 'video') {
-                // If it's a youtube URL, format it
-                let embedUrl = url;
-                if (url.includes('youtube.com/watch?v=')) {
-                    embedUrl = url.replace('watch?v=', 'embed/');
-                } else if (url.includes('youtu.be/')) {
-                    embedUrl = url.replace('youtu.be/', 'youtube.com/embed/');
-                }
-
-                viewport.innerHTML = `
-                    <div class="aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
-                        <iframe 
-                            src="${embedUrl}" 
-                            class="w-full h-full border-none"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                `;
-                contentEl.classList.add('hidden');
-            } else if (type === 'pdf') {
-                viewport.innerHTML = `
-                    <div class="w-full h-[80vh] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-white">
-                        <iframe 
-                            src="${url}" 
-                            class="w-full h-full border-none"
-                            title="Documento PDF">
-                        </iframe>
-                    </div>
-                    <div class="mt-4 flex justify-center">
-                        <a href="${url}" target="_blank" class="text-primary font-bold flex items-center gap-2 hover:underline">
-                            <span class="material-symbols-outlined">download</span>
-                            Descargar PDF original
-                        </a>
-                    </div>
-                `;
-                contentEl.classList.add('hidden');
-            } else {
-                viewport.innerHTML = `
-                    <div class="bg-surface rounded-3xl p-12 text-center border border-surface-variant shadow-sm aspect-video flex flex-col items-center justify-center">
-                        <span class="material-symbols-outlined text-6xl text-on-surface/10 mb-4 font-light">article</span>
-                        <p class="text-on-surface/40">Lectura de lección activada</p>
-                    </div>
-                `;
-                contentEl.classList.remove('hidden');
-                contentEl.innerHTML = text || 'Sin contenido de texto.';
-            }
-
-            // Sync Nav UI
-            document.querySelectorAll('.lesson-btn').forEach(btn => {
-                btn.classList.remove('bg-primary/10', 'border-l-4', 'border-primary');
-                if (btn.dataset.lessonId == id) {
-                    btn.classList.add('bg-primary/10', 'border-l-4', 'border-primary');
-                }
-            });
-
-            const scrollContainer = document.getElementById('lesson-scroll-container');
-            if (scrollContainer) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        // TTS Logic
-        const readBtn = document.getElementById('btn-read-aloud');
-        if (readBtn) {
             readBtn.onclick = () => {
                 if (isReading) {
                     window.speechSynthesis.cancel();
@@ -221,7 +132,7 @@ export const CoursePlayer = {
                     readBtn.classList.replace('text-white', 'text-secondary');
                 } else {
                     if (!currentTranscript) return;
-                    const utterance = new SpeechSynthesisUtterance(currentTranscript.replace(/<[^>]*>/g, '')); // Strip HTML
+                    const utterance = new SpeechSynthesisUtterance(currentTranscript.replace(/<[^>]*>/g, ''));
                     utterance.lang = 'es-CO';
                     utterance.rate = 0.9;
                     
@@ -239,7 +150,141 @@ export const CoursePlayer = {
                     readBtn.classList.replace('text-secondary', 'text-white');
                 }
             };
-        }
+        };
+
+        window.loadLesson = (id, type, url, title, text, transcript) => {
+            const viewport = document.getElementById('lesson-viewport');
+            const meta = document.getElementById('lesson-meta');
+            const titleEl = document.getElementById('active-lesson-title');
+            const contentEl = document.getElementById('active-lesson-content');
+            
+            // Set transcript for TTS — fallback to text content, then to lesson title
+            currentTranscript = transcript || (type === 'text' ? text : '') || title || '';
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            isReading = false;
+
+            // Update LSC if enabled
+            const lesson = DB.getCourses().flatMap(c => c.content || []).flatMap(m => m.lessons || []).find(l => l.id == id);
+            if (lesson && lesson.lsc_video_url) {
+                window.dispatchEvent(new CustomEvent('lsc-video-update', { detail: lesson.lsc_video_url }));
+            }
+
+            if (type === 'video') {
+                let embedUrl = url;
+                if (url.includes('youtube.com/watch?v=')) {
+                    embedUrl = url.replace('watch?v=', 'embed/');
+                } else if (url.includes('youtu.be/')) {
+                    embedUrl = url.replace('youtu.be/', 'youtube.com/embed/');
+                }
+
+                viewport.innerHTML = `
+                    <div class="aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
+                        <iframe 
+                            src="${embedUrl}" 
+                            class="w-full h-full border-none"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `;
+                // Show meta section with title + buttons below
+                meta.classList.remove('hidden');
+                titleEl.innerText = title;
+                contentEl.classList.add('hidden');
+
+                // Update TTS button state
+                const readBtn = document.getElementById('btn-read-aloud');
+                if (readBtn) {
+                    if (!currentTranscript) {
+                        readBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                    } else {
+                        readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    }
+                }
+                bindReadAloudBtn();
+
+            } else if (type === 'pdf') {
+                // PDF: buttons are embedded directly next to the viewer
+                meta.classList.add('hidden');  // Hide the default meta section
+
+                viewport.innerHTML = `
+                    <div class="space-y-4">
+                        <!-- Title + Action Bar -->
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h1 class="text-2xl font-headline font-bold text-primary mb-1">${title}</h1>
+                                <p class="text-sm font-bold text-secondary flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-lg">verified</span>
+                                    Contenido Accesible Certificado
+                                </p>
+                            </div>
+                            <div class="flex gap-3 flex-wrap">
+                                <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95 text-sm">
+                                    <span class="material-symbols-outlined text-lg">volume_up</span>
+                                    Lectura por voz
+                                </button>
+                                <a href="${url}" target="_blank" class="bg-primary/10 text-primary px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-primary hover:text-white transition-all shadow-md border-2 border-primary/20 active:scale-95 text-sm">
+                                    <span class="material-symbols-outlined text-lg">download</span>
+                                    Descargar PDF
+                                </a>
+                                <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95 text-sm">
+                                    <span class="material-symbols-outlined text-lg">check_circle</span>
+                                    Finalizado
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- PDF Viewer -->
+                        <div class="w-full h-[75vh] rounded-2xl overflow-hidden shadow-2xl border border-surface-variant bg-white">
+                            <iframe 
+                                src="${url}" 
+                                class="w-full h-full border-none"
+                                title="Documento PDF">
+                            </iframe>
+                        </div>
+                    </div>
+                `;
+                // Bind TTS to the newly injected button
+                bindReadAloudBtn();
+
+            } else {
+                viewport.innerHTML = `
+                    <div class="bg-surface rounded-3xl p-12 text-center border border-surface-variant shadow-sm aspect-video flex flex-col items-center justify-center">
+                        <span class="material-symbols-outlined text-6xl text-on-surface/10 mb-4 font-light">article</span>
+                        <p class="text-on-surface/40">Lectura de lección activada</p>
+                    </div>
+                `;
+                meta.classList.remove('hidden');
+                titleEl.innerText = title;
+                contentEl.classList.remove('hidden');
+                contentEl.innerHTML = text || 'Sin contenido de texto.';
+
+                // Update TTS button state
+                const readBtn = document.getElementById('btn-read-aloud');
+                if (readBtn) {
+                    if (!currentTranscript) {
+                        readBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                    } else {
+                        readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    }
+                }
+                bindReadAloudBtn();
+            }
+
+            // Sync Nav UI
+            document.querySelectorAll('.lesson-btn').forEach(btn => {
+                btn.classList.remove('bg-primary/10', 'border-l-4', 'border-primary');
+                if (btn.dataset.lessonId == id) {
+                    btn.classList.add('bg-primary/10', 'border-l-4', 'border-primary');
+                }
+            });
+
+            const scrollContainer = document.getElementById('lesson-scroll-container');
+            if (scrollContainer) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Initial bind for the static buttons
+        bindReadAloudBtn();
 
         window.markLessonComplete = () => {
             UI.alert('¡Excelente trabajo!', 'Has completado esta lección. Sigue así para obtener tu certificado.', 'success');
