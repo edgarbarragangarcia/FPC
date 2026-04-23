@@ -46,7 +46,7 @@ export const CoursePlayer = {
                                         <button 
                                             class="lesson-btn w-full text-left px-8 py-4 hover:bg-primary/5 transition-all flex items-center justify-between group"
                                             data-lesson-id="${lesson.id}"
-                                            onclick="window.loadLesson('${lesson.id}', '${lesson.content_type}', '${lesson.content || ''}', \`${lesson.title}\`, \`${lesson.content || ''}\`)"
+                                            onclick="window.loadLesson('${lesson.id}', '${lesson.content_type}', '${lesson.content || ''}', \`${lesson.title}\`, \`${lesson.content || ''}\`, \`${lesson.transcript || ''}\`)"
                                         >
                                             <div class="flex items-center gap-4">
                                                 <span class="material-symbols-outlined text-lg text-on-surface/30 group-hover:text-primary transition-colors">
@@ -88,10 +88,16 @@ export const CoursePlayer = {
                                     Contenido Accesible Certificado
                                 </p>
                             </div>
-                            <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
-                                <span class="material-symbols-outlined">check_circle</span>
-                                Marcar como finalizado
-                            </button>
+                            <div class="flex gap-3">
+                                <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-6 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-secondary hover:text-white transition-all shadow-sm">
+                                    <span class="material-symbols-outlined">volume_up</span>
+                                    Lectura por voz
+                                </button>
+                                <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                    Marcar como finalizado
+                                </button>
+                            </div>
                         </div>
                         <div id="active-lesson-content" class="bg-surface p-8 lg:p-12 rounded-[2.5rem] border border-surface-variant shadow-sm text-lg leading-relaxed text-on-surface/80">
                             <!-- Text content injected here -->
@@ -103,11 +109,19 @@ export const CoursePlayer = {
         `;
     },
     afterRender: async () => {
-        window.loadLesson = (id, type, url, title, text) => {
+        let currentTranscript = '';
+        let isReading = false;
+        
+        window.loadLesson = (id, type, url, title, text, transcript) => {
             const viewport = document.getElementById('lesson-viewport');
             const meta = document.getElementById('lesson-meta');
             const titleEl = document.getElementById('active-lesson-title');
             const contentEl = document.getElementById('active-lesson-content');
+            
+            // Set transcript for TTS (fallback to text if transcript is empty and type is text)
+            currentTranscript = transcript || (type === 'text' ? text : '');
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            document.getElementById('btn-read-aloud')?.classList.toggle('hidden', !currentTranscript);
 
             meta.classList.remove('hidden');
             titleEl.innerText = title;
@@ -176,6 +190,38 @@ export const CoursePlayer = {
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
+
+        // TTS Logic
+        const readBtn = document.getElementById('btn-read-aloud');
+        if (readBtn) {
+            readBtn.onclick = () => {
+                if (isReading) {
+                    window.speechSynthesis.cancel();
+                    isReading = false;
+                    readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>Lectura por voz';
+                    readBtn.classList.replace('bg-secondary', 'bg-secondary/10');
+                    readBtn.classList.replace('text-white', 'text-secondary');
+                } else {
+                    if (!currentTranscript) return;
+                    const utterance = new SpeechSynthesisUtterance(currentTranscript.replace(/<[^>]*>/g, '')); // Strip HTML
+                    utterance.lang = 'es-CO';
+                    utterance.rate = 0.9;
+                    
+                    utterance.onend = () => {
+                        isReading = false;
+                        readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>Lectura por voz';
+                        readBtn.classList.replace('bg-secondary', 'bg-secondary/10');
+                        readBtn.classList.replace('text-white', 'text-secondary');
+                    };
+                    
+                    window.speechSynthesis.speak(utterance);
+                    isReading = true;
+                    readBtn.innerHTML = '<span class="material-symbols-outlined">stop_circle</span>Detener lectura';
+                    readBtn.classList.replace('bg-secondary/10', 'bg-secondary');
+                    readBtn.classList.replace('text-secondary', 'text-white');
+                }
+            };
+        }
 
         window.markLessonComplete = () => {
             UI.alert('¡Excelente trabajo!', 'Has completado esta lección. Sigue así para obtener tu certificado.', 'success');

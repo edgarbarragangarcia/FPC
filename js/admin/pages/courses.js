@@ -292,6 +292,10 @@ export const AdminCourses = {
                                     <input type="url" id="lesson-lsc-url" class="flex-1 bg-surface-variant/20 border border-surface-variant/50 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="URL embebida de YouTube/Vimeo">
                                 </div>
                             </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-on-surface/40 ml-1">Transcripción para Lectura por Voz (Ciegos)</label>
+                                <textarea id="lesson-transcript" rows="2" class="w-full bg-surface-variant/20 border border-surface-variant/50 rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none text-xs" placeholder="Escribe el contenido textual que será leído por voz..."></textarea>
+                            </div>
                         </div>
                         <div class="flex gap-3 pt-2">
                             <button type="button" onclick="window.closeLessonModal()" class="flex-1 py-3 border border-surface-variant rounded-2xl font-bold hover:bg-surface-variant transition-all">Cancelar</button>
@@ -517,8 +521,8 @@ export const AdminCourses = {
             document.getElementById('lesson-title').value = lesson.title;
             document.getElementById('lesson-type').value = lesson.content_type || 'text';
             document.getElementById('lesson-duration').value = lesson.duration || '';
-            document.getElementById('lesson-content').value = lesson.content || '';
             document.getElementById('lesson-lsc-url').value = lesson.lsc_video_url || '';
+            document.getElementById('lesson-transcript').value = lesson.transcript || '';
             
             // Trigger type change logic
             updateLessonUI(lesson.content_type || 'text');
@@ -613,6 +617,7 @@ export const AdminCourses = {
                     content_type: contentType,
                     content: content,
                     lsc_video_url: document.getElementById('lesson-lsc-url').value,
+                    transcript: document.getElementById('lesson-transcript').value,
                     duration: document.getElementById('lesson-duration').value,
                     position: mod?.lessons?.length || 0
                 };

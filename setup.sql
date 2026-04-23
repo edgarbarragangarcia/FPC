@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS lessons (
     title TEXT NOT NULL,
     content_type TEXT DEFAULT 'text',
     content TEXT,
+    transcript TEXT,
     duration TEXT,
     position INT DEFAULT 0,
     lsc_video_url TEXT,
