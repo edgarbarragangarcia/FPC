@@ -50,9 +50,9 @@ export const CoursePlayer = {
                                         <span class="w-6 h-6 bg-secondary text-white rounded-md flex items-center justify-center text-[10px] font-black shrink-0">${mi + 1}</span>
                                         <span class="font-bold text-sm text-primary text-left group-hover:text-[#0052b4] transition-colors">${mod.title}</span>
                                     </div>
-                                    <span id="mod-icon-${mi}" class="material-symbols-outlined text-primary transition-transform duration-300 ${mi === 0 ? 'rotate-180' : ''}">expand_more</span>
+                                    <span id="mod-icon-${mi}" class="material-symbols-outlined text-primary transition-transform duration-300">expand_more</span>
                                 </button>
-                                <div id="mod-content-${mi}" class="divide-y divide-surface-variant/10 ${mi === 0 ? '' : 'hidden'}">
+                                <div id="mod-content-${mi}" class="divide-y divide-surface-variant/10 hidden">
                                     ${(mod.lessons || []).map(lesson => `
                                         <button 
                                             class="lesson-btn w-full text-left px-8 py-4 hover:bg-primary/5 transition-all flex items-center justify-between group"
@@ -87,7 +87,7 @@ export const CoursePlayer = {
                         <span class="font-bold text-xs uppercase tracking-widest">Menú</span>
                     </div>
                 </button>
-                <div class="max-w-4xl mx-auto space-y-8 pb-24">
+                <div id="lesson-wrapper" class="max-w-4xl mx-auto space-y-8 pb-24">
                     <!-- Placeholder / Welcome -->
                     <div id="lesson-viewport" class="animate-in fade-in slide-in-from-bottom-4 duration-1000">
                         <div class="bg-surface rounded-3xl p-12 text-center border border-surface-variant shadow-sm aspect-video flex flex-col items-center justify-center">
@@ -280,6 +280,10 @@ export const CoursePlayer = {
                 // Document: buttons are embedded directly next to the viewer
                 meta.classList.add('hidden');  // Hide the default meta section
 
+                // Disable scrolling on the main container so only the iframe scrolls
+                document.getElementById('lesson-scroll-container').classList.add('overflow-hidden');
+                document.getElementById('lesson-wrapper').classList.remove('pb-24');
+
                 let viewerUrl = url;
                 const isOfficeDoc = url.toLowerCase().includes('.pptx') || url.toLowerCase().includes('.ppt') || url.toLowerCase().includes('.docx') || url.toLowerCase().includes('.doc');
                 if (isOfficeDoc) {
@@ -287,9 +291,9 @@ export const CoursePlayer = {
                 }
 
                 viewport.innerHTML = `
-                    <div class="space-y-4">
+                    <div class="flex flex-col h-[calc(100vh-6rem)] md:h-[calc(100vh-8rem)]">
                         <!-- Title + Action Bar -->
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30 bg-[#fbf9f8]/95 backdrop-blur-md p-4 -mx-4 rounded-xl shadow-sm border-b border-surface-variant/50">
+                        <div class="shrink-0 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface p-4 rounded-xl shadow-sm border border-surface-variant/50 mb-4 z-30">
                             <div>
                                 <h1 class="text-2xl font-headline font-bold text-primary mb-1">${title}</h1>
                                 <p class="text-sm font-bold text-secondary flex items-center gap-2">
@@ -311,7 +315,7 @@ export const CoursePlayer = {
                         </div>
 
                         <!-- Document Viewer -->
-                        <div class="w-full h-[75vh] rounded-2xl overflow-hidden shadow-2xl border border-surface-variant bg-white">
+                        <div class="w-full flex-1 rounded-2xl overflow-hidden shadow-2xl border border-surface-variant bg-white min-h-0">
                             <iframe 
                                 src="${viewerUrl}" 
                                 class="w-full h-full border-none"
@@ -435,6 +439,28 @@ export const CoursePlayer = {
                 });
 
 
+            } else if (type === 'text') {
+                viewport.innerHTML = ``;
+                meta.classList.remove('hidden');
+
+                // Re-enable scrolling in case we came from a PDF
+                document.getElementById('lesson-scroll-container').classList.remove('overflow-hidden');
+                document.getElementById('lesson-wrapper').classList.add('pb-24');
+
+                // If content is just raw text, we show it directly.
+                contentEl.classList.remove('hidden');
+                contentEl.innerHTML = text || 'Sin contenido de texto.';
+
+                // Update TTS button state
+                const readBtn = document.getElementById('btn-read-aloud');
+                if (readBtn) {
+                    if (!currentTranscript) {
+                        readBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                    } else {
+                        readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    }
+                }
+                bindReadAloudBtn();
             } else {
                 viewport.innerHTML = `
                     <div class="bg-surface rounded-3xl p-12 text-center border border-surface-variant shadow-sm aspect-video flex flex-col items-center justify-center">
