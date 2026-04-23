@@ -343,8 +343,8 @@ export const CoursePlayer = {
 
                 extractDocumentText(url).then(extractedText => {
                     const readBtn = document.getElementById('btn-read-aloud');
-                    // Fallback to the existing transcript or text if extraction fails
-                    currentTranscript = extractedText || transcript || text || title || '';
+                    // Fallback to the existing transcript or title if extraction fails (do NOT use text as it contains the URL for PDFs)
+                    currentTranscript = extractedText || transcript || title || '';
                     
                     if (currentTranscript) {
                         if (readBtn) {
