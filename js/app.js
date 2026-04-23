@@ -46,6 +46,7 @@ const initAppPromise = (async () => {
 })();
 
 const routes = {
+    // Platform Logic v2.2 - Layout Stabilization
     '/': Home,
     '/cursos': Courses,
     '/impacto': Mission,
@@ -90,18 +91,21 @@ const router = async () => {
         if (path.startsWith('/admin') || path === '/dashboard' || path === '/curso') {
             document.querySelector('footer')?.classList.add('hidden');
             
-            // Fixed height layouts
-            view.classList.add('fixed', 'top-[128px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
+            // Layout Estático e Independiente
+            view.classList.add('fixed', 'top-[80px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
             document.body.classList.add('h-screen', 'overflow-hidden');
+            document.documentElement.classList.add('h-screen', 'overflow-hidden');
             
             if (path.startsWith('/admin')) {
                 content = AdminLayout.render(content);
             }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
-            // Public pages need top padding to clear the fixed header + their own internal padding
-            view.style.paddingTop = '128px';
+            // Public pages start exactly below the 80px navbar
+            view.style.paddingTop = '80px';
             view.classList.add('p-6', 'md:px-12', 'md:pb-12');
+            document.body.classList.remove('h-screen', 'overflow-hidden');
+            document.documentElement.classList.remove('h-screen', 'overflow-hidden');
         }
 
         // Immediate Swap

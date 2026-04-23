@@ -19,17 +19,17 @@ export const CoursePlayer = {
 
         return `
         <div class="h-full flex flex-col md:flex-row bg-surface overflow-hidden">
-            <!-- Sidebar: Curriculum Navigation -->
-            <aside class="w-full md:w-[340px] h-[40%] md:h-full bg-surface border-r-2 border-surface-variant flex flex-col z-10 relative shrink-0 shadow-xl">
+            <!-- Sidebar: Static & Independent Scroll -->
+            <aside class="w-full md:w-80 h-[300px] md:h-full bg-surface border-r border-surface-variant flex flex-col z-10 relative shrink-0">
                 <!-- Static Sidebar Header -->
-                <div class="shrink-0 p-6 bg-primary text-white border-b-2 border-primary-dark z-20">
+                <div class="shrink-0 p-6 bg-primary text-white border-b border-white/10 z-20">
                     <div class="flex items-center gap-3 mb-3">
                         <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
                             <span class="material-symbols-outlined text-sm">arrow_back</span>
                         </a>
                         <span class="text-[9px] font-black uppercase tracking-[0.25em] opacity-60">Currículo del curso</span>
                     </div>
-                    <h2 class="text-lg font-headline font-bold leading-tight drop-shadow-sm">${course.title}</h2>
+                    <h2 class="text-base font-headline font-bold leading-tight drop-shadow-sm">${course.title}</h2>
                 </div>
 
                 <!-- Scrollable Lesson List -->
@@ -64,8 +64,8 @@ export const CoursePlayer = {
                 </div>
             </aside>
 
-            <!-- Main Content: Lesson Player -->
-            <main id="lesson-scroll-container" class="flex-1 bg-surface-variant/10 overflow-y-auto p-6 lg:p-12 h-1/2 md:h-full custom-scrollbar">
+            <!-- Main Content Area: Independent Scroll -->
+            <main id="lesson-scroll-container" class="flex-1 h-full overflow-y-auto bg-surface-variant/10 p-6 lg:p-12 custom-scrollbar">
                 <div class="max-w-4xl mx-auto space-y-8 pb-24">
                     <!-- Placeholder / Welcome -->
                     <div id="lesson-viewport" class="animate-in fade-in slide-in-from-bottom-4 duration-1000">
