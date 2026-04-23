@@ -44,11 +44,11 @@ export const CoursePlayer = {
                                         <button 
                                             class="lesson-btn w-full text-left px-8 py-4 hover:bg-primary/5 transition-all flex items-center justify-between group"
                                             data-lesson-id="${lesson.id}"
-                                            onclick="window.loadLesson('${lesson.id}', '${lesson.type}', '${lesson.content_url || ''}', \`${lesson.title}\`, \`${lesson.content || ''}\`)"
+                                            onclick="window.loadLesson('${lesson.id}', '${lesson.content_type}', '${lesson.content || ''}', \`${lesson.title}\`, \`${lesson.content || ''}\`)"
                                         >
                                             <div class="flex items-center gap-4">
                                                 <span class="material-symbols-outlined text-lg text-on-surface/30 group-hover:text-primary transition-colors">
-                                                    ${lesson.type === 'video' ? 'play_circle' : lesson.type === 'pdf' ? 'picture_as_pdf' : 'article'}
+                                                    ${lesson.content_type === 'video' ? 'play_circle' : lesson.content_type === 'pdf' ? 'picture_as_pdf' : 'article'}
                                                 </span>
                                                 <span class="text-sm font-medium text-on-surface/70 group-hover:text-primary transition-colors">${lesson.title}</span>
                                             </div>
