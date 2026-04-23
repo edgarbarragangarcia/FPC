@@ -48,7 +48,7 @@ export const CoursePlayer = {
                                         >
                                             <div class="flex items-center gap-4">
                                                 <span class="material-symbols-outlined text-lg text-on-surface/30 group-hover:text-primary transition-colors">
-                                                    ${lesson.type === 'video' ? 'play_circle' : 'article'}
+                                                    ${lesson.type === 'video' ? 'play_circle' : lesson.type === 'pdf' ? 'picture_as_pdf' : 'article'}
                                                 </span>
                                                 <span class="text-sm font-medium text-on-surface/70 group-hover:text-primary transition-colors">${lesson.title}</span>
                                             </div>
@@ -133,6 +133,23 @@ export const CoursePlayer = {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                         </iframe>
+                    </div>
+                `;
+                contentEl.classList.add('hidden');
+            } else if (type === 'pdf') {
+                viewport.innerHTML = `
+                    <div class="w-full h-[80vh] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-white">
+                        <iframe 
+                            src="${url}" 
+                            class="w-full h-full border-none"
+                            title="Documento PDF">
+                        </iframe>
+                    </div>
+                    <div class="mt-4 flex justify-center">
+                        <a href="${url}" target="_blank" class="text-primary font-bold flex items-center gap-2 hover:underline">
+                            <span class="material-symbols-outlined">download</span>
+                            Descargar PDF original
+                        </a>
                     </div>
                 `;
                 contentEl.classList.add('hidden');
