@@ -278,11 +278,24 @@ export const CoursePlayer = {
                 // Extract text from PDF or PPTX
                 const extractDocumentText = async (docUrl) => {
                     try {
-                        const response = await fetch(docUrl);
+                        let fetchUrl = docUrl;
+                        
+                        // Convert Google Drive viewer links to direct download links
+                        const gdriveMatch = docUrl.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+                        if (gdriveMatch) {
+                            fetchUrl = `https://drive.google.com/uc?export=download&id=${gdriveMatch[1]}`;
+                        }
+                        
+                        // Bypass CORS for external URLs (non-Supabase)
+                        if (fetchUrl.startsWith('http') && !fetchUrl.includes('supabase.co')) {
+                            fetchUrl = `https://corsproxy.io/?${encodeURIComponent(fetchUrl)}`;
+                        }
+
+                        const response = await fetch(fetchUrl);
                         if (!response.ok) throw new Error(`HTTP ${response.status}`);
                         const arrayBuffer = await response.arrayBuffer();
                         
-                        // Check extension
+                        // Check extension based on original URL
                         const isPptx = docUrl.toLowerCase().includes('.pptx');
                         
                         if (isPptx) {
