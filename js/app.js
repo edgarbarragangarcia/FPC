@@ -74,8 +74,8 @@ const router = async () => {
         const routePath = path.split('?')[0];
         const component = routes[routePath] || Home;
         // Pre-fetch specific data if needed
-        if (path === '/admin/cursos') await DB.fetchCourses();
-        if (path === '/admin/usuarios') await DB.fetchUsers();
+        if (routePath === '/admin/cursos') await DB.fetchCourses();
+        if (routePath === '/admin/usuarios') await DB.fetchUsers();
 
         let content = await component.render();
 
@@ -88,7 +88,7 @@ const router = async () => {
         view.className = '';
         view.style = '';
 
-        if (path.startsWith('/admin') || path === '/dashboard' || path === '/curso') {
+        if (routePath.startsWith('/admin') || routePath === '/dashboard' || routePath === '/curso') {
             document.querySelector('footer')?.classList.add('hidden');
 
             // Layout Estático e Independiente
@@ -96,13 +96,13 @@ const router = async () => {
             document.body.classList.add('h-screen', 'overflow-hidden');
             document.documentElement.classList.add('h-screen', 'overflow-hidden');
 
-            if (path.startsWith('/admin')) {
+            if (routePath.startsWith('/admin')) {
                 content = AdminLayout.render(content);
             }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
             
-            if (path === '/cursos') {
+            if (routePath === '/cursos') {
                 // Tight offset: navbar height (~72px) + minimal breathing room
                 view.style.paddingTop = '80px';
                 view.className = 'animate-in fade-in duration-500'; 
@@ -120,7 +120,7 @@ const router = async () => {
         view.innerHTML = content;
 
         // Post-render logic
-        if (path.startsWith('/admin') && AdminLayout.afterRender) {
+        if (routePath.startsWith('/admin') && AdminLayout.afterRender) {
             await AdminLayout.afterRender();
         }
         if (component.afterRender) await component.afterRender();
