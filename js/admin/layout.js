@@ -12,22 +12,12 @@ export const AdminLayout = {
         ];
 
         return `
-        <div class="flex flex-col lg:flex-row h-screen bg-surface overflow-hidden">
-            <!-- Mobile Admin Header -->
-            <header class="lg:hidden bg-surface/90 backdrop-blur-md border-b border-surface-variant p-4 flex justify-between items-center z-[110] shrink-0">
-                <div class="flex flex-col">
-                    <span class="font-headline font-extrabold text-primary text-lg leading-none">Admin Panel</span>
-                    <span class="text-[9px] font-bold text-secondary uppercase tracking-[0.2em] mt-1">LMS Promover</span>
-                </div>
-                <button id="toggle-admin-menu" class="p-2 hover:bg-surface-variant rounded-full text-primary transition-colors">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
-            </header>
+        <div class="flex flex-col lg:flex-row h-[calc(100vh-80px)] bg-surface overflow-hidden relative">
 
             <!-- Admin Sidebar (Responsive Drawer) -->
-            <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-[120] w-72 bg-surface/95 backdrop-blur-2xl border-r border-surface-variant/50 flex flex-col transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 lg:h-screen lg:shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-[120] w-72 bg-surface/95 backdrop-blur-2xl border-r border-surface-variant/50 flex flex-col transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 lg:h-full lg:shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
                 <div class="flex-1 p-8 overflow-y-auto">
-                    <div class="hidden lg:flex flex-col mb-12">
+                    <div class="flex flex-col mb-12">
                         <span class="font-headline font-black text-primary text-2xl tracking-tight leading-none drop-shadow-sm">Admin Panel</span>
                         <span class="text-[10px] font-black text-secondary tracking-[0.25em] uppercase mt-2">LMS Promover</span>
                     </div>
@@ -70,7 +60,7 @@ export const AdminLayout = {
         `;
     },
     afterRender: async () => {
-        const toggleBtn = document.getElementById('toggle-admin-menu');
+        const toggleBtn = document.getElementById('toggle-sidebar');
         const sidebar = document.getElementById('admin-sidebar');
         const backdrop = document.getElementById('admin-sidebar-backdrop');
         const links = document.querySelectorAll('.admin-nav-link');
@@ -94,7 +84,7 @@ export const AdminLayout = {
             };
         }
 
-        if (toggleBtn) {
+        if (toggleBtn && sidebar && backdrop) {
             const openSidebar = () => {
                 backdrop.classList.remove('hidden');
                 setTimeout(() => {

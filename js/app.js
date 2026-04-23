@@ -79,12 +79,17 @@ const router = async () => {
         let content = await component.render();
 
         // Handle Layouts (Admin vs Public)
-        document.querySelector('header')?.classList.remove('hidden'); // Always show header
+        const mainHeader = document.getElementById('main-header');
+        if (mainHeader) mainHeader.classList.remove('hidden');
+        
+        // Account for fixed header height
+        document.body.style.paddingTop = '80px';
         
         if (path.startsWith('/admin')) {
             content = AdminLayout.render(content);
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
+            document.body.classList.add('h-screen', 'overflow-hidden');
         } else if (path === '/dashboard' || path === '/curso' || path === '/login') {
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
