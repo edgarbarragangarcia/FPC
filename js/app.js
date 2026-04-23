@@ -92,6 +92,7 @@ const router = async () => {
             
             // Fixed height layouts
             view.classList.add('fixed', 'top-[128px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
+            document.body.classList.add('h-screen', 'overflow-hidden');
             
             if (path.startsWith('/admin')) {
                 content = AdminLayout.render(content);

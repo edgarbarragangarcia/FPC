@@ -65,7 +65,7 @@ export const CoursePlayer = {
             </aside>
 
             <!-- Main Content: Lesson Player -->
-            <main class="flex-1 bg-surface-variant/10 overflow-y-auto p-6 lg:p-12 h-1/2 md:h-full custom-scrollbar">
+            <main id="lesson-scroll-container" class="flex-1 bg-surface-variant/10 overflow-y-auto p-6 lg:p-12 h-1/2 md:h-full custom-scrollbar">
                 <div class="max-w-4xl mx-auto space-y-8 pb-24">
                     <!-- Placeholder / Welcome -->
                     <div id="lesson-viewport" class="animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -188,7 +188,8 @@ export const CoursePlayer = {
                 }
             });
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const scrollContainer = document.getElementById('lesson-scroll-container');
+            if (scrollContainer) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         // TTS Logic
