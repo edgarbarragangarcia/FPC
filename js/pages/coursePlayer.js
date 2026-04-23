@@ -245,37 +245,73 @@ export const CoursePlayer = {
                     </div>
                 `;
 
-                // Extract text from PDF using PDF.js
-                const extractPdfText = async (pdfUrl) => {
-                    if (!window.pdfjsLib) {
-                        console.warn('PDF.js not loaded');
-                        return null;
-                    }
+                // Extract text from PDF or PPTX
+                const extractDocumentText = async (docUrl) => {
                     try {
-                        // Fetch the PDF as binary data to avoid CORS issues with PDF.js URL loading
-                        const response = await fetch(pdfUrl);
+                        const response = await fetch(docUrl);
                         if (!response.ok) throw new Error(`HTTP ${response.status}`);
                         const arrayBuffer = await response.arrayBuffer();
                         
-                        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                        let fullText = '';
-                        for (let i = 1; i <= pdf.numPages; i++) {
-                            const page = await pdf.getPage(i);
-                            const content = await page.getTextContent();
-                            const pageText = content.items.map(item => item.str).join(' ');
-                            fullText += pageText + '\n\n';
+                        // Check extension
+                        const isPptx = docUrl.toLowerCase().includes('.pptx');
+                        
+                        if (isPptx) {
+                            if (!window.JSZip) {
+                                console.warn('JSZip not loaded');
+                                return null;
+                            }
+                            const zip = await JSZip.loadAsync(arrayBuffer);
+                            let fullText = '';
+                            
+                            // Find all slide XML files
+                            const slideFiles = Object.keys(zip.files).filter(name => name.startsWith('ppt/slides/slide') && name.endsWith('.xml'));
+                            
+                            // Sort by slide number to read in order
+                            slideFiles.sort((a, b) => {
+                                const numA = parseInt(a.match(/\d+/) ? a.match(/\d+/)[0] : 0);
+                                const numB = parseInt(b.match(/\d+/) ? b.match(/\d+/)[0] : 0);
+                                return numA - numB;
+                            });
+
+                            for (const filename of slideFiles) {
+                                const xmlContent = await zip.file(filename).async("string");
+                                
+                                // Extract text from <a:t> tags
+                                const textMatches = xmlContent.match(/<a:t>.*?<\/a:t>/g) || [];
+                                const slideText = textMatches.map(match => {
+                                    return match.replace(/<\/?a:t>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+                                }).join(' ');
+                                
+                                if (slideText) fullText += slideText + '\n\n';
+                            }
+                            return fullText.trim() || null;
+                            
+                        } else {
+                            // PDF
+                            if (!window.pdfjsLib) {
+                                console.warn('PDF.js not loaded');
+                                return null;
+                            }
+                            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                            let fullText = '';
+                            for (let i = 1; i <= pdf.numPages; i++) {
+                                const page = await pdf.getPage(i);
+                                const content = await page.getTextContent();
+                                const pageText = content.items.map(item => item.str).join(' ');
+                                fullText += pageText + '\n\n';
+                            }
+                            return fullText.trim() || null;
                         }
-                        return fullText.trim() || null;
                     } catch (err) {
-                        console.warn('PDF text extraction failed:', err);
+                        console.warn('Document text extraction failed:', err);
                         return null;
                     }
                 };
 
-                extractPdfText(url).then(pdfText => {
+                extractDocumentText(url).then(extractedText => {
                     const readBtn = document.getElementById('btn-read-aloud');
-                    if (pdfText) {
-                        currentTranscript = pdfText;
+                    if (extractedText) {
+                        currentTranscript = extractedText;
                         if (readBtn) {
                             readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>Lectura por voz';
                             readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
