@@ -46,7 +46,7 @@ const initAppPromise = (async () => {
 })();
 
 const routes = {
-    // Platform Logic v2.2 - Layout Stabilization
+    // Platform Logic v2.4 - Static Sidebar Deployment
     '/': Home,
     '/cursos': Courses,
     '/impacto': Mission,

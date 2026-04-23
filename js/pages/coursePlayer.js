@@ -20,7 +20,7 @@ export const CoursePlayer = {
         return `
         <div class="h-full flex flex-col md:flex-row bg-surface overflow-hidden">
             <!-- Sidebar: Static & Independent Scroll -->
-            <aside class="w-full md:w-80 h-[300px] md:h-full bg-surface border-r border-surface-variant flex flex-col z-10 relative shrink-0">
+            <aside class="w-full md:w-80 h-[300px] md:h-full bg-slate-50 border-r border-surface-variant flex flex-col z-10 relative shrink-0">
                 <!-- Static Sidebar Header -->
                 <div class="shrink-0 p-6 bg-primary text-white border-b border-white/10 z-20">
                     <div class="flex items-center gap-3 mb-3">
