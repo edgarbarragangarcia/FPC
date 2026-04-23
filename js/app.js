@@ -91,7 +91,7 @@ const router = async () => {
             document.querySelector('footer')?.classList.add('hidden');
             
             // Fixed height layouts
-            view.classList.add('fixed', 'top-[80px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
+            view.classList.add('fixed', 'top-[104px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
             
             if (path.startsWith('/admin')) {
                 content = AdminLayout.render(content);
@@ -99,7 +99,7 @@ const router = async () => {
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
             // Public pages need top padding to clear the fixed header + their own internal padding
-            view.style.paddingTop = '80px';
+            view.style.paddingTop = '104px';
             view.classList.add('p-6', 'md:px-12', 'md:pb-12');
         }
 
