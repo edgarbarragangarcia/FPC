@@ -121,7 +121,18 @@ export const CoursePlayer = {
             // Set transcript for TTS (fallback to text if transcript is empty and type is text)
             currentTranscript = transcript || (type === 'text' ? text : '');
             if (window.speechSynthesis) window.speechSynthesis.cancel();
-            document.getElementById('btn-read-aloud')?.classList.toggle('hidden', !currentTranscript);
+            
+            // Always show the button if it's a valid content type, but update its appearance if empty
+            const readBtn = document.getElementById('btn-read-aloud');
+            if (readBtn) {
+                if (!currentTranscript) {
+                    readBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                    readBtn.title = "No hay transcripción disponible para esta lección todavía.";
+                } else {
+                    readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    readBtn.title = "Escuchar contenido de la lección";
+                }
+            }
 
             meta.classList.remove('hidden');
             titleEl.innerText = title;
