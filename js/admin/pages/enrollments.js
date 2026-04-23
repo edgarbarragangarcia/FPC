@@ -71,7 +71,7 @@ export const AdminEnrollments = {
     },
     afterRender: async () => {
         window.deleteEnrollment = async (courseId, userId) => {
-            if (confirm('¿Eliminar esta inscripción?')) {
+            UI.confirm('¿Borrar Inscripción?', 'Esta acción eliminará el registro de inscripción del alumno.', async () => {
                 try {
                     const result = await DB.unenrollCourse(courseId, userId);
                     if (result.status === 'success') {
@@ -79,9 +79,9 @@ export const AdminEnrollments = {
                         location.reload();
                     }
                 } catch (e) {
-                    alert('Error al eliminar: ' + e.message);
+                    UI.alert('Error', 'No se pudo eliminar la inscripción: ' + e.message, 'error');
                 }
-            }
+            });
         };
     }
 };

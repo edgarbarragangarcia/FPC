@@ -166,7 +166,7 @@ export const StudentDashboard = {
                         
                         // Notify user
                         if (!window.state.lscEnabled) {
-                            alert('Este curso tiene contenido en Lengua de Señas. Actívalo en el menú de accesibilidad.');
+                            UI.alert('Contenido Accesible', 'Este curso incluye videos en Lengua de Señas (LSC). Puedes activarlo en tu menú de ajustes de accesibilidad.', 'info');
                         }
                     }
                 }
@@ -175,14 +175,14 @@ export const StudentDashboard = {
         // Handle Unenrollment
         document.querySelectorAll('.btn-unenroll').forEach(btn => {
             btn.onclick = async () => {
-                if (confirm('¿Estás seguro que deseas darte de baja de este curso? Se perderá tu progreso.')) {
+                UI.confirm('Darme de baja', '¿Estás seguro que deseas retirarte de este curso? Se perderá todo tu progreso acumulado.', async () => {
                     try {
                         await DB.unenrollCourse(btn.dataset.id, window.state.user.id);
-                        window.location.reload(); // Refresh to update list
+                        location.reload(); // Refresh to update list
                     } catch (e) {
-                        alert('No se pudo procesar la baja. Intenta de nuevo.');
+                        UI.alert('Error', 'No pudimos procesar tu solicitud de baja. Por favor intenta más tarde.', 'error');
                     }
-                }
+                });
             };
         });
 

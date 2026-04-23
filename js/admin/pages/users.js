@@ -132,7 +132,7 @@ export const AdminUsers = {
 
         window.openUserModal = (id) => {
             const user = users.find(u => u.id == id);
-            if(!user) return alert('Usuario no encontrado. Por favor recarga la página.');
+            if(!user) return UI.alert('Atención', 'Usuario no encontrado en la lista actual.', 'error');
             currentUserEditing = user.id;
 
             nameInput.value = user.name || '';
@@ -150,21 +150,22 @@ export const AdminUsers = {
 
         window.deleteUserButton = async (btnElement, id) => {
             const user = users.find(u => u.id == id);
-            if (!user) return alert('Usuario no encontrado');
+            if (!user) return UI.alert('Aviso', 'Usuario no encontrado', 'error');
 
-            if (confirm(`¿Estás seguro de eliminar el perfil de ${user.name}? (El usuario no podrá entrar al sistema)`)) {
+            UI.confirm('Eliminar Perfil', `¿Estás seguro de eliminar a ${user.name}? Perderá el acceso permanentemente.`, async () => {
                 const originalHTML = btnElement.innerHTML;
                 btnElement.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span>';
                 try {
                     await DB.deleteUser(id);
                     await DB.fetchUsers(); // Refresh
                     window.dispatchEvent(new Event('hashchange')); // Reload panel
+                    UI.alert('Usuario Eliminado', 'El perfil ha sido removido exitosamente.', 'success');
                 } catch (err) {
-                    alert("Error al eliminar. Revisa si tienes permisos.");
+                    UI.alert('Error', "No se pudo eliminar el usuario. Revisa tus permisos de administrador.", 'error');
                     console.error(err);
                     btnElement.innerHTML = originalHTML;
                 }
-            }
+            });
         };
 
         const closeModal = () => {
@@ -205,7 +206,7 @@ export const AdminUsers = {
 
         // New User logic (Popup alert)
         document.getElementById('btn-new-user').onclick = () => {
-            alert("Para añadir un usuario, pídele a la persona que se registre en la página principal ('Crear Cuenta'). Luego, puedes venir aquí y cambiar su rol a Administrador si lo deseas.");
+            UI.alert('Cómo agregar usuarios', "Para añadir un usuario, pídele a la persona que se registre en la página principal ('Crear Cuenta'). Luego, podrás encontrarlo aquí para cambiar su rol.", 'info');
         };
     }
 };
