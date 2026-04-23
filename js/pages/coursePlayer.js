@@ -18,11 +18,14 @@ export const CoursePlayer = {
         const modules = await DB.fetchCourseContent(courseId);
 
         return `
-        <div class="h-full flex flex-col md:flex-row bg-surface overflow-hidden">
-            <!-- Sidebar: Static & Independent Scroll -->
-            <aside class="w-full md:w-80 h-[300px] md:h-full bg-slate-50 border-r border-surface-variant flex flex-col z-10 relative shrink-0">
-                <!-- Static Sidebar Header -->
-                <div class="shrink-0 p-6 bg-primary text-white border-b border-white/10 z-20">
+        <div class="course-player-layout">
+            <!-- ============================================= -->
+            <!-- SIDEBAR: Static, fixed, independent column    -->
+            <!-- Never scrolls. Lesson list scrolls internally -->
+            <!-- ============================================= -->
+            <aside class="course-sidebar">
+                <!-- Fixed Header -->
+                <div class="shrink-0 p-6 bg-primary text-white">
                     <div class="flex items-center gap-3 mb-3">
                         <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
                             <span class="material-symbols-outlined text-sm">arrow_back</span>
@@ -32,17 +35,17 @@ export const CoursePlayer = {
                     <h2 class="text-base font-headline font-bold leading-tight drop-shadow-sm">${course.title}</h2>
                 </div>
 
-                <!-- Scrollable Lesson List -->
-                <div class="flex-1 overflow-y-auto custom-scrollbar bg-surface-variant/5">
+                <!-- Lesson List: Only this part scrolls inside the sidebar -->
+                <div class="course-sidebar-lessons">
                     <div class="divide-y divide-surface-variant/30">
                         ${modules.map((mod, mi) => `
                             <div class="module-group">
-                                <div class="px-6 py-4 bg-surface-variant/20 flex items-center gap-3">
-                                    <span class="w-6 h-6 bg-secondary text-white rounded-md flex items-center justify-center text-[10px] font-black">${mi + 1}</span>
+                                <div class="px-6 py-4 bg-surface-variant/20 flex items-center gap-3 sticky top-0 z-10 backdrop-blur-sm">
+                                    <span class="w-6 h-6 bg-secondary text-white rounded-md flex items-center justify-center text-[10px] font-black shrink-0">${mi + 1}</span>
                                     <span class="font-bold text-sm text-primary">${mod.title}</span>
                                 </div>
                                 <div class="divide-y divide-surface-variant/10">
-                                    ${(mod.lessons || []).map((lesson, li) => `
+                                    ${(mod.lessons || []).map(lesson => `
                                         <button 
                                             class="lesson-btn w-full text-left px-8 py-4 hover:bg-primary/5 transition-all flex items-center justify-between group"
                                             data-lesson-id="${lesson.id}"
@@ -64,8 +67,11 @@ export const CoursePlayer = {
                 </div>
             </aside>
 
-            <!-- Main Content Area: Independent Scroll -->
-            <main id="lesson-scroll-container" class="flex-1 h-full overflow-y-auto bg-surface-variant/10 p-6 lg:p-12 custom-scrollbar">
+            <!-- ============================================= -->
+            <!-- CONTENT: Scrollable column, independent       -->
+            <!-- Scrolls vertically. Sidebar stays fixed.      -->
+            <!-- ============================================= -->
+            <main id="lesson-scroll-container" class="course-content">
                 <div class="max-w-4xl mx-auto space-y-8 pb-24">
                     <!-- Placeholder / Welcome -->
                     <div id="lesson-viewport" class="animate-in fade-in slide-in-from-bottom-4 duration-1000">

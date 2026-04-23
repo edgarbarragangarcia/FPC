@@ -95,3 +95,80 @@ p {
         padding-right: 1.5rem;
     }
 }
+
+/* ========================================= */
+/* Course Player: Two-Column Layout          */
+/* Sidebar = static | Content = scrollable   */
+/* ========================================= */
+
+.course-player-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Sidebar: static, never scrolls as a whole */
+.course-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 260px;           /* Fixed height on mobile */
+    background: rgb(var(--color-surface));
+    border-right: none;
+    border-bottom: 1px solid rgb(var(--color-surface-variant));
+    flex-shrink: 0;
+    overflow: hidden;        /* The aside itself never scrolls */
+    z-index: 10;
+    position: relative;
+}
+
+/* Only the lesson list inside the sidebar scrolls */
+.course-sidebar-lessons {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;           /* Required for flex child scroll */
+}
+
+/* Content area: scrolls vertically, fills remaining space */
+.course-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem;
+    background: rgb(var(--color-surface-variant) / 0.1);
+    min-height: 0;           /* Required for flex child scroll */
+}
+
+/* Desktop: side-by-side two-column layout */
+@media (min-width: 768px) {
+    .course-player-layout {
+        flex-direction: row;
+    }
+
+    .course-sidebar {
+        width: 300px;
+        height: 100%;        /* Full height on desktop */
+        border-bottom: none;
+        border-right: 1px solid rgb(var(--color-surface-variant));
+    }
+
+    .course-content {
+        padding: 2rem 3rem;
+    }
+}
+
+/* Custom scrollbar for sidebar lessons */
+.course-sidebar-lessons::-webkit-scrollbar {
+    width: 4px;
+}
+
+.course-sidebar-lessons::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-primary) / 0.15);
+    border-radius: 10px;
+}
+
+.course-sidebar-lessons::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-primary) / 0.4);
+}
