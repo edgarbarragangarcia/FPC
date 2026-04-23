@@ -103,8 +103,8 @@ const router = async () => {
             document.querySelector('footer')?.classList.remove('hidden');
             
             if (path === '/cursos') {
-                // Restoration to 128px as per user's highlighted screenshot
-                view.style.paddingTop = '128px';
+                // Tight offset: navbar height (~72px) + minimal breathing room
+                view.style.paddingTop = '80px';
                 view.className = 'animate-in fade-in duration-500'; 
             } else {
                 // Standard padding for other public pages
