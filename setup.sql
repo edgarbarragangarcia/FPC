@@ -27,8 +27,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 3. Función y Trigger para creación automática de perfil (LA UNIÓN REAL)
--- Esto asegura que cada vez que un usuario se registre en Auth, tenga su fila en profiles
+-- 3. Función is_admin y creación automática de perfil
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -38,44 +37,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles 
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Borrar trigger si existe y crearlo
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-
--- 4. Habilitar Seguridad (RLS)
-ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE enrollments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE modules ENABLE ROW LEVEL SECURITY;
-ALTER TABLE lessons ENABLE ROW LEVEL SECURITY;
-
--- 5. Políticas de Acceso (Policies)
--- Borrar si ya existen para evitar errores
-DROP POLICY IF EXISTS "Courses are viewable by everyone" ON courses;
-DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
-DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
-DROP POLICY IF EXISTS "Users can view own enrollments" ON enrollments;
-
--- Cualquiera puede ver cursos
-CREATE POLICY "Courses are viewable by everyone" ON courses FOR SELECT USING (true);
-
--- Usuarios pueden ver su propio perfil
-CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
-
--- Usuarios pueden ver sus propias inscripciones
-CREATE POLICY "Users can view own enrollments" ON enrollments FOR SELECT USING (auth.uid() = profile_id);
-CREATE POLICY "Users can enroll themselves" ON enrollments FOR INSERT WITH CHECK (auth.uid() = profile_id);
-CREATE POLICY "Users can unenroll themselves" ON enrollments FOR DELETE USING (auth.uid() = profile_id);
-
--- 6. Tabla de Logs de Auditoría
-CREATE TABLE IF NOT EXISTS logs (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    message TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
 
 -- 4. Tabla de Inscripciones (Enrollments)
 CREATE TABLE IF NOT EXISTS enrollments (
@@ -109,6 +85,61 @@ CREATE TABLE IF NOT EXISTS lessons (
     lsc_video_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- 7. Tabla de Materiales del Curso
+CREATE TABLE IF NOT EXISTS course_materials (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    course_id BIGINT REFERENCES courses(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    url TEXT NOT NULL,
+    file_type TEXT DEFAULT 'pdf',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 8. Tabla de Logs de Auditoría
+CREATE TABLE IF NOT EXISTS logs (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    message TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 9. Habilitar Seguridad (RLS)
+ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE enrollments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE modules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lessons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE course_materials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE logs ENABLE ROW LEVEL SECURITY;
+
+-- 10. Políticas de Acceso (Policies)
+DROP POLICY IF EXISTS "Courses are viewable by everyone" ON courses;
+CREATE POLICY "Courses are viewable by everyone" ON courses FOR SELECT USING (true);
+CREATE POLICY "Admins can do everything on courses" ON courses FOR ALL USING (public.is_admin());
+
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Admins can do everything on profiles" ON profiles FOR ALL USING (public.is_admin());
+
+DROP POLICY IF EXISTS "Users can view own enrollments" ON enrollments;
+CREATE POLICY "Users can view own enrollments" ON enrollments FOR SELECT USING (auth.uid() = profile_id);
+CREATE POLICY "Users can enroll themselves" ON enrollments FOR INSERT WITH CHECK (auth.uid() = profile_id);
+CREATE POLICY "Users can unenroll themselves" ON enrollments FOR DELETE USING (auth.uid() = profile_id);
+CREATE POLICY "Admins can do everything on enrollments" ON enrollments FOR ALL USING (public.is_admin());
+
+CREATE POLICY "Everyone can view modules" ON modules FOR SELECT USING (true);
+CREATE POLICY "Admins can do everything on modules" ON modules FOR ALL USING (public.is_admin());
+
+CREATE POLICY "Everyone can view lessons" ON lessons FOR SELECT USING (true);
+CREATE POLICY "Admins can do everything on lessons" ON lessons FOR ALL USING (public.is_admin());
+
+CREATE POLICY "Everyone can view materials" ON course_materials FOR SELECT USING (true);
+CREATE POLICY "Admins can do everything on materials" ON course_materials FOR ALL USING (public.is_admin());
+
+CREATE POLICY "Admins can view logs" ON logs FOR SELECT USING (public.is_admin());
+CREATE POLICY "Admins can insert logs" ON logs FOR INSERT WITH CHECK (public.is_admin());
+
 
 -- 7. Datos Iniciales (Seed)
 -- Nota: Los seeds de profiles y enrollments se omiten porque profiles usa UUID

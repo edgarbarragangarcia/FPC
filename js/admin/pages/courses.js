@@ -173,6 +173,24 @@ export const AdminCourses = {
                                 <h3 class="text-lg font-bold text-on-surface/60">Sin módulos aún</h3>
                                 <p class="text-sm text-on-surface/40 mt-1">Haz clic en "Agregar Módulo" para comenzar a estructurar el curso.</p>
                             </div>
+
+                            <!-- Course General Materials (PDFs) -->
+                            <div class="pt-8 border-t border-surface-variant/50">
+                                <div class="flex justify-between items-center mb-6">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">picture_as_pdf</span>
+                                        <h3 class="text-xl font-bold text-primary text-secondary">Materiales Descargables del Curso</h3>
+                                    </div>
+                                    <label class="bg-secondary/10 hover:bg-secondary/20 text-secondary px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 cursor-pointer transition-all border border-secondary/20">
+                                        <span class="material-symbols-outlined text-lg">upload_file</span> 
+                                        <span>Subir PDF del Curso</span>
+                                        <input type="file" id="course-material-upload" class="hidden" accept=".pdf" />
+                                    </label>
+                                </div>
+                                <div id="materials-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- Materials loaded dynamically -->
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -280,7 +298,10 @@ export const AdminCourses = {
             document.querySelectorAll('.builder-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById(`panel-${tab}`).classList.remove('hidden');
 
-            if (tab === 'content') loadModules();
+            if (tab === 'content') {
+                loadModules();
+                loadMaterials();
+            }
             if (tab === 'publish') loadPublishSummary();
         };
 
@@ -585,6 +606,88 @@ export const AdminCourses = {
                 await loadPublishSummary();
                 alert(status === 'published' ? '¡Curso publicado exitosamente!' : 'Curso guardado como borrador.');
             } catch (e) { alert('Error: ' + e.message); }
+        };
+
+        // --- Course Materials ---
+        async function loadMaterials() {
+            if (!currentCourseId) return;
+            const materials = await DB.fetchMaterials(currentCourseId);
+            renderMaterials(materials);
+        }
+
+        function renderMaterials(materials) {
+            const container = document.getElementById('materials-container');
+            if (!container) return;
+
+            if (materials.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-8 text-center bg-surface/30 rounded-2xl border border-dashed border-surface-variant/50">
+                        <p class="text-xs text-on-surface/40 italic">No hay materiales adicionales cargados para este curso.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = materials.map(mat => `
+                <div class="flex items-center justify-between p-4 bg-surface rounded-2xl border border-surface-variant group hover:border-secondary/30 transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-xl">description</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-on-surface/80 truncate max-w-[150px]">${mat.title}</span>
+                            <span class="text-[10px] text-on-surface/40 uppercase font-medium tracking-tighter">${mat.file_type}</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <a href="${mat.url}" target="_blank" class="p-2 hover:bg-secondary/10 text-secondary rounded-lg transition-all" title="Ver archivo">
+                            <span class="material-symbols-outlined text-lg">visibility</span>
+                        </a>
+                        <button onclick="window.deleteMaterialConfirm(${mat.id})" class="p-2 hover:bg-red-500/10 text-red-400 rounded-lg transition-all" title="Eliminar">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- Material Actions ---
+        document.getElementById('course-material-upload')?.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file || !currentCourseId) return;
+
+            const label = e.target.closest('label');
+            const originalHTML = label.innerHTML;
+            
+            try {
+                label.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> <span>Subiendo...</span>';
+                label.style.pointerEvents = 'none';
+
+                const fileUrl = await DB.uploadFile(file);
+                await DB.saveMaterial({
+                    course_id: currentCourseId,
+                    title: file.name,
+                    url: fileUrl,
+                    file_type: file.name.split('.').pop().toUpperCase()
+                });
+
+                await loadMaterials();
+            } catch (error) {
+                alert('Error al subir material: ' + error.message);
+            } finally {
+                label.innerHTML = originalHTML;
+                label.style.pointerEvents = 'auto';
+                e.target.value = ''; // Reset input
+            }
+        });
+
+        window.deleteMaterialConfirm = async (id) => {
+            if (confirm('¿Eliminar este material del curso?')) {
+                try {
+                    await DB.deleteMaterial(id);
+                    await loadMaterials();
+                } catch (e) { alert('Error: ' + e.message); }
+            }
         };
 
         // --- Delete Course ---

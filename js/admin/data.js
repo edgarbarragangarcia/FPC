@@ -259,6 +259,35 @@ export const DB = {
         return modules;
     },
 
+    // --- Course Materials (Files/PDFs) ---
+    fetchMaterials: async (courseId) => {
+        const { data, error } = await supabase
+            .from('course_materials')
+            .select('*')
+            .eq('course_id', courseId)
+            .order('created_at', { ascending: false });
+        
+        if (error) { console.error('Error fetching materials:', error); return []; }
+        return data;
+    },
+
+    saveMaterial: async (material) => {
+        const { id, ...data } = material;
+        let result;
+        if (id) {
+            result = await supabase.from('course_materials').update(data).eq('id', id);
+        } else {
+            result = await supabase.from('course_materials').insert([data]).select();
+        }
+        if (result.error) throw result.error;
+        return result.data;
+    },
+
+    deleteMaterial: async (id) => {
+        const { error } = await supabase.from('course_materials').delete().eq('id', id);
+        if (error) throw error;
+    },
+
     // --- Storage ---
     uploadFile: async (file) => {
         if (!file) return null;
