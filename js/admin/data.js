@@ -10,6 +10,7 @@ export const DB = {
     _courses: [],
     _users: [],
     _logs: [],
+    _enrollmentsCache: {},
 
     init: async () => {
         // Parallel fetch for maximum speed
