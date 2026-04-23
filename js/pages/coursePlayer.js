@@ -220,8 +220,8 @@ export const CoursePlayer = {
                             </div>
                             <div class="flex gap-3 flex-wrap">
                                 <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95 text-sm">
-                                    <span class="material-symbols-outlined text-lg">volume_up</span>
-                                    Lectura por voz
+                                    <span class="material-symbols-outlined text-lg animate-spin">sync</span>
+                                    Extrayendo texto...
                                 </button>
                                 <a href="${url}" target="_blank" class="bg-primary/10 text-primary px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-primary hover:text-white transition-all shadow-md border-2 border-primary/20 active:scale-95 text-sm">
                                     <span class="material-symbols-outlined text-lg">download</span>
@@ -244,8 +244,38 @@ export const CoursePlayer = {
                         </div>
                     </div>
                 `;
-                // Bind TTS to the newly injected button
-                bindReadAloudBtn();
+
+                // Extract text from PDF using PDF.js, then enable TTS
+                const extractPdfText = async (pdfUrl) => {
+                    if (!window.pdfjsLib) {
+                        console.warn('PDF.js not loaded');
+                        return title; // Fallback to title
+                    }
+                    try {
+                        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+                        let fullText = '';
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            const page = await pdf.getPage(i);
+                            const content = await page.getTextContent();
+                            const pageText = content.items.map(item => item.str).join(' ');
+                            fullText += pageText + '\n\n';
+                        }
+                        return fullText.trim() || title;
+                    } catch (err) {
+                        console.warn('PDF text extraction failed:', err);
+                        return title; // Fallback
+                    }
+                };
+
+                extractPdfText(url).then(pdfText => {
+                    currentTranscript = pdfText;
+                    const readBtn = document.getElementById('btn-read-aloud');
+                    if (readBtn) {
+                        readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>Lectura por voz';
+                        readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    }
+                    bindReadAloudBtn();
+                });
 
             } else {
                 viewport.innerHTML = `
