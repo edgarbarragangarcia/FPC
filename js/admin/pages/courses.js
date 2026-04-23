@@ -245,7 +245,7 @@ export const AdminCourses = {
                                 <select id="lesson-type" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all">
                                     <option value="text">📝 Texto</option>
                                     <option value="video">🎬 Video</option>
-                                    <option value="pdf">📄 PDF</option>
+                                    <option value="pdf">📄 Documento (PDF, PPTX)</option>
                                 </select>
                             </div>
                             <div class="space-y-2">
@@ -254,7 +254,7 @@ export const AdminCourses = {
                             </div>
                         </div>
                         <div id="lesson-file-container" class="hidden space-y-3">
-                            <label class="text-xs font-black uppercase tracking-widest text-secondary/60 ml-1">Archivo del curso (PDFs, Docs)</label>
+                            <label class="text-xs font-black uppercase tracking-widest text-secondary/60 ml-1">Archivo del curso (PDFs, PPTX, Docs)</label>
                             <div id="current-file-indicator" class="hidden flex items-center justify-between p-4 bg-secondary/5 border border-secondary/20 rounded-2xl">
                                 <div class="flex items-center gap-3">
                                     <span class="material-symbols-outlined text-secondary">verified_user</span>
@@ -269,9 +269,9 @@ export const AdminCourses = {
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                     <span class="material-symbols-outlined text-secondary text-4xl mb-2 group-hover:scale-110 transition-transform">cloud_upload</span>
                                     <p id="lesson-file-name" class="text-sm text-secondary font-bold">Haz clic para subir un archivo</p>
-                                    <p class="text-[10px] text-secondary/40 mt-1 uppercase tracking-tighter">Máximo 50MB (PDF, DOCX, ZIP)</p>
+                                    <p class="text-[10px] text-secondary/40 mt-1 uppercase tracking-tighter">Máximo 50MB (PDF, PPTX, DOCX, ZIP)</p>
                                 </div>
-                                <input id="lesson-file" type="file" class="hidden" accept=".pdf,.docx,.zip,.doc" />
+                                <input id="lesson-file" type="file" class="hidden" accept=".pdf,.pptx,.ppt,.docx,.zip,.doc" />
                             </label>
                         </div>
                         <div id="lesson-content-container" class="space-y-2">

@@ -237,8 +237,14 @@ export const CoursePlayer = {
                 bindReadAloudBtn();
 
             } else if (type === 'pdf') {
-                // PDF: buttons are embedded directly next to the viewer
+                // Document: buttons are embedded directly next to the viewer
                 meta.classList.add('hidden');  // Hide the default meta section
+
+                let viewerUrl = url;
+                const isOfficeDoc = url.toLowerCase().includes('.pptx') || url.toLowerCase().includes('.ppt') || url.toLowerCase().includes('.docx') || url.toLowerCase().includes('.doc');
+                if (isOfficeDoc) {
+                    viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+                }
 
                 viewport.innerHTML = `
                     <div class="space-y-4">
@@ -255,7 +261,7 @@ export const CoursePlayer = {
                                 <button id="btn-read-aloud" title="Extrayendo texto..." class="bg-secondary/10 text-secondary p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95 text-sm">
                                     <span class="material-symbols-outlined text-lg animate-spin">sync</span>
                                 </button>
-                                <a href="${url}" target="_blank" title="Descargar PDF" class="bg-primary/10 text-primary p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-md border-2 border-primary/20 active:scale-95 text-sm">
+                                <a href="${url}" target="_blank" title="Descargar Archivo" class="bg-primary/10 text-primary p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-md border-2 border-primary/20 active:scale-95 text-sm">
                                     <span class="material-symbols-outlined text-lg">download</span>
                                 </a>
                                 <button onclick="window.markLessonComplete()" title="Finalizado" class="bg-emerald-600 text-white p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95 text-sm">
@@ -264,12 +270,12 @@ export const CoursePlayer = {
                             </div>
                         </div>
 
-                        <!-- PDF Viewer -->
+                        <!-- Document Viewer -->
                         <div class="w-full h-[75vh] rounded-2xl overflow-hidden shadow-2xl border border-surface-variant bg-white">
                             <iframe 
-                                src="${url}" 
+                                src="${viewerUrl}" 
                                 class="w-full h-full border-none"
-                                title="Documento PDF">
+                                title="Documento">
                             </iframe>
                         </div>
                     </div>
