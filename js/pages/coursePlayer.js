@@ -20,7 +20,7 @@ export const CoursePlayer = {
         return `
         <div class="h-full flex flex-col md:flex-row bg-surface overflow-hidden">
             <!-- Sidebar: Curriculum Navigation -->
-            <aside class="w-full md:w-[340px] bg-surface-variant/10 border-r-2 border-surface-variant/40 flex flex-col h-full z-10 relative shrink-0 shadow-lg">
+            <aside class="w-full md:w-[340px] h-[40%] md:h-full bg-surface border-r-2 border-surface-variant flex flex-col z-10 relative shrink-0 shadow-xl">
                 <!-- Static Sidebar Header -->
                 <div class="shrink-0 p-6 bg-primary text-white border-b-2 border-primary-dark z-20">
                     <div class="flex items-center gap-3 mb-3">
@@ -33,7 +33,7 @@ export const CoursePlayer = {
                 </div>
 
                 <!-- Scrollable Lesson List -->
-                <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <div class="flex-1 overflow-y-auto custom-scrollbar bg-surface-variant/5">
                     <div class="divide-y divide-surface-variant/30">
                         ${modules.map((mod, mi) => `
                             <div class="module-group">
