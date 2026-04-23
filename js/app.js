@@ -16,7 +16,11 @@ import { StudentDashboard } from './pages/studentDashboard.js';
 import { Interpreter } from './components/interpreter.js';
 import { supabase } from './admin/data.js';
 import { i18n } from './i18n.js';
+import { Notifications } from './components/notifications.js';
 window.i18n = i18n;
+
+// Initialize Notifications UI container
+Notifications.init();
 
 // Global State Initialized Early
 window.state = {

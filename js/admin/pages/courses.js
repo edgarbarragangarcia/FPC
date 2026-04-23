@@ -247,28 +247,44 @@ export const AdminCourses = {
                                 <input type="text" id="lesson-duration" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="Ej: 15min">
                             </div>
                         </div>
-                        <div id="lesson-file-container" class="hidden space-y-2">
-                            <label class="text-sm font-bold ml-1 text-secondary">Archivo del curso (PDFs, Docs)</label>
-                            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-secondary/30 rounded-2xl bg-secondary/5 hover:bg-secondary/10 cursor-pointer transition-all group">
+                        <div id="lesson-file-container" class="hidden space-y-3">
+                            <label class="text-xs font-black uppercase tracking-widest text-secondary/60 ml-1">Archivo del curso (PDFs, Docs)</label>
+                            <div id="current-file-indicator" class="hidden flex items-center justify-between p-4 bg-secondary/5 border border-secondary/20 rounded-2xl">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-secondary">verified_user</span>
+                                    <div class="flex flex-col">
+                                        <span class="text-xs font-bold text-secondary">Archivo Cargado</span>
+                                        <span id="current-file-url" class="text-[10px] text-secondary/50 truncate max-w-[200px]">...</span>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="document.getElementById('lesson-file').click()" class="text-[10px] font-black uppercase tracking-wider text-secondary hover:underline">Cambiar</button>
+                            </div>
+                            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-secondary/20 rounded-2xl bg-secondary/5 hover:bg-secondary/10 cursor-pointer transition-all group">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <span class="material-symbols-outlined text-secondary text-3xl mb-2 group-hover:scale-110 transition-transform">cloud_upload</span>
+                                    <span class="material-symbols-outlined text-secondary text-4xl mb-2 group-hover:scale-110 transition-transform">cloud_upload</span>
                                     <p id="lesson-file-name" class="text-sm text-secondary font-bold">Haz clic para subir un archivo</p>
-                                    <p class="text-xs text-secondary/60 mt-1">Máximo 50MB (PDF, DOCX, ZIP)</p>
+                                    <p class="text-[10px] text-secondary/40 mt-1 uppercase tracking-tighter">Máximo 50MB (PDF, DOCX, ZIP)</p>
                                 </div>
                                 <input id="lesson-file" type="file" class="hidden" accept=".pdf,.docx,.zip,.doc" />
                             </label>
                         </div>
                         <div id="lesson-content-container" class="space-y-2">
-                            <label class="text-sm font-bold ml-1">Contenido (URL o texto)</label>
-                            <textarea id="lesson-content" rows="4" class="w-full bg-surface-variant/30 border border-surface-variant rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" placeholder="URL del video, URL del PDF, o escribe el contenido de texto..."></textarea>
+                            <label id="lesson-content-label" class="text-xs font-black uppercase tracking-widest text-on-surface/40 ml-1">Contenido (URL o texto)</label>
+                            <textarea id="lesson-content" rows="3" class="w-full bg-surface-variant/20 border border-surface-variant/50 rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none text-sm" placeholder="URL del video, URL del PDF, o escribe el contenido de texto..."></textarea>
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold ml-1 text-secondary">Video de Intérprete LSC (Opcional)</label>
-                            <div class="flex gap-2">
-                                <div class="w-10 h-10 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center shrink-0">
-                                    <span class="material-symbols-outlined text-lg">back_hand</span>
+                        <div class="pt-4 border-t border-surface-variant/30 space-y-4">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary text-lg">universal_accessibility</span>
+                                <label class="text-xs font-black uppercase tracking-widest text-secondary/80">Accesibilidad Universal</label>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-on-surface/40 ml-1">Video de Intérprete LSC (Opcional)</label>
+                                <div class="flex gap-2">
+                                    <div class="w-12 h-12 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center shrink-0 border border-secondary/20">
+                                        <span class="material-symbols-outlined text-xl">back_hand</span>
+                                    </div>
+                                    <input type="url" id="lesson-lsc-url" class="flex-1 bg-surface-variant/20 border border-surface-variant/50 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="URL embebida de YouTube/Vimeo">
                                 </div>
-                                <input type="url" id="lesson-lsc-url" class="flex-1 bg-secondary/5 border border-secondary/20 rounded-2xl px-4 py-2 text-sm focus:ring-2 focus:ring-secondary/20 outline-none transition-all" placeholder="URL embebida del intérprete (YouTube/Vimeo)">
                             </div>
                         </div>
                         <div class="flex gap-3 pt-2">
@@ -370,7 +386,7 @@ export const AdminCourses = {
                 btn.classList.add('bg-secondary');
                 setTimeout(() => { btn.innerHTML = origText; btn.classList.remove('bg-secondary'); }, 2000);
             } catch (error) {
-                alert('Error al guardar: ' + error.message);
+                UI.alert('Error', 'No pudimos guardar los cambios: ' + error.message, 'error');
             }
         };
 
@@ -459,10 +475,15 @@ export const AdminCourses = {
         };
 
         window.deleteModuleConfirm = async (id) => {
-            if (confirm('¿Eliminar este módulo y todas sus lecciones?')) {
-                try { await DB.deleteModule(id); await loadModules(); }
-                catch (e) { alert('Error: ' + e.message); }
-            }
+            UI.confirm('¿Eliminar Módulo?', 'Esta acción borrará el módulo y todas sus lecciones de forma permanente.', async () => {
+                try { 
+                    await DB.deleteModule(id); 
+                    await loadModules(); 
+                    UI.alert('Módulo eliminado', 'El contenido se ha borrado correctamente.', 'success');
+                } catch (e) { 
+                    UI.alert('Error', 'No se pudo eliminar el módulo: ' + e.message, 'error'); 
+                }
+            });
         };
 
         // --- Lesson Actions ---
@@ -496,10 +517,34 @@ export const AdminCourses = {
 
         function updateLessonUI(type) {
             const fileContainer = document.getElementById('lesson-file-container');
+            const contentLabel = document.getElementById('lesson-content-label');
+            const contentArea = document.getElementById('lesson-content');
+            const fileIndicator = document.getElementById('current-file-indicator');
+            const fileUrl = contentArea.value;
+
             if (type === 'pdf') {
                 fileContainer.classList.remove('hidden');
+                contentLabel.innerText = 'Enlace directo al PDF (Opcional)';
+                contentArea.rows = 1;
+                // If there's already a URL, show the indicator and hide the large textarea if it looks like a supabase URL
+                if (fileUrl && fileUrl.includes('supabase.co')) {
+                    fileIndicator.classList.remove('hidden');
+                    document.getElementById('current-file-url').innerText = fileUrl;
+                    contentArea.parentElement.classList.add('hidden'); // Hide the URL field
+                } else {
+                    fileIndicator.classList.add('hidden');
+                    contentArea.parentElement.classList.remove('hidden');
+                }
+            } else if (type === 'video') {
+                fileContainer.classList.add('hidden');
+                contentLabel.innerText = 'URL del Video (YouTube / Vimeo)';
+                contentArea.rows = 1;
+                contentArea.parentElement.classList.remove('hidden');
             } else {
                 fileContainer.classList.add('hidden');
+                contentLabel.innerText = 'Contenido de la Lección (Texto / HTML)';
+                contentArea.rows = 4;
+                contentArea.parentElement.classList.remove('hidden');
             }
         }
 
@@ -520,10 +565,14 @@ export const AdminCourses = {
         };
 
         window.deleteLessonConfirm = async (id) => {
-            if (confirm('¿Eliminar esta lección?')) {
-                try { await DB.deleteLesson(id); await loadModules(); }
-                catch (e) { alert('Error: ' + e.message); }
-            }
+            UI.confirm('¿Eliminar Lección?', '¿Estás seguro de que deseas borrar esta lección?', async () => {
+                try { 
+                    await DB.deleteLesson(id); 
+                    await loadModules(); 
+                } catch (e) { 
+                    UI.alert('Error', 'No se pudo eliminar la lección: ' + e.message, 'error'); 
+                }
+            });
         };
 
         document.getElementById('lesson-form').onsubmit = async (e) => {
@@ -562,7 +611,7 @@ export const AdminCourses = {
                 window.closeLessonModal();
                 await loadModules();
             } catch (e) { 
-                alert('Error: ' + e.message); 
+                UI.alert('Error', 'Hubo un problema al guardar la lección: ' + e.message, 'error'); 
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = origText;
@@ -600,12 +649,12 @@ export const AdminCourses = {
         }
 
         window.publishCourse = async (status) => {
-            if (!currentCourseId) return alert('Guarda la información del curso primero.');
+            if (!currentCourseId) return UI.alert('Aviso', 'Guarda la información del curso primero antes de publicar.', 'info');
             try {
                 await DB.saveCourse({ id: currentCourseId, status });
                 await loadPublishSummary();
-                alert(status === 'published' ? '¡Curso publicado exitosamente!' : 'Curso guardado como borrador.');
-            } catch (e) { alert('Error: ' + e.message); }
+                UI.alert('Estado Actualizado', status === 'published' ? '¡Curso publicado exitosamente!' : 'Curso guardado como borrador.', 'success');
+            } catch (e) { UI.alert('Error', 'No se pudo actualizar el estado: ' + e.message, 'error'); }
         };
 
         // --- Course Materials ---
@@ -673,7 +722,7 @@ export const AdminCourses = {
 
                 await loadMaterials();
             } catch (error) {
-                alert('Error al subir material: ' + error.message);
+                UI.alert('Error de Carga', 'No se pudo subir el material: ' + error.message, 'error');
             } finally {
                 label.innerHTML = originalHTML;
                 label.style.pointerEvents = 'auto';
@@ -682,20 +731,24 @@ export const AdminCourses = {
         });
 
         window.deleteMaterialConfirm = async (id) => {
-            if (confirm('¿Eliminar este material del curso?')) {
+            UI.confirm('¿Eliminar Material?', '¿Deseas quitar este material del curso?', async () => {
                 try {
                     await DB.deleteMaterial(id);
                     await loadMaterials();
-                } catch (e) { alert('Error: ' + e.message); }
-            }
+                } catch (e) { UI.alert('Error', 'No se pudo eliminar el material: ' + e.message, 'error'); }
+            });
         };
 
         // --- Delete Course ---
         window.deleteCourse = async (id) => {
-            if (confirm('¿Estás seguro de eliminar este curso? Esta acción no se puede deshacer.')) {
-                try { await DB.deleteCourse(id); location.reload(); }
-                catch (e) { alert('Error al eliminar: ' + e.message); }
-            }
+            UI.confirm('¿Eliminar Curso?', '¿Estás completamente seguro? Esta acción eliminará el curso, módulos, lecciones y materiales definitivamente.', async () => {
+                try { 
+                    await DB.deleteCourse(id); 
+                    location.reload(); 
+                } catch (e) { 
+                    UI.alert('Error', 'Error al eliminar: ' + e.message, 'error'); 
+                }
+            });
         };
     }
 };
