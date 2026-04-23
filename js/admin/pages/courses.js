@@ -224,8 +224,8 @@ export const AdminCourses = {
             </div>
 
             <!-- Lesson Editor Modal -->
-            <div id="lesson-modal" class="hidden fixed inset-0 z-[250] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
-                <div class="bg-surface rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-surface-variant">
+            <div id="lesson-modal" class="hidden fixed inset-0 z-[250] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 md:p-6">
+                <div class="bg-surface rounded-3xl p-6 md:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-surface-variant">
                     <div class="flex justify-between items-center mb-6">
                         <h3 id="lesson-modal-title" class="text-2xl font-headline font-bold text-primary">Nueva Lección</h3>
                         <button onclick="window.closeLessonModal()" class="p-2 hover:bg-surface-variant rounded-full transition-all">
