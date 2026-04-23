@@ -19,19 +19,21 @@ export const CoursePlayer = {
 
         return `
         <div class="h-full flex flex-col md:flex-row overflow-hidden animate-in fade-in duration-700">
-            <!-- Sidebar: Modules & Lessons -->
-            <aside class="w-full md:w-80 bg-surface border-r border-surface-variant flex flex-col h-1/2 md:h-full z-10 shadow-xl">
-                <div class="p-6 border-b border-surface-variant bg-primary text-white">
-                    <div class="flex items-center gap-3 mb-2">
-                        <a href="#/dashboard" class="p-2 hover:bg-white/20 rounded-lg transition-all">
-                            <span class="material-symbols-outlined text-lg">arrow_back</span>
+            <!-- Sidebar: Curriculum Navigation -->
+            <aside class="w-full md:w-80 bg-surface border-r border-surface-variant flex flex-col h-full z-10 shadow-2xl relative">
+                <!-- Static Sidebar Header -->
+                <div class="shrink-0 p-6 bg-primary text-white border-b border-white/10 shadow-lg z-20">
+                    <div class="flex items-center gap-3 mb-3">
+                        <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
+                            <span class="material-symbols-outlined text-sm">arrow_back</span>
                         </a>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">En curso</span>
+                        <span class="text-[9px] font-black uppercase tracking-[0.25em] opacity-60">Currículo del curso</span>
                     </div>
-                    <h2 class="text-xl font-headline font-bold leading-tight">${course.title}</h2>
+                    <h2 class="text-lg font-headline font-bold leading-tight drop-shadow-sm">${course.title}</h2>
                 </div>
 
-                <div class="flex-1 overflow-y-auto custom-scrollbar p-0">
+                <!-- Scrollable Lesson List -->
+                <div class="flex-1 overflow-y-auto custom-scrollbar bg-surface-variant/5">
                     <div class="divide-y divide-surface-variant/30">
                         ${modules.map((mod, mi) => `
                             <div class="module-group">
