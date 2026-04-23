@@ -25,14 +25,19 @@ export const CoursePlayer = {
             <!-- ============================================= -->
             <aside class="course-sidebar">
                 <!-- Fixed Header -->
-                <div class="shrink-0 p-6 bg-primary text-white">
-                    <div class="flex items-center gap-3 mb-3">
-                        <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
-                            <span class="material-symbols-outlined text-sm">arrow_back</span>
-                        </a>
-                        <span class="text-[9px] font-black uppercase tracking-[0.25em] opacity-60">Currículo del curso</span>
+                <div class="shrink-0 p-6 bg-primary text-white flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
+                                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                            </a>
+                            <span class="text-[9px] font-black uppercase tracking-[0.25em] opacity-60">Currículo del curso</span>
+                        </div>
+                        <h2 class="text-base font-headline font-bold leading-tight drop-shadow-sm">${course.title}</h2>
                     </div>
-                    <h2 class="text-base font-headline font-bold leading-tight drop-shadow-sm">${course.title}</h2>
+                    <button onclick="window.toggleCourseSidebar()" class="p-2 hover:bg-white/20 rounded-xl transition-all flex items-center justify-center text-white" title="Ocultar menú lateral">
+                        <span class="material-symbols-outlined text-lg">menu_open</span>
+                    </button>
                 </div>
 
                 <!-- Lesson List: Only this part scrolls inside the sidebar -->
@@ -75,12 +80,13 @@ export const CoursePlayer = {
             <!-- Scrolls vertically. Sidebar stays fixed.      -->
             <!-- ============================================= -->
             <main id="lesson-scroll-container" class="course-content relative">
-                <div class="sticky top-0 z-40 mb-6 flex items-center gap-3 bg-surface/80 backdrop-blur-md p-3 rounded-2xl border border-surface-variant w-max shadow-sm">
-                    <button onclick="window.toggleCourseSidebar()" id="sidebar-toggle-btn" class="p-2 bg-white rounded-xl shadow-sm border border-surface-variant hover:bg-primary hover:text-white transition-all flex items-center justify-center text-primary" title="Alternar menú lateral">
-                        <span class="material-symbols-outlined text-lg">menu_open</span>
-                    </button>
-                    <span class="font-bold text-xs text-on-surface/50 uppercase tracking-widest pr-2" id="sidebar-toggle-text">Ocultar Menú</span>
-                </div>
+                <!-- Floating Open Menu Button (only visible when sidebar is hidden) -->
+                <button onclick="window.toggleCourseSidebar()" id="sidebar-open-btn" class="hidden sticky top-0 mb-6 z-40 p-3 bg-surface rounded-2xl shadow-sm border border-surface-variant hover:bg-primary hover:text-white transition-all text-primary w-max" title="Mostrar menú lateral">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg">menu</span>
+                        <span class="font-bold text-xs uppercase tracking-widest">Menú</span>
+                    </div>
+                </button>
                 <div class="max-w-4xl mx-auto space-y-8 pb-24">
                     <!-- Placeholder / Welcome -->
                     <div id="lesson-viewport" class="animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -139,17 +145,14 @@ export const CoursePlayer = {
 
         window.toggleCourseSidebar = () => {
             const sidebar = document.querySelector('.course-sidebar');
-            const btnIcon = document.querySelector('#sidebar-toggle-btn span');
-            const btnText = document.querySelector('#sidebar-toggle-text');
+            const openBtn = document.getElementById('sidebar-open-btn');
             
             if (sidebar.classList.contains('hidden')) {
                 sidebar.classList.remove('hidden');
-                btnIcon.innerText = 'menu_open';
-                btnText.innerText = 'Ocultar Menú';
+                if (openBtn) openBtn.classList.add('hidden');
             } else {
                 sidebar.classList.add('hidden');
-                btnIcon.innerText = 'menu';
-                btnText.innerText = 'Mostrar Menú';
+                if (openBtn) openBtn.classList.remove('hidden');
             }
         };
         
