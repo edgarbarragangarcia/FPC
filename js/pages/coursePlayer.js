@@ -95,13 +95,11 @@ export const CoursePlayer = {
                                 </p>
                             </div>
                             <div class="flex gap-3">
-                                <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-6 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95">
+                                <button id="btn-read-aloud" title="Lectura por voz" class="bg-secondary/10 text-secondary p-3.5 rounded-2xl font-bold flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95">
                                     <span class="material-symbols-outlined">volume_up</span>
-                                    Lectura por voz
                                 </button>
-                                <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95">
+                                <button onclick="window.markLessonComplete()" title="Marcar como finalizado" class="bg-emerald-600 text-white p-3.5 rounded-2xl font-bold flex items-center justify-center hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95">
                                     <span class="material-symbols-outlined">check_circle</span>
-                                    Marcar como finalizado
                                 </button>
                             </div>
                         </div>
@@ -127,7 +125,8 @@ export const CoursePlayer = {
                 if (isReading) {
                     window.speechSynthesis.cancel();
                     isReading = false;
-                    readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>Lectura por voz';
+                    readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>';
+                    readBtn.title = 'Lectura por voz';
                     readBtn.classList.replace('bg-secondary', 'bg-secondary/10');
                     readBtn.classList.replace('text-white', 'text-secondary');
                 } else {
@@ -138,7 +137,8 @@ export const CoursePlayer = {
                     let currentChunkIndex = 0;
                     
                     isReading = true;
-                    readBtn.innerHTML = '<span class="material-symbols-outlined">stop_circle</span>Detener lectura';
+                    readBtn.innerHTML = '<span class="material-symbols-outlined">stop_circle</span>';
+                    readBtn.title = 'Detener lectura';
                     readBtn.classList.replace('bg-secondary/10', 'bg-secondary');
                     readBtn.classList.replace('text-secondary', 'text-white');
 
@@ -147,7 +147,8 @@ export const CoursePlayer = {
                             // Finished reading all chunks or cancelled
                             isReading = false;
                             if (readBtn) {
-                                readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>Lectura por voz';
+                                readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>';
+                                readBtn.title = 'Lectura por voz';
                                 readBtn.classList.replace('bg-secondary', 'bg-secondary/10');
                                 readBtn.classList.replace('text-white', 'text-secondary');
                             }
@@ -251,17 +252,14 @@ export const CoursePlayer = {
                                 </p>
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95 text-sm">
+                                <button id="btn-read-aloud" title="Extrayendo texto..." class="bg-secondary/10 text-secondary p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95 text-sm">
                                     <span class="material-symbols-outlined text-lg animate-spin">sync</span>
-                                    Extrayendo texto...
                                 </button>
-                                <a href="${url}" target="_blank" class="bg-primary/10 text-primary px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-primary hover:text-white transition-all shadow-md border-2 border-primary/20 active:scale-95 text-sm">
+                                <a href="${url}" target="_blank" title="Descargar PDF" class="bg-primary/10 text-primary p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-md border-2 border-primary/20 active:scale-95 text-sm">
                                     <span class="material-symbols-outlined text-lg">download</span>
-                                    Descargar PDF
                                 </a>
-                                <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-5 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95 text-sm">
+                                <button onclick="window.markLessonComplete()" title="Finalizado" class="bg-emerald-600 text-white p-3 rounded-2xl font-bold flex items-center justify-center hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95 text-sm">
                                     <span class="material-symbols-outlined text-lg">check_circle</span>
-                                    Finalizado
                                 </button>
                             </div>
                         </div>
@@ -348,12 +346,14 @@ export const CoursePlayer = {
                     
                     if (currentTranscript) {
                         if (readBtn) {
-                            readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>Lectura por voz';
+                            readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>';
+                            readBtn.title = 'Lectura por voz';
                             readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
                         }
                     } else {
                         if (readBtn) {
-                            readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_off</span>No disponible';
+                            readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_off</span>';
+                            readBtn.title = 'No disponible';
                             readBtn.classList.add('opacity-40', 'cursor-not-allowed');
                         }
                     }
