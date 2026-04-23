@@ -6,9 +6,9 @@ export const AdminEnrollments = {
         const enrollments = await DB.fetchAllEnrollments();
 
         return `
-        <div class="space-y-8 animate-in fade-in duration-700 pb-12">
-            <!-- Premium Header (Sticky) -->
-            <div class="sticky -top-6 lg:-top-12 z-40 pt-6 lg:pt-12 pb-4 bg-surface/80 backdrop-blur-md">
+        <div class="h-full flex flex-col overflow-hidden animate-in fade-in duration-700">
+            <!-- Fixed Header (Static) -->
+            <div class="shrink-0 p-6 lg:p-12 pb-4">
                 <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-surface/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                     <div class="relative z-10 space-y-2 mb-6 md:mb-0">
@@ -22,49 +22,54 @@ export const AdminEnrollments = {
                 </header>
             </div>
 
-            <!-- Data Table Container -->
-            <div class="bg-surface/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <table class="min-w-full text-left border-collapse">
-                    <thead class="bg-surface/40 border-b border-surface-variant/50">
-                        <tr>
-                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Estudiante</th>
-                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Curso</th>
-                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Progreso</th>
-                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Estado</th>
-                            <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40 text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-surface-variant/30">
-                        ${enrollments.map((env, index) => `
-                        <tr class="hover:bg-surface transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
-                            <td class="px-8 py-6">
-                                <span class="font-extrabold text-primary text-base group-hover:text-[#0052b4] transition-colors">${env.profiles?.name || env.profiles?.email || 'N/A'}</span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="text-xs font-bold text-on-surface/80 bg-surface px-3 py-1.5 rounded-lg border border-surface-variant/50 shadow-sm">${env.courses?.title || 'N/A'}</span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <div class="w-full bg-surface-variant/50 rounded-full h-2.5 max-w-[120px] overflow-hidden">
-                                  <div class="bg-secondary h-2.5 rounded-full shadow-inner" style="width: ${env.progress}%"></div>
-                                </div>
-                                <span class="text-[10px] font-bold mt-1 text-on-surface/50 uppercase tracking-wider">${env.progress}% Completado</span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <span class="px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.15em] border ${env.status === 'active' ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} shadow-sm">
-                                    ${env.status === 'active' ? 'En Curso' : 'Graduado'}
-                                </span>
-                            </td>
-                            <td class="px-8 py-6 text-right">
-                                <div class="flex gap-2 justify-end opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-                                    <button onclick="window.deleteEnrollment(${env.course_id}, '${env.profile_id}')" class="p-2.5 bg-surface hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Eliminar">
-                                        <span class="material-symbols-outlined text-xl">delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+            <!-- Scrollable Body Section -->
+            <div class="flex-1 overflow-y-auto p-6 lg:p-12 pt-0 custom-scrollbar">
+                <div class="max-w-7xl mx-auto space-y-8 pb-12">
+                    <!-- Data Table Container -->
+                    <div class="bg-surface/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                        <table class="min-w-full text-left border-collapse">
+                            <thead class="bg-surface/40 border-b border-surface-variant/50">
+                                <tr>
+                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Estudiante</th>
+                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Curso</th>
+                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Progreso</th>
+                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40">Estado</th>
+                                    <th class="px-8 py-6 text-xs font-black uppercase tracking-[0.2em] text-on-surface/40 text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-surface-variant/30">
+                                ${enrollments.map((env, index) => `
+                                <tr class="hover:bg-surface transition-all duration-300 group ${index % 2 === 0 ? 'bg-transparent' : 'bg-surface/10'}">
+                                    <td class="px-8 py-6">
+                                        <span class="font-extrabold text-primary text-base group-hover:text-[#0052b4] transition-colors">${env.profiles?.name || env.profiles?.email || 'N/A'}</span>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <span class="text-xs font-bold text-on-surface/80 bg-surface px-3 py-1.5 rounded-lg border border-surface-variant/50 shadow-sm">${env.courses?.title || 'N/A'}</span>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <div class="w-full bg-surface-variant/50 rounded-full h-2.5 max-w-[120px] overflow-hidden">
+                                          <div class="bg-secondary h-2.5 rounded-full shadow-inner" style="width: ${env.progress}%"></div>
+                                        </div>
+                                        <span class="text-[10px] font-bold mt-1 text-on-surface/50 uppercase tracking-wider">${env.progress}% Completado</span>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        <span class="px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-[0.15em] border ${env.status === 'active' ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-emerald-50 text-emerald-600 border-emerald-200'} shadow-sm">
+                                            ${env.status === 'active' ? 'En Curso' : 'Graduado'}
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-6 text-right">
+                                        <div class="flex gap-2 justify-end opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+                                            <button onclick="window.deleteEnrollment(${env.course_id}, '${env.profile_id}')" class="p-2.5 bg-surface hover:bg-red-500 hover:text-white text-red-500 rounded-xl transition-all duration-300 hover:shadow-md hover:-translate-y-0.5" title="Eliminar">
+                                                <span class="material-symbols-outlined text-xl">delete</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
         `;

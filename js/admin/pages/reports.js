@@ -9,9 +9,9 @@ export const AdminReports = {
             : 0;
             
         return `
-        <div class="space-y-8 animate-in fade-in duration-700 pb-12">
-            <!-- Premium Header (Sticky) -->
-            <div class="sticky -top-6 lg:-top-12 z-40 pt-6 lg:pt-12 pb-4 bg-surface/80 backdrop-blur-md">
+        <div class="h-full flex flex-col overflow-hidden animate-in fade-in duration-700">
+            <!-- Fixed Header (Static) -->
+            <div class="shrink-0 p-6 lg:p-12 pb-4">
                 <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-surface/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                     <div class="relative z-10 space-y-2 mb-6 md:mb-0">
@@ -25,40 +25,45 @@ export const AdminReports = {
                 </header>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Placeholder for Chart 1 -->
-                <div class="bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] h-[350px] flex flex-col items-center justify-center hover:shadow-lg transition-all duration-300 group">
-                    <div class="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <span class="material-symbols-outlined text-5xl text-primary/40">bar_chart</span>
-                    </div>
-                    <p class="text-primary font-extrabold text-lg mb-2">Completitud por Categoría</p>
-                    <p class="text-on-surface/40 font-bold uppercase tracking-widest text-[10px]">Gráfico en desarrollo</p>
-                </div>
-                
-                <!-- Placeholder for Chart 2 -->
-                <div class="bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] h-[350px] flex flex-col items-center justify-center hover:shadow-lg transition-all duration-300 group">
-                     <div class="w-20 h-20 bg-secondary/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <span class="material-symbols-outlined text-5xl text-secondary/40">pie_chart</span>
-                    </div>
-                    <p class="text-primary font-extrabold text-lg mb-2">Estudiantes vs Instructores</p>
-                    <p class="text-on-surface/40 font-bold uppercase tracking-widest text-[10px]">Gráfico en desarrollo</p>
-                </div>
+            <!-- Scrollable Body Section -->
+            <div class="flex-1 overflow-y-auto p-6 lg:p-12 pt-0 custom-scrollbar">
+                <div class="max-w-7xl mx-auto space-y-8 pb-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Placeholder for Chart 1 -->
+                        <div class="bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] h-[350px] flex flex-col items-center justify-center hover:shadow-lg transition-all duration-300 group">
+                            <div class="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-5xl text-primary/40">bar_chart</span>
+                            </div>
+                            <p class="text-primary font-extrabold text-lg mb-2">Completitud por Categoría</p>
+                            <p class="text-on-surface/40 font-bold uppercase tracking-widest text-[10px]">Gráfico en desarrollo</p>
+                        </div>
+                        
+                        <!-- Placeholder for Chart 2 -->
+                        <div class="bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] h-[350px] flex flex-col items-center justify-center hover:shadow-lg transition-all duration-300 group">
+                             <div class="w-20 h-20 bg-secondary/5 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-5xl text-secondary/40">pie_chart</span>
+                            </div>
+                            <p class="text-primary font-extrabold text-lg mb-2">Estudiantes vs Instructores</p>
+                            <p class="text-on-surface/40 font-bold uppercase tracking-widest text-[10px]">Gráfico en desarrollo</p>
+                        </div>
 
-                <!-- Descriptive Metrics Table -->
-                <div class="md:col-span-2 bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                    <h3 class="text-2xl font-headline font-extrabold text-primary mb-6">Métricas Destacadas del Mes</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
-                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Total Inscritos</p>
-                            <p class="text-3xl font-extrabold text-secondary">${totalEnrollments}</p>
-                        </div>
-                        <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
-                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Promedio Progreso</p>
-                            <p class="text-3xl font-extrabold text-emerald-600">${avgCompletion}%</p>
-                        </div>
-                        <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
-                            <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Actividad de Sistema</p>
-                            <p class="text-3xl font-extrabold text-accent">Óptimo</p>
+                        <!-- Descriptive Metrics Table -->
+                        <div class="md:col-span-2 bg-surface/80 backdrop-blur-xl p-8 rounded-3xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                            <h3 class="text-2xl font-headline font-extrabold text-primary mb-6">Métricas Destacadas del Mes</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
+                                    <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Total Inscritos</p>
+                                    <p class="text-3xl font-extrabold text-secondary">${totalEnrollments}</p>
+                                </div>
+                                <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
+                                    <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Promedio Progreso</p>
+                                    <p class="text-3xl font-extrabold text-emerald-600">${avgCompletion}%</p>
+                                </div>
+                                <div class="p-6 bg-surface/30 rounded-2xl border border-surface-variant/50">
+                                    <p class="text-[10px] uppercase font-black tracking-[0.2em] text-on-surface/50 mb-2">Actividad de Sistema</p>
+                                    <p class="text-3xl font-extrabold text-accent">Óptimo</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

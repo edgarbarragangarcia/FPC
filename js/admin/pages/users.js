@@ -6,9 +6,9 @@ export const AdminUsers = {
         const users = DB.getUsers();
 
         return `
-        <div class="space-y-8 animate-in fade-in duration-700 pb-12">
-            <!-- Premium Header (Sticky) -->
-            <div class="sticky -top-6 lg:-top-12 z-40 pt-6 lg:pt-12 pb-4 bg-surface/80 backdrop-blur-md">
+        <div class="h-full flex flex-col overflow-hidden animate-in fade-in duration-700">
+            <!-- Fixed Header (Static) -->
+            <div class="shrink-0 p-6 lg:p-12 pb-4">
                 <header class="relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center bg-gradient-to-r from-primary to-[#0052b4] p-8 md:p-10 rounded-3xl border border-white/20 shadow-2xl shadow-primary/30 text-white">
                     <div class="absolute top-0 right-0 w-64 h-64 bg-surface/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                     <div class="relative z-10 space-y-2 mb-6 md:mb-0">
@@ -21,6 +21,10 @@ export const AdminUsers = {
                     </button>
                 </header>
             </div>
+
+            <!-- Scrollable Body Section -->
+            <div class="flex-1 overflow-y-auto p-6 lg:p-12 pt-0 custom-scrollbar">
+                <div class="max-w-7xl mx-auto space-y-8 pb-12">
 
             <!-- Data Table Container with Glassmorphism -->
             <div class="bg-surface/80 backdrop-blur-xl rounded-3xl border border-white/50 overflow-x-auto shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
@@ -113,8 +117,10 @@ export const AdminUsers = {
                     
                     <div id="user-feedback" class="mt-4 text-sm font-bold text-center hidden"></div>
                 </div>
+                </div>
             </div>
-            
+                </div>
+            </div>
         </div>
         `;
     },
