@@ -132,22 +132,54 @@ export const CoursePlayer = {
                     readBtn.classList.replace('text-white', 'text-secondary');
                 } else {
                     if (!currentTranscript) return;
-                    const utterance = new SpeechSynthesisUtterance(currentTranscript.replace(/<[^>]*>/g, ''));
-                    utterance.lang = 'es-CO';
-                    utterance.rate = 0.9;
                     
-                    utterance.onend = () => {
-                        isReading = false;
-                        readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>Lectura por voz';
-                        readBtn.classList.replace('bg-secondary', 'bg-secondary/10');
-                        readBtn.classList.replace('text-white', 'text-secondary');
-                    };
+                    // Split text into chunks (by sentences or newlines) to avoid TTS dropping out on long texts
+                    const textToRead = currentTranscript.replace(/<[^>]*>/g, '').replace(/([.?!])\s*(?=[A-Z])/g, "$1|").split("|");
+                    let currentChunkIndex = 0;
                     
-                    window.speechSynthesis.speak(utterance);
                     isReading = true;
                     readBtn.innerHTML = '<span class="material-symbols-outlined">stop_circle</span>Detener lectura';
                     readBtn.classList.replace('bg-secondary/10', 'bg-secondary');
                     readBtn.classList.replace('text-secondary', 'text-white');
+
+                    const speakNextChunk = () => {
+                        if (!isReading || currentChunkIndex >= textToRead.length) {
+                            // Finished reading all chunks or cancelled
+                            isReading = false;
+                            if (readBtn) {
+                                readBtn.innerHTML = '<span class="material-symbols-outlined">volume_up</span>Lectura por voz';
+                                readBtn.classList.replace('bg-secondary', 'bg-secondary/10');
+                                readBtn.classList.replace('text-white', 'text-secondary');
+                            }
+                            return;
+                        }
+
+                        const chunk = textToRead[currentChunkIndex].trim();
+                        if (!chunk) {
+                            currentChunkIndex++;
+                            speakNextChunk();
+                            return;
+                        }
+
+                        const utterance = new SpeechSynthesisUtterance(chunk);
+                        utterance.lang = 'es-CO';
+                        utterance.rate = 0.9;
+                        
+                        utterance.onend = () => {
+                            currentChunkIndex++;
+                            speakNextChunk();
+                        };
+                        
+                        utterance.onerror = (e) => {
+                            console.warn("TTS Error:", e);
+                            currentChunkIndex++;
+                            speakNextChunk();
+                        };
+
+                        window.speechSynthesis.speak(utterance);
+                    };
+
+                    speakNextChunk();
                 }
             };
         };
@@ -292,7 +324,8 @@ export const CoursePlayer = {
                                 console.warn('PDF.js not loaded');
                                 return null;
                             }
-                            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                            const uint8Array = new Uint8Array(arrayBuffer);
+                            const pdf = await pdfjsLib.getDocument({ data: uint8Array }).promise;
                             let fullText = '';
                             for (let i = 1; i <= pdf.numPages; i++) {
                                 const page = await pdf.getPage(i);
@@ -310,14 +343,15 @@ export const CoursePlayer = {
 
                 extractDocumentText(url).then(extractedText => {
                     const readBtn = document.getElementById('btn-read-aloud');
-                    if (extractedText) {
-                        currentTranscript = extractedText;
+                    // Fallback to the existing transcript or text if extraction fails
+                    currentTranscript = extractedText || transcript || text || title || '';
+                    
+                    if (currentTranscript) {
                         if (readBtn) {
                             readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_up</span>Lectura por voz';
                             readBtn.classList.remove('opacity-40', 'cursor-not-allowed');
                         }
                     } else {
-                        currentTranscript = '';
                         if (readBtn) {
                             readBtn.innerHTML = '<span class="material-symbols-outlined text-lg">volume_off</span>No disponible';
                             readBtn.classList.add('opacity-40', 'cursor-not-allowed');
