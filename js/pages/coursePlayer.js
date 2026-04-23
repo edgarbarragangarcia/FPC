@@ -40,11 +40,14 @@ export const CoursePlayer = {
                     <div class="divide-y divide-surface-variant/30">
                         ${modules.map((mod, mi) => `
                             <div class="module-group">
-                                <div class="px-6 py-4 bg-surface-variant/20 flex items-center gap-3 sticky top-0 z-10 backdrop-blur-sm">
-                                    <span class="w-6 h-6 bg-secondary text-white rounded-md flex items-center justify-center text-[10px] font-black shrink-0">${mi + 1}</span>
-                                    <span class="font-bold text-sm text-primary">${mod.title}</span>
-                                </div>
-                                <div class="divide-y divide-surface-variant/10">
+                                <button onclick="window.toggleModule(${mi})" class="w-full px-6 py-4 bg-surface-variant/20 hover:bg-surface-variant/40 flex items-center justify-between sticky top-0 z-10 backdrop-blur-sm transition-colors border-y border-surface-variant/50 group">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 bg-secondary text-white rounded-md flex items-center justify-center text-[10px] font-black shrink-0">${mi + 1}</span>
+                                        <span class="font-bold text-sm text-primary text-left group-hover:text-[#0052b4] transition-colors">${mod.title}</span>
+                                    </div>
+                                    <span id="mod-icon-${mi}" class="material-symbols-outlined text-primary transition-transform duration-300 ${mi === 0 ? 'rotate-180' : ''}">expand_more</span>
+                                </button>
+                                <div id="mod-content-${mi}" class="divide-y divide-surface-variant/10 ${mi === 0 ? '' : 'hidden'}">
                                     ${(mod.lessons || []).map(lesson => `
                                         <button 
                                             class="lesson-btn w-full text-left px-8 py-4 hover:bg-primary/5 transition-all flex items-center justify-between group"
@@ -71,7 +74,13 @@ export const CoursePlayer = {
             <!-- CONTENT: Scrollable column, independent       -->
             <!-- Scrolls vertically. Sidebar stays fixed.      -->
             <!-- ============================================= -->
-            <main id="lesson-scroll-container" class="course-content">
+            <main id="lesson-scroll-container" class="course-content relative">
+                <div class="sticky top-0 z-40 mb-6 flex items-center gap-3 bg-surface/80 backdrop-blur-md p-3 rounded-2xl border border-surface-variant w-max shadow-sm">
+                    <button onclick="window.toggleCourseSidebar()" id="sidebar-toggle-btn" class="p-2 bg-white rounded-xl shadow-sm border border-surface-variant hover:bg-primary hover:text-white transition-all flex items-center justify-center text-primary" title="Alternar menú lateral">
+                        <span class="material-symbols-outlined text-lg">menu_open</span>
+                    </button>
+                    <span class="font-bold text-xs text-on-surface/50 uppercase tracking-widest pr-2" id="sidebar-toggle-text">Ocultar Menú</span>
+                </div>
                 <div class="max-w-4xl mx-auto space-y-8 pb-24">
                     <!-- Placeholder / Welcome -->
                     <div id="lesson-viewport" class="animate-in fade-in slide-in-from-bottom-4 duration-1000">
@@ -115,6 +124,34 @@ export const CoursePlayer = {
     afterRender: async () => {
         let currentTranscript = '';
         let isReading = false;
+
+        window.toggleModule = (index) => {
+            const content = document.getElementById(`mod-content-${index}`);
+            const icon = document.getElementById(`mod-icon-${index}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        };
+
+        window.toggleCourseSidebar = () => {
+            const sidebar = document.querySelector('.course-sidebar');
+            const btnIcon = document.querySelector('#sidebar-toggle-btn span');
+            const btnText = document.querySelector('#sidebar-toggle-text');
+            
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                btnIcon.innerText = 'menu_open';
+                btnText.innerText = 'Ocultar Menú';
+            } else {
+                sidebar.classList.add('hidden');
+                btnIcon.innerText = 'menu';
+                btnText.innerText = 'Mostrar Menú';
+            }
+        };
         
         // Reusable: bind TTS to whichever btn-read-aloud exists in the DOM
         const bindReadAloudBtn = () => {
