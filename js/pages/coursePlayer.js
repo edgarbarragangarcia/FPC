@@ -89,11 +89,11 @@ export const CoursePlayer = {
                                 </p>
                             </div>
                             <div class="flex gap-3">
-                                <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-6 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-secondary hover:text-white transition-all shadow-sm">
+                                <button id="btn-read-aloud" class="bg-secondary/10 text-secondary px-6 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-secondary hover:text-white transition-all shadow-md border-2 border-secondary/20 active:scale-95">
                                     <span class="material-symbols-outlined">volume_up</span>
                                     Lectura por voz
                                 </button>
-                                <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+                                <button onclick="window.markLessonComplete()" class="bg-emerald-600 text-white px-8 py-3.5 rounded-2xl font-bold flex items-center gap-3 hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95">
                                     <span class="material-symbols-outlined">check_circle</span>
                                     Marcar como finalizado
                                 </button>
