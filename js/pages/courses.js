@@ -6,8 +6,8 @@ export const Courses = {
         const dummyCourses = DB.getCourses();
 
         return `
-        <div class="max-w-7xl mx-auto py-12">
-            <header class="bg-surface lg:bg-transparent flex flex-col md:flex-row md:items-end justify-between gap-8 py-6 mb-12 px-4 -mx-4">
+        <div class="max-w-7xl mx-auto pb-12 pt-4">
+            <header class="bg-surface lg:bg-transparent flex flex-col md:flex-row md:items-end justify-between gap-8 pb-6 pt-2 mb-8 px-4 -mx-4">
                 <div class="space-y-4">
                     <h2 class="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tight">Catálogo de Cursos</h2>
                     <p class="text-on-surface/60 max-w-xl">

@@ -101,9 +101,9 @@ const router = async () => {
             }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
-            // Public pages start exactly below the 80px navbar
+            // Public pages: EXACTLY 80px top, NO internal padding
             view.style.paddingTop = '80px';
-            view.classList.add('p-6', 'md:px-12', 'md:pb-12');
+            view.className = 'animate-in fade-in duration-500'; // Reset classes, only animation
             document.body.classList.remove('h-screen', 'overflow-hidden');
             document.documentElement.classList.remove('h-screen', 'overflow-hidden');
         }
