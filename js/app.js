@@ -101,9 +101,17 @@ const router = async () => {
             }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
-            // Public pages start exactly below the 80px navbar
-            view.style.paddingTop = '80px';
-            view.classList.add('p-6', 'md:px-12', 'md:pb-12');
+            
+            if (path === '/cursos') {
+                // Special high alignment for Courses page only
+                view.style.paddingTop = '80px';
+                view.className = 'animate-in fade-in duration-500'; 
+            } else {
+                // Standard padding for other public pages
+                view.style.paddingTop = '100px';
+                view.classList.add('px-6', 'md:px-12', 'md:pb-12', 'animate-in', 'fade-in', 'duration-500');
+            }
+
             document.body.classList.remove('h-screen', 'overflow-hidden');
             document.documentElement.classList.remove('h-screen', 'overflow-hidden');
         }
