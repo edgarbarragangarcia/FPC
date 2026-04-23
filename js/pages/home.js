@@ -4,8 +4,24 @@ export const Home = {
         return `
         <div class="max-w-7xl mx-auto px-4">
             <!-- Hero Section: The Spark of a Mission -->
-            <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center pt-0 pb-12 md:pb-24 animate-in fade-in duration-1000">
-                <div class="space-y-8">
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-4 md:pt-0 pb-12 md:pb-24 animate-in fade-in duration-1000">
+                <!-- Column 1: Image (Appears first on mobile) -->
+                <div class="relative lg:-mt-20 order-1 lg:order-2">
+                    <div class="absolute -inset-10 bg-secondary/5 rounded-full blur-[120px] -z-10"></div>
+                    <div class="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white transform lg:rotate-2 hover:rotate-0 transition-transform duration-700">
+                        <img src="https://www.saldarriagaconcha.org/wp-content/uploads/2020/02/Jairo-Clopatofsky-Consejero-de-la-Participacio%CC%81n-de-las-Personas-con-Discapacidad.jpg" 
+                             alt="Retrato de Jairo Clopatofsky" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <!-- Impact Floating Badge -->
+                    <div class="absolute -bottom-6 -left-4 lg:-bottom-8 lg:-left-8 bg-surface p-6 lg:p-8 rounded-3xl shadow-2xl border border-surface-variant max-w-[240px] lg:max-w-[280px] animate-bounce-slow">
+                        <p data-i18n="hero_badge_tag" class="text-[10px] lg:text-xs font-bold text-secondary uppercase tracking-widest mb-2">Hito Legislativo</p>
+                        <p data-i18n="hero_badge_desc" class="text-xs lg:text-sm font-medium text-on-surface leading-snug">Autor de la <strong>Ley 361 de 1997</strong> (Ley Clopatofsky), base de la inclusión en Colombia.</p>
+                    </div>
+                </div>
+
+                <!-- Column 2: Text Content -->
+                <div class="space-y-8 order-2 lg:order-1">
                     <div data-i18n="hero_tag" class="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-widest">
                         Desde 1982 transformando vidas
                     </div>
@@ -23,20 +39,6 @@ export const Home = {
                         <a href="#/impacto" data-i18n="hero_btn_mission" class="bg-surface border border-surface-variant text-on-surface px-10 py-5 rounded-2xl font-bold text-lg hover:bg-surface-variant transition-all accessible-focus">
                             Conoce Nuestra Labor
                         </a>
-                    </div>
-                </div>
-
-                <div class="relative lg:-mt-20">
-                    <div class="absolute -inset-10 bg-secondary/5 rounded-full blur-[120px] -z-10"></div>
-                    <div class="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white transform rotate-2 hover:rotate-0 transition-transform duration-700">
-                        <img src="https://www.saldarriagaconcha.org/wp-content/uploads/2020/02/Jairo-Clopatofsky-Consejero-de-la-Participacio%CC%81n-de-las-Personas-con-Discapacidad.jpg" 
-                             alt="Retrato de Jairo Clopatofsky" 
-                             class="w-full h-full object-cover">
-                    </div>
-                    <!-- Impact Floating Badge -->
-                    <div class="absolute -bottom-8 -left-8 bg-surface p-8 rounded-3xl shadow-2xl border border-surface-variant max-w-[280px] animate-bounce-slow">
-                        <p data-i18n="hero_badge_tag" class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Hito Legislativo</p>
-                        <p data-i18n="hero_badge_desc" class="text-sm font-medium text-on-surface leading-snug">Autor de la <strong>Ley 361 de 1997</strong> (Ley Clopatofsky), base de la inclusión en Colombia.</p>
                     </div>
                 </div>
             </section>
