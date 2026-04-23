@@ -289,7 +289,7 @@ export const CoursePlayer = {
                 viewport.innerHTML = `
                     <div class="space-y-4">
                         <!-- Title + Action Bar -->
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 z-30 bg-[#fbf9f8]/95 backdrop-blur-md p-4 -mx-4 rounded-xl shadow-sm border-b border-surface-variant/50">
                             <div>
                                 <h1 class="text-2xl font-headline font-bold text-primary mb-1">${title}</h1>
                                 <p class="text-sm font-bold text-secondary flex items-center gap-2">
