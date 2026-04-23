@@ -145,30 +145,12 @@ export const StudentDashboard = {
         `;
     },
     afterRender: async () => {
-        // Handle Course Interaction
-        const courseButtons = document.querySelectorAll('button[aria-label*="curso"]');
-        courseButtons.forEach(btn => {
-            btn.onclick = async () => {
-                // Find course ID from context (extracted from aria-label in this simple case)
-                const courseTitle = btn.getAttribute('aria-label').split('curso ')[1];
-                const course = DB.getCourses().find(c => c.title === courseTitle);
-                
-                if (course) {
-                    console.log('Cargando curso:', course.title);
-                    // Fetch first lesson with LSC for demonstration
-                    const content = await DB.fetchCourseContent(course.id);
-                    const firstLesson = content[0]?.lessons?.[0];
-                    
-                    if (firstLesson && firstLesson.lsc_video_url) {
-                        window.dispatchEvent(new CustomEvent('lsc-video-update', { 
-                            detail: firstLesson.lsc_video_url 
-                        }));
-                        
-                        // Notify user
-                        if (!window.state.lscEnabled) {
-                            UI.alert('Contenido Accesible', 'Este curso incluye videos en Lengua de Señas (LSC). Puedes activarlo en tu menú de ajustes de accesibilidad.', 'info');
-                        }
-                    }
+        // Handle Course Interaction (Start Player)
+        document.querySelectorAll('.btn-start-course').forEach(btn => {
+            btn.onclick = () => {
+                const courseId = btn.dataset.id;
+                if (courseId) {
+                    window.location.hash = `#/curso?id=${courseId}`;
                 }
             };
         });

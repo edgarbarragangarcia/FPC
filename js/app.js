@@ -13,6 +13,7 @@ import { AdminEnrollments } from './admin/pages/enrollments.js';
 import { AdminReports } from './admin/pages/reports.js';
 import { Login } from './pages/login.js';
 import { StudentDashboard } from './pages/studentDashboard.js';
+import { CoursePlayer } from './pages/coursePlayer.js';
 import { Interpreter } from './components/interpreter.js';
 import { supabase } from './admin/data.js';
 import { i18n } from './i18n.js';
@@ -57,7 +58,8 @@ const routes = {
     
     // Auth
     '/login': Login,
-    '/dashboard': StudentDashboard
+    '/dashboard': StudentDashboard,
+    '/curso': CoursePlayer
 };
 
 const router = async () => {
@@ -68,7 +70,8 @@ const router = async () => {
         // Prepare content
         if (!isAppInitialized) await initAppPromise;
         
-        const component = routes[path] || Home;
+        const routePath = path.split('?')[0];
+        const component = routes[routePath] || Home;
         // Pre-fetch specific data if needed
         if (path === '/admin/cursos') await DB.fetchCourses();
         if (path === '/admin/usuarios') await DB.fetchUsers();
@@ -81,7 +84,7 @@ const router = async () => {
             document.querySelector('header')?.classList.add('hidden');
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-        } else if (path === '/dashboard') {
+        } else if (path === '/dashboard' || path === '/curso') {
             document.querySelector('header')?.classList.remove('hidden');
             document.querySelector('footer')?.classList.add('hidden');
             view.classList.remove('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
