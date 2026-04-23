@@ -343,45 +343,48 @@ export const CoursePlayer = {
                         
                         if (isPptx) {
                             if (!window.JSZip) {
-                                console.warn('JSZip not loaded');
+                                console.warn('JSZip no está cargado');
                                 return null;
                             }
                             const zip = await JSZip.loadAsync(arrayBuffer);
                             let fullText = '';
                             
-                            // Find all slide XML files
+                            // Encontrar todos los archivos XML de las diapositivas
                             const slideFiles = Object.keys(zip.files).filter(name => name.startsWith('ppt/slides/slide') && name.endsWith('.xml'));
                             
-                            // Sort by slide number to read in order
+                            // Ordenar por número de diapositiva
                             slideFiles.sort((a, b) => {
                                 const numA = parseInt(a.match(/\d+/) ? a.match(/\d+/)[0] : 0);
                                 const numB = parseInt(b.match(/\d+/) ? b.match(/\d+/)[0] : 0);
                                 return numA - numB;
                             });
 
-                            const parser = new DOMParser();
                             for (const filename of slideFiles) {
                                 const xmlContent = await zip.file(filename).async("string");
                                 
-                                // Extract text from <a:t> tags
-                                const xmlDoc = parser.parseFromString(xmlContent, "text/xml");
-                                const tNodes = xmlDoc.getElementsByTagName("a:t");
-                                let slideText = "";
+                                // Extraer texto de las etiquetas <a:t> usando un Regex muy robusto que ignora atributos y saltos de línea
+                                const textMatches = xmlContent.match(/<a:t[^>]*>([\s\S]*?)<\/a:t>/g) || [];
                                 
-                                if (tNodes.length > 0) {
-                                    for (let i = 0; i < tNodes.length; i++) {
-                                        slideText += tNodes[i].textContent + " ";
-                                    }
-                                } else {
-                                    // Fallback Regex if DOMParser misses namespaces
-                                    const textMatches = xmlContent.match(/<a:t[^>]*>.*?<\/a:t>/g) || [];
-                                    slideText = textMatches.map(match => {
-                                        return match.replace(/<a:t[^>]*>/, '').replace(/<\/a:t>/, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-                                    }).join(' ');
+                                let slideText = textMatches.map(match => {
+                                    return match
+                                        .replace(/<a:t[^>]*>/g, '') // Quitar etiqueta de apertura
+                                        .replace(/<\/a:t>/g, '')     // Quitar etiqueta de cierre
+                                        .replace(/&lt;/g, '<')
+                                        .replace(/&gt;/g, '>')
+                                        .replace(/&amp;/g, '&')
+                                        .replace(/&quot;/g, '"')
+                                        .replace(/&apos;/g, "'");
+                                }).join(' ');
+                                
+                                if (slideText.trim()) {
+                                    fullText += slideText.trim() + '\n\n';
                                 }
-                                
-                                if (slideText.trim()) fullText += slideText.trim() + '\n\n';
                             }
+                            
+                            if (!fullText.trim()) {
+                                console.warn("Se leyó el PPTX pero no se encontró texto en las etiquetas <a:t>.");
+                            }
+                            
                             return fullText.trim() || null;
                             
                         } else {
