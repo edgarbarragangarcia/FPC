@@ -20,9 +20,9 @@ export const CoursePlayer = {
         return `
         <div class="h-full flex flex-col md:flex-row overflow-hidden animate-in fade-in duration-700">
             <!-- Sidebar: Curriculum Navigation -->
-            <aside class="w-full md:w-80 bg-surface border-r border-surface-variant flex flex-col h-full z-10 shadow-2xl relative">
+            <aside class="w-full md:w-85 bg-surface-variant/10 border-r-2 border-surface-variant/40 flex flex-col h-full z-10 relative shrink-0">
                 <!-- Static Sidebar Header -->
-                <div class="shrink-0 p-6 bg-primary text-white border-b border-white/10 shadow-lg z-20">
+                <div class="shrink-0 p-6 bg-primary text-white border-b-2 border-primary-dark shadow-md z-20">
                     <div class="flex items-center gap-3 mb-3">
                         <a href="#/dashboard" class="w-8 h-8 flex items-center justify-center hover:bg-white/20 rounded-full transition-all accessible-focus" title="Volver al panel">
                             <span class="material-symbols-outlined text-sm">arrow_back</span>
@@ -33,7 +33,7 @@ export const CoursePlayer = {
                 </div>
 
                 <!-- Scrollable Lesson List -->
-                <div class="flex-1 overflow-y-auto custom-scrollbar bg-surface-variant/5">
+                <div class="flex-1 overflow-y-auto custom-scrollbar">
                     <div class="divide-y divide-surface-variant/30">
                         ${modules.map((mod, mi) => `
                             <div class="module-group">
