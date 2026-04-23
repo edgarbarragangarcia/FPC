@@ -78,20 +78,19 @@ const router = async () => {
         
         let content = await component.render();
 
-        // Handle Layouts (Admin vs Public)
+        // Account for fixed header height (80px) globally
         const mainHeader = document.getElementById('main-header');
         if (mainHeader) mainHeader.classList.remove('hidden');
         
-        // Reset body
-        document.body.style.paddingTop = '0';
+        // Reset body and view styles
         document.body.classList.remove('h-screen', 'overflow-hidden');
-        view.className = ''; // Reset classes
-        view.style = '';    // Reset styles
+        view.className = ''; 
+        view.style = '';
 
         if (path.startsWith('/admin') || path === '/dashboard' || path === '/curso') {
             document.querySelector('footer')?.classList.add('hidden');
             
-            // Layout Estático e Independiente
+            // Fixed height layouts
             view.classList.add('fixed', 'top-[80px]', 'left-0', 'right-0', 'bottom-0', 'overflow-hidden');
             
             if (path.startsWith('/admin')) {
@@ -99,8 +98,9 @@ const router = async () => {
             }
         } else {
             document.querySelector('footer')?.classList.remove('hidden');
-            view.classList.add('p-6', 'md:pt-4', 'md:px-12', 'md:pb-12');
-            // Allow normal scroll for public pages
+            // Public pages need top padding to clear the fixed header + their own internal padding
+            view.style.paddingTop = '80px';
+            view.classList.add('p-6', 'md:px-12', 'md:pb-12');
         }
 
         // Immediate Swap
