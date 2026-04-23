@@ -63,10 +63,8 @@ export const AdminLayout = {
             <div id="admin-sidebar-backdrop" class="fixed inset-0 bg-primary/20 backdrop-blur-sm z-[115] hidden lg:hidden opacity-0 transition-opacity duration-300"></div>
 
             <!-- Main Admin Content Area -->
-            <main class="flex-1 p-6 lg:p-12 overflow-y-auto scroll-smooth relative">
-                <div class="max-w-7xl mx-auto pb-12">
-                    ${content}
-                </div>
+            <main class="flex-1 h-full overflow-hidden relative">
+                ${content}
             </main>
         </div>
         `;
