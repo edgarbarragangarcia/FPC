@@ -7,7 +7,7 @@ export const Courses = {
 
         return `
         <div class="max-w-7xl mx-auto pt-4 pb-12">
-            <header class="bg-surface lg:bg-transparent flex flex-col md:flex-row md:items-end justify-between gap-8 py-4 mb-12 px-4 -mx-4">
+            <header class="sticky top-[80px] z-20 bg-surface/95 backdrop-blur-md flex flex-col md:flex-row md:items-end justify-between gap-6 py-5 mb-8 px-4 -mx-4 border-b border-surface-variant/50 shadow-sm">
                 <div class="space-y-4">
                     <h2 class="text-4xl md:text-5xl font-headline font-bold text-primary tracking-tight">Catálogo de Cursos</h2>
                     <p class="text-on-surface/60 max-w-xl">
